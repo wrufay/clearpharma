@@ -4,7 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ClearPharma - Login</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://i.icomoon.io/public/temp/92804d2d14/UntitledProject/style.css"
+    />
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Stack+Sans+Headline:wght@200..700&display=swap");
+
       * {
         margin: 0;
         padding: 0;
@@ -12,63 +19,161 @@
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Oxygen, Ubuntu, Cantarell, sans-serif;
+        font-family: "Hammersmith One", sans-serif;
+        font-weight: 400;
+        font-style: normal;
         background: linear-gradient(135deg, #a8d5e2 0%, #e8f4f8 100%);
         min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         padding: 20px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      /* Animated background particles */
+      body::before {
+        content: "";
+        position: absolute;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+            circle at 20% 50%,
+            rgba(255, 255, 255, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 80% 80%,
+            rgba(90, 154, 174, 0.1) 0%,
+            transparent 50%
+          ),
+          radial-gradient(
+            circle at 40% 20%,
+            rgba(168, 213, 226, 0.15) 0%,
+            transparent 50%
+          );
+        animation: float 20s ease-in-out infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) rotate(0deg);
+        }
+        33% {
+          transform: translate(30px, -30px) rotate(120deg);
+        }
+        66% {
+          transform: translate(-20px, 20px) rotate(240deg);
+        }
       }
 
       .container {
-        background: white;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
         border-radius: 30px;
         padding: 40px 30px;
         max-width: 400px;
         width: 100%;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        position: relative;
+        z-index: 1;
+        animation: slideInUp 0.6s ease-out;
+        border: 1px solid rgba(255, 255, 255, 0.5);
       }
 
+      @keyframes slideInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Logo animations */
       .logo {
         text-align: center;
         margin-bottom: 30px;
       }
 
       .logo-icon {
-        width: 60px;
-        height: 60px;
-        background: #5a9aae;
+        width: 120px;
+        height: 120px;
         border-radius: 15px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 15px;
+        animation: fadeInScale 0.8s ease-out 0.2s backwards;
       }
 
-      .logo-icon::before {
-        content: "+";
-        color: white;
-        font-size: 36px;
-        font-weight: 300;
+      .logo-icon img {
+        animation: pulse 2s ease-in-out infinite;
+      }
+
+      @keyframes fadeInScale {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
       }
 
       .logo h1 {
         color: #2d6a7a;
-        font-size: 28px;
+        font-size: 36px;
         font-weight: 500;
         margin-bottom: 5px;
+        animation: fadeInDown 0.8s ease-out 0.3s backwards;
       }
 
       .logo p {
         color: #7ba8b5;
-        font-size: 14px;
+        font-size: 16px;
+        animation: fadeInDown 0.8s ease-out 0.4s backwards;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .welcome {
         text-align: center;
         margin-bottom: 30px;
+        animation: fadeIn 0.8s ease-out 0.5s backwards;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
 
       .welcome h2 {
@@ -83,10 +188,12 @@
         font-size: 14px;
       }
 
+      /* User type buttons with staggered animation */
       .user-type {
         display: flex;
         gap: 12px;
         margin-bottom: 25px;
+        animation: fadeIn 0.8s ease-out 0.6s backwards;
       }
 
       .user-type button {
@@ -99,21 +206,68 @@
         font-weight: 500;
         color: #7ba8b5;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .user-type button::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(90, 154, 174, 0.1);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      .user-type button:hover::before {
+        width: 300px;
+        height: 300px;
       }
 
       .user-type button.active {
-        background: #5a9aae;
+        background: linear-gradient(135deg, #5a9aae 0%, #6ba8bb 100%);
         border-color: #5a9aae;
         color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(90, 154, 174, 0.3);
       }
 
       .user-type button:hover {
         border-color: #5a9aae;
+        transform: translateY(-2px);
       }
 
+      .user-type button:active {
+        transform: translateY(0);
+      }
+
+      /* Input groups with staggered animation */
       .input-group {
         margin-bottom: 20px;
+        animation: fadeInLeft 0.6s ease-out backwards;
+      }
+
+      .input-group:nth-child(7) {
+        animation-delay: 0.7s;
+      }
+      .input-group:nth-child(8) {
+        animation-delay: 0.8s;
+      }
+
+      @keyframes fadeInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
       }
 
       .input-group label {
@@ -122,6 +276,7 @@
         font-size: 13px;
         font-weight: 500;
         margin-bottom: 8px;
+        transition: color 0.3s ease;
       }
 
       .input-group input {
@@ -131,13 +286,20 @@
         border-radius: 12px;
         font-size: 15px;
         color: #2d6a7a;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        background: white;
       }
 
       .input-group input:focus {
         outline: none;
         border-color: #5a9aae;
         background: #f8fcfd;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(90, 154, 174, 0.15);
+      }
+
+      .input-group input:focus + label {
+        color: #5a9aae;
       }
 
       .input-group input::placeholder {
@@ -147,6 +309,7 @@
       .forgot-password {
         text-align: right;
         margin-bottom: 25px;
+        animation: fadeIn 0.8s ease-out 0.9s backwards;
       }
 
       .forgot-password a {
@@ -154,104 +317,275 @@
         font-size: 13px;
         text-decoration: none;
         font-weight: 500;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .forgot-password a::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #5a9aae;
+        transition: width 0.3s ease;
+      }
+
+      .forgot-password a:hover::after {
+        width: 100%;
       }
 
       .forgot-password a:hover {
-        text-decoration: underline;
+        color: #4a8a9e;
       }
 
+      /* Login button with ripple effect */
       .login-btn {
         width: 100%;
         padding: 16px;
-        background: #5a9aae;
+        background: linear-gradient(135deg, #5a9aae 0%, #6ba8bb 100%);
         border: none;
         border-radius: 12px;
         color: white;
         font-size: 16px;
         font-weight: 600;
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         margin-bottom: 20px;
+        position: relative;
+        overflow: hidden;
+        animation: fadeInUp 0.8s ease-out 1s backwards;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-btn::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+      }
+
+      .login-btn:hover::before {
+        width: 400px;
+        height: 400px;
       }
 
       .login-btn:hover {
-        background: #4a8a9e;
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(90, 154, 174, 0.3);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(90, 154, 174, 0.4);
       }
 
       .login-btn:active {
-        transform: translateY(0);
+        transform: translateY(-1px);
       }
 
       .login-btn:disabled {
         background: #b8d4dc;
         cursor: not-allowed;
         transform: none;
+        opacity: 0.7;
       }
 
       .signup-link {
         text-align: center;
         color: #7ba8b5;
         font-size: 14px;
+        animation: fadeIn 0.8s ease-out 1.1s backwards;
       }
 
       .signup-link a {
         color: #5a9aae;
         text-decoration: none;
         font-weight: 600;
+        position: relative;
+        transition: color 0.3s ease;
+      }
+
+      .signup-link a::after {
+        content: "";
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: #5a9aae;
+        transition: width 0.3s ease;
+      }
+
+      .signup-link a:hover::after {
+        width: 100%;
       }
 
       .signup-link a:hover {
-        text-decoration: underline;
+        color: #4a8a9e;
       }
 
+      /* Error and success messages with slide animation */
       .error-message {
-        background: #f8d7da;
+        background: linear-gradient(135deg, #f8d7da 0%, #f5c2c7 100%);
         color: #721c24;
         padding: 12px;
         border-radius: 8px;
         margin-bottom: 20px;
         font-size: 14px;
         display: none;
+        animation: slideInDown 0.4s ease-out;
+        border-left: 4px solid #dc3545;
+      }
+
+      @keyframes slideInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .success-message {
-        background: #d4edda;
+        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
         color: #155724;
         padding: 12px;
         border-radius: 8px;
         margin-bottom: 20px;
         font-size: 14px;
         display: none;
+        animation: slideInDown 0.4s ease-out;
+        border-left: 4px solid #28a745;
       }
 
+      /* Floating particles effect */
+      @keyframes floatParticle {
+        0% {
+          transform: translateY(0) translateX(0);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        90% {
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-100vh) translateX(100px);
+          opacity: 0;
+        }
+      }
+
+      .particle {
+        position: fixed;
+        width: 10px;
+        height: 10px;
+        background: rgba(90, 154, 174, 0.3);
+        border-radius: 50%;
+        pointer-events: none;
+        animation: floatParticle 15s linear infinite;
+      }
+
+      /* Loading spinner for button */
+      .login-btn.loading::after {
+        content: "";
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.6s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: translateY(-50%) rotate(360deg);
+        }
+      }
+
+      /* Responsive */
       @media (max-width: 480px) {
         .container {
           padding: 30px 20px;
         }
 
         .logo h1 {
-          font-size: 24px;
+          font-size: 28px;
         }
 
         .welcome h2 {
           font-size: 20px;
         }
+
+        .logo-icon {
+          width: 100px;
+          height: 100px;
+        }
+      }
+
+      /* Hover effect on container */
+      .container::before {
+        content: "";
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #5a9aae, #a8d5e2, #5a9aae);
+        border-radius: 30px;
+        z-index: -1;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        background-size: 200% 200%;
+        animation: gradientShift 3s ease infinite;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .container:hover::before {
+        opacity: 0.5;
       }
     </style>
   </head>
   <body>
     <div class="container">
       <div class="logo">
-        <div class="logo-icon"></div>
-        <h1>ClearPharma</h1>
-        <p>Your health, our mission</p>
+        <div class="logo-icon"><img src="search-svgrepo-com%20(1).svg" /></div>
+        <h1 class="main">ClearPharma</h1>
+        <p class="main">Transparent solutions, today.</p>
       </div>
 
       <div class="welcome">
-        <h2>Welcome back</h2>
-        <p>Sign in to continue</p>
+        <p>Please select your account to continue.</p>
       </div>
 
       <div class="error-message" id="errorMessage"></div>
@@ -316,7 +650,6 @@
         getDoc,
       } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-      // TODO: Replace with your Firebase config
       const firebaseConfig = {
         apiKey: "AIzaSyDwMTaAWC1crZgt-qYPA8coG_0ufUBpWBg",
         authDomain: "clearpharma-d267f.firebaseapp.com",
@@ -327,12 +660,10 @@
         measurementId: "G-T0LF1E23E4",
       };
 
-      // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
       const db = getFirestore(app);
 
-      // Make auth and db available globally
       window.auth = auth;
       window.db = db;
       window.firebaseAuth = {
@@ -345,6 +676,25 @@
 
     <script>
       let userType = "patient";
+
+      // Create floating particles
+      function createParticles() {
+        for (let i = 0; i < 5; i++) {
+          setTimeout(() => {
+            const particle = document.createElement("div");
+            particle.className = "particle";
+            particle.style.left = Math.random() * 100 + "%";
+            particle.style.animationDelay = Math.random() * 5 + "s";
+            particle.style.animationDuration = Math.random() * 10 + 10 + "s";
+            document.body.appendChild(particle);
+
+            setTimeout(() => particle.remove(), 15000);
+          }, i * 3000);
+        }
+      }
+
+      createParticles();
+      setInterval(createParticles, 15000);
 
       function selectUserType(type) {
         userType = type;
@@ -389,10 +739,10 @@
         }
 
         loginBtn.disabled = true;
+        loginBtn.classList.add("loading");
         loginBtn.textContent = "Signing in...";
 
         try {
-          // Sign in with Firebase
           const userCredential =
             await window.firebaseAuth.signInWithEmailAndPassword(
               window.auth,
@@ -401,7 +751,6 @@
             );
           const user = userCredential.user;
 
-          // Get user data from Firestore
           const userDoc = await window.firestore.getDoc(
             window.firestore.doc(window.db, "users", user.uid)
           );
@@ -409,23 +758,23 @@
           if (!userDoc.exists()) {
             showError("User profile not found. Please contact support.");
             loginBtn.disabled = false;
+            loginBtn.classList.remove("loading");
             loginBtn.textContent = "Sign In";
             return;
           }
 
           const userData = userDoc.data();
 
-          // Check if user role matches selected type
           if (userData.role !== userType) {
             showError(
               `This account is registered as ${userData.role}. Please select the correct login type.`
             );
             loginBtn.disabled = false;
+            loginBtn.classList.remove("loading");
             loginBtn.textContent = "Sign In";
             return;
           }
 
-          // Store user info in localStorage
           localStorage.setItem("userId", user.uid);
           localStorage.setItem("userEmail", user.email);
           localStorage.setItem("userRole", userData.role);
@@ -433,7 +782,6 @@
 
           showSuccess("Login successful! Redirecting...");
 
-          // Redirect based on role
           setTimeout(() => {
             if (userData.role === "patient") {
               window.location.href = "patient-dashboard.html";
@@ -459,6 +807,7 @@
 
           showError(errorMessage);
           loginBtn.disabled = false;
+          loginBtn.classList.remove("loading");
           loginBtn.textContent = "Sign In";
         }
       }
@@ -484,7 +833,6 @@
         window.location.href = "signup.html";
       }
 
-      // Allow Enter key to submit
       document
         .getElementById("password")
         .addEventListener("keypress", function (e) {
