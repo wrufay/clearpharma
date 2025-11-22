@@ -4,7 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ClearPharma - Sign Up</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="stylesheet"
+      href="https://i.icomoon.io/public/temp/92804d2d14/UntitledProject/style.css"
+    />
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Stack+Sans+Headline:wght@200..700&display=swap");
       * {
         margin: 0;
         padding: 0;
@@ -12,8 +18,11 @@
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Oxygen, Ubuntu, Cantarell, sans-serif;
+        /* font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif; */
+        font-family: "Hammersmith One", sans-serif;
+        font-weight: 400;
+        font-style: normal;
         background: linear-gradient(135deg, #a8d5e2 0%, #e8f4f8 100%);
         min-height: 100vh;
         display: flex;
@@ -39,7 +48,7 @@
       .logo-icon {
         width: 60px;
         height: 60px;
-        background: #5a9aae;
+        /* background: #5a9aae; */
         border-radius: 15px;
         display: inline-flex;
         align-items: center;
@@ -47,12 +56,12 @@
         margin-bottom: 15px;
       }
 
-      .logo-icon::before {
+      /* .logo-icon::before {
         content: "+";
         color: white;
         font-size: 36px;
         font-weight: 300;
-      }
+      } */
 
       .logo h1 {
         color: #2d6a7a;
@@ -242,15 +251,17 @@
   <body>
     <div class="container">
       <div class="logo">
-        <div class="logo-icon"></div>
+        <div class="logo-icon">
+          <img src="search-svgrepo-com%20(1).svg" />
+        </div>
         <h1>ClearPharma</h1>
-        <p>Your health, our mission</p>
+        <p>Create an account today!</p>
       </div>
-
+      <!-- 
       <div class="welcome">
         <h2>Create Account</h2>
         <p>Join ClearPharma today</p>
-      </div>
+      </div> -->
 
       <div class="error-message" id="errorMessage"></div>
       <div class="success-message" id="successMessage"></div>
@@ -271,7 +282,7 @@
       <!-- Patient Signup Form -->
       <div id="patientForm">
         <div class="info-box">
-          📋 Patients need a referral code from their pharmacist to sign up
+          Patients need a referral code from their pharmacist to sign up
         </div>
 
         <div class="input-group">
@@ -331,7 +342,7 @@
       <!-- Pharmacist Signup Form -->
       <div id="pharmacistForm" class="hidden">
         <div class="info-box">
-          👨‍⚕️ Pharmacist registration requires admin approval. Please contact
+          Pharmacist registration requires admin approval. Please contact
           support@clearpharma.com
         </div>
 
