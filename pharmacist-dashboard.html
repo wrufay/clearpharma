@@ -711,39 +711,12 @@
         </div>
       </div>
       <div class="header-actions">
-        <div class="search-bar">
-          <input
-            type="text"
-            placeholder="Search patients by name or ID..."
-            id="searchInput"
-          />
-          <span class="search-icon">
-            <span class="icon-search-svgrepo-com-1"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span><span class="path28"></span
-              ><span class="path29"></span><span class="path30"></span
-              ><span class="path31"></span
-            ></span>
-          </span>
-        </div>
         <div class="user-info">
           <div class="user-details">
-            <p>Dr. Sarah Johnson</p>
-            <span>License #PH-87654</span>
+            <p>Name</p>
+            <span>License #</span>
           </div>
-          <div class="user-avatar">SJ</div>
+          <div class="user-avatar">-</div>
           <button
             onclick="logout()"
             style="
@@ -1050,167 +1023,7 @@
           <a href="#" class="view-all" id="viewAllPatientsLink">View All (0)</a>
         </div>
 
-        <div class="patient-list">
-          <div class="patient-item" onclick="viewPatient('12345')">
-            <div class="patient-header">
-              <div class="patient-info">
-                <div class="patient-avatar">JD</div>
-                <div class="patient-details">
-                  <h3>John Doe</h3>
-                  <p>ID: 12345 • Type 2 Diabetes, Hypertension</p>
-                </div>
-              </div>
-              <div class="adherence-badge low">62% Adherence</div>
-            </div>
-            <div class="patient-stats">
-              <div class="patient-stat"><strong>5</strong> Medications</div>
-              <div class="patient-stat"><strong>2</strong> Missed Doses</div>
-              <div class="patient-stat">
-                Last Check: <strong>2 days ago</strong>
-              </div>
-            </div>
-            <div class="patient-actions">
-              <button
-                class="patient-action-btn primary"
-                onclick="event.stopPropagation(); viewProfile('12345')"
-              >
-                View Profile
-              </button>
-              <button
-                class="patient-action-btn"
-                onclick="event.stopPropagation(); sendMessage('12345')"
-              >
-                Message
-              </button>
-              <button
-                class="patient-action-btn"
-                onclick="event.stopPropagation(); viewHistory('12345')"
-              >
-                History
-              </button>
-            </div>
-          </div>
-
-          <div class="patient-item" onclick="viewPatient('12346')">
-            <div class="patient-header">
-              <div class="patient-info">
-                <div class="patient-avatar">MG</div>
-                <div class="patient-details">
-                  <h3>Maria Garcia</h3>
-                  <p>ID: 12346 • COPD, Asthma</p>
-                </div>
-              </div>
-              <div class="adherence-badge medium">78% Adherence</div>
-            </div>
-            <div class="patient-stats">
-              <div class="patient-stat"><strong>4</strong> Medications</div>
-              <div class="patient-stat"><strong>1</strong> Missed Dose</div>
-              <div class="patient-stat">
-                Last Check: <strong>5 days ago</strong>
-              </div>
-            </div>
-            <div class="patient-actions">
-              <button
-                class="patient-action-btn primary"
-                onclick="event.stopPropagation(); viewProfile('12346')"
-              >
-                View Profile
-              </button>
-              <button
-                class="patient-action-btn"
-                onclick="event.stopPropagation(); sendMessage('12346')"
-              >
-                Message
-              </button>
-              <button
-                class="patient-action-btn"
-                onclick="event.stopPropagation(); viewHistory('12346')"
-              >
-                History
-              </button>
-            </div>
-          </div>
-
-          <div class="patient-item" onclick="viewPatient('12347')">
-            <div class="patient-header">
-              <div class="patient-info">
-                <div class="patient-avatar">RC</div>
-                <div class="patient-details">
-                  <h3>Robert Chen</h3>
-                  <p>ID: 12347 • Heart Disease, High Cholesterol</p>
-                </div>
-              </div>
-              <div class="adherence-badge high">94% Adherence</div>
-            </div>
-            <div class="patient-stats">
-              <div class="patient-stat"><strong>6</strong> Medications</div>
-              <div class="patient-stat"><strong>0</strong> Missed Doses</div>
-              <div class="patient-stat">
-                Last Check: <strong>1 day ago</strong>
-              </div>
-            </div>
-            <div class="patient-actions">
-              <button
-                class="patient-action-btn primary"
-                onclick="event.stopPropagation(); viewProfile('12347')"
-              >
-                View Profile
-              </button>
-              <button
-                class="patient-action-btn"
-                onclick="event.stopPropagation(); sendMessage('12347')"
-              >
-                Message
-              </button>
-              <button
-                class="patient-action-btn"
-                onclick="event.stopPropagation(); viewHistory('12347')"
-              >
-                History
-              </button>
-            </div>
-          </div>
-
-          <div class="patient-item" onclick="viewPatient('12348')">
-            <div class="patient-header">
-              <div class="patient-info">
-                <div class="patient-avatar">LA</div>
-                <div class="patient-details">
-                  <h3>Lisa Anderson</h3>
-                  <p>ID: 12348 • Chronic Kidney Disease</p>
-                </div>
-              </div>
-              <div class="adherence-badge high">91% Adherence</div>
-            </div>
-            <div class="patient-stats">
-              <div class="patient-stat"><strong>3</strong> Medications</div>
-              <div class="patient-stat"><strong>0</strong> Missed Doses</div>
-              <div class="patient-stat">
-                Last Check: <strong>3 days ago</strong>
-              </div>
-            </div>
-            <div class="patient-actions">
-              <button
-                class="patient-action-btn primary"
-                onclick="event.stopPropagation(); viewProfile('12348')"
-              >
-                View Profile
-              </button>
-              <button
-                class="patient-action-btn"
-                onclick="event.stopPropagation(); sendMessage('12348')"
-              >
-                Message
-              </button>
-              <button
-                class="patient-action-btn"
-                onclick="event.stopPropagation(); viewHistory('12348')"
-              >
-                History
-              </button>
-            </div>
-          </div>
-        </div>
+        <div class="patient-list"></div>
       </div>
     </div>
 
@@ -2166,33 +1979,61 @@
       // Generate Referral Code
       async function generateReferralCode() {
         try {
-          // Generate unique code
+          Swal.fire({
+            title: "Generating Code...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
           const code =
             "RX-" + Math.random().toString(36).substr(2, 9).toUpperCase();
 
-          // Save to Firebase
           await db.collection("referralCodes").add({
             code: code,
             pharmacistId: currentUser.uid,
             pharmacistName: currentPharmacist.name,
             used: false,
             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
           });
 
-          // Show code to pharmacist
-          alert(
-            `✅ Referral Code Generated Successfully!\n\n${code}\n\nShare this code with your patient to complete their registration.\n\nValid for 30 days.`
-          );
-
-          // Optional: Copy to clipboard
-          if (navigator.clipboard) {
-            navigator.clipboard.writeText(code);
-            console.log("Code copied to clipboard!");
-          }
+          Swal.fire({
+            title: "✅ Referral Code Generated!",
+            html: `<div style="text-align: center;">
+        <p style="color: #666; margin-bottom: 20px;">Share this code with your patient.</p>
+        <div style="background: linear-gradient(135deg, #e8f4f8 0%, #d0e8ef 100%); padding: 25px; border-radius: 15px; margin: 25px 0; border: 2px dashed #5a9aae;">
+          <div style="font-size: 36px; font-weight: bold; color: #2c5f6f; letter-spacing: 3px; font-family: monospace;">${code}</div>
+        </div>
+        <p style="color: #666; font-size: 14px;"><strong>Valid for:</strong> 30 days</p>
+      </div>`,
+            icon: "success",
+            confirmButtonText: "📋 Copy Code",
+            confirmButtonColor: "#5a9aae",
+            showCancelButton: true,
+            cancelButtonText: "Close",
+            width: "550px",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              navigator.clipboard.writeText(code).then(() => {
+                Swal.fire({
+                  title: "Copied! 📋",
+                  text: `Code ${code} copied to clipboard!`,
+                  icon: "success",
+                  timer: 2000,
+                  showConfirmButton: false,
+                });
+              });
+            }
+          });
         } catch (error) {
-          console.error("Error generating referral code:", error);
-          alert("Error generating code. Please try again.");
+          Swal.fire({
+            title: "Error!",
+            text: "Failed to generate code.",
+            icon: "error",
+            confirmButtonColor: "#5a9aae",
+          });
         }
       }
 
