@@ -1419,6 +1419,74 @@
         }
       }
 
+      // Resolve a symptom (marks it as resolved)
+      async function resolveSymptom(symptomId) {
+        if (!confirm("Mark this symptom as resolved?")) {
+          return;
+        }
+
+        try {
+          await db.collection("symptoms").doc(symptomId).update({
+            resolved: true,
+            resolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            resolvedBy: currentUser.uid,
+          });
+
+          // Show success message
+          const successDiv = document.createElement("div");
+          successDiv.style.cssText =
+            "position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
+          successDiv.textContent = "✅ Symptom marked as resolved!";
+          document.body.appendChild(successDiv);
+
+          setTimeout(() => {
+            successDiv.remove();
+          }, 3000);
+
+          // Reload symptoms
+          setTimeout(() => {
+            loadSymptoms();
+          }, 500);
+        } catch (error) {
+          console.error("Error resolving symptom:", error);
+          alert("Error resolving symptom: " + error.message);
+        }
+      }
+
+      // Delete a symptom permanently
+      async function deleteSymptom(symptomId) {
+        if (
+          !confirm(
+            "Are you sure you want to delete this symptom? This cannot be undone."
+          )
+        ) {
+          return;
+        }
+
+        try {
+          await db.collection("symptoms").doc(symptomId).delete();
+
+          // Show success message
+          const successDiv = document.createElement("div");
+          successDiv.style.cssText =
+            "position: fixed; top: 20px; right: 20px; background: #ff9800; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
+          successDiv.textContent = "🗑️ Symptom deleted!";
+          document.body.appendChild(successDiv);
+
+          setTimeout(() => {
+            successDiv.remove();
+          }, 3000);
+
+          // Reload symptoms
+          setTimeout(() => {
+            loadSymptoms();
+          }, 500);
+        } catch (error) {
+          console.error("Error deleting symptom:", error);
+          alert("Error deleting symptom: " + error.message);
+        }
+      }
+
       // Load medications
       async function loadMedications() {
         try {
@@ -1481,13 +1549,13 @@
       }
 
       // Load symptoms
+      // Load symptoms (FIXED - no orderBy to avoid index requirement)
       async function loadSymptoms() {
         try {
           const symptomsSnapshot = await db
             .collection("symptoms")
             .where("patientId", "==", currentUser.uid)
-            .orderBy("loggedAt", "desc")
-            .limit(3)
+            .limit(10)
             .get();
 
           const symptomsList = document.getElementById("symptomsList");
@@ -1498,34 +1566,72 @@
             return;
           }
 
+          // Convert to array and sort manually
+          const symptoms = [];
+          symptomsSnapshot.forEach((doc) => {
+            symptoms.push({ id: doc.id, ...doc.data() });
+          });
+
+          // Sort by loggedAt manually (most recent first)
+          symptoms.sort((a, b) => {
+            const dateA = a.loggedAt
+              ? a.loggedAt.toDate
+                ? a.loggedAt.toDate()
+                : new Date(a.loggedAt)
+              : new Date(0);
+            const dateB = b.loggedAt
+              ? b.loggedAt.toDate
+                ? b.loggedAt.toDate()
+                : new Date(b.loggedAt)
+              : new Date(0);
+            return dateB - dateA;
+          });
+
+          // Take only first 3
+          const recentSymptoms = symptoms.slice(0, 3);
+
           symptomsList.innerHTML = "";
 
-          symptomsSnapshot.forEach((doc) => {
-            const symptom = doc.data();
+          recentSymptoms.forEach((symptom) => {
             const symptomItem = document.createElement("div");
             symptomItem.className = "symptom-item";
 
             symptomItem.innerHTML = `
-                        <div class="symptom-header">
-                            <div class="symptom-type">${
-                              symptom.type || "Symptom"
-                            }</div>
-                            <div class="symptom-severity ${
-                              symptom.severity || "mild"
-                            }">${symptom.severity || "Mild"}</div>
-                        </div>
-                        <div class="symptom-description">${
-                          symptom.description || "No description"
-                        }</div>
-                        <div class="symptom-time">${formatTimestamp(
-                          symptom.loggedAt
-                        )}</div>
-                    `;
+  <div class="symptom-header">
+      <div class="symptom-type">${symptom.type || "Symptom"}</div>
+      <div class="symptom-severity ${symptom.severity || "mild"}">${
+              symptom.severity || "Mild"
+            }</div>
+  </div>
+  <div class="symptom-description">${
+    symptom.description || "No description"
+  }</div>
+  <div class="symptom-time">${formatTimestamp(symptom.loggedAt)}</div>
+  <div class="symptom-actions">
+      <button class="symptom-btn symptom-btn-resolve" onclick="resolveSymptom('${
+        symptom.id
+      }')">
+          ✓ Resolve
+      </button>
+      <button class="symptom-btn symptom-btn-delete" onclick="deleteSymptom('${
+        symptom.id
+      }')">
+          × Delete
+      </button>
+  </div>
+`;
+
+            // Add resolved class if symptom is resolved
+            if (symptom.resolved) {
+              symptomItem.classList.add("resolved");
+            }
 
             symptomsList.appendChild(symptomItem);
           });
         } catch (error) {
           console.error("Error loading symptoms:", error);
+          document.getElementById("symptomsList").innerHTML =
+            '<p style="text-align: center; color: #999; padding: 20px;">Error loading symptoms</p>';
         }
       }
 
@@ -1691,12 +1797,16 @@
         }
 
         try {
+          // Save to Firestore with both server timestamp and local fallback
           await db.collection("symptoms").add({
             patientId: currentUser.uid,
+            patientName: currentPatient.name || "Patient",
+            pharmacistId: currentPatient.pharmacistId || null,
             type: symptomType,
             severity: severity,
             description: description || "",
             loggedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            createdAt: new Date(), // Fallback timestamp for immediate display
           });
 
           // Clear form
@@ -1706,7 +1816,7 @@
 
           closeModal("symptomsModal");
 
-          // Show success message in modal content instead of alert
+          // Show success message
           const successDiv = document.createElement("div");
           successDiv.style.cssText =
             "position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
@@ -1717,10 +1827,13 @@
             successDiv.remove();
           }, 3000);
 
-          loadSymptoms();
+          // Reload symptoms with a small delay
+          setTimeout(() => {
+            loadSymptoms();
+          }, 500);
         } catch (error) {
           console.error("Error logging symptom:", error);
-          alert("Error logging symptom. Please try again.");
+          alert("Error logging symptom: " + error.message);
         }
       }
 
