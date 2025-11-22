@@ -1478,6 +1478,144 @@
       </div>
     </div>
 
+    <!-- Add Medication Modal -->
+    <div id="addMedicationModal" class="modal">
+      <div class="modal-content" style="max-width: 600px">
+        <div class="modal-header">
+          <h2>💊 Add Medication for Patient</h2>
+          <button
+            class="modal-close"
+            onclick="closeModal('addMedicationModal')"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Patient Name</label>
+            <input
+              type="text"
+              id="medPatientName"
+              readonly
+              style="background: #f5f5f5"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Medication Name *</label>
+            <input
+              type="text"
+              id="medName"
+              placeholder="e.g., Metformin, Lisinopril"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Dosage *</label>
+            <input type="text" id="medDosage" placeholder="e.g., 500mg, 10mg" />
+          </div>
+
+          <div class="form-group">
+            <label>Frequency *</label>
+            <select id="medFrequency">
+              <option value="">Select frequency...</option>
+              <option value="once-daily">Once Daily</option>
+              <option value="twice-daily">Twice Daily (Every 12 hours)</option>
+              <option value="three-times-daily">
+                Three Times Daily (Every 8 hours)
+              </option>
+              <option value="four-times-daily">
+                Four Times Daily (Every 6 hours)
+              </option>
+              <option value="every-other-day">Every Other Day</option>
+              <option value="weekly">Once Weekly</option>
+              <option value="as-needed">As Needed (PRN)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Time(s) to Take</label>
+            <div id="medicationTimes">
+              <input type="time" id="medTime1" style="margin-bottom: 10px" />
+            </div>
+            <button
+              type="button"
+              onclick="addTimeSlot()"
+              style="
+                font-size: 12px;
+                padding: 5px 10px;
+                background: #e0e0e0;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+              "
+            >
+              + Add Another Time
+            </button>
+          </div>
+
+          <div class="form-group">
+            <label>Instructions</label>
+            <textarea
+              id="medInstructions"
+              placeholder="e.g., Take with food, Avoid alcohol"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label>Duration</label>
+            <select id="medDuration">
+              <option value="ongoing">Ongoing (No end date)</option>
+              <option value="7">7 days</option>
+              <option value="14">14 days</option>
+              <option value="30">30 days</option>
+              <option value="60">60 days</option>
+              <option value="90">90 days</option>
+              <option value="custom">Custom...</option>
+            </select>
+          </div>
+
+          <div
+            class="form-group"
+            id="customDurationGroup"
+            style="display: none"
+          >
+            <label>End Date</label>
+            <input type="date" id="medEndDate" />
+          </div>
+
+          <div class="form-group">
+            <label>Refills Remaining</label>
+            <input type="number" id="medRefills" value="3" min="0" max="12" />
+          </div>
+
+          <div class="form-group">
+            <label>Notes (Optional)</label>
+            <textarea
+              id="medNotes"
+              placeholder="Additional notes for the patient..."
+              rows="2"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-btn modal-btn-secondary"
+            onclick="closeModal('addMedicationModal')"
+          >
+            Cancel
+          </button>
+          <button
+            class="modal-btn modal-btn-primary"
+            onclick="submitMedication()"
+          >
+            💊 Add Medication
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script>
       // Firebase Configuration
       const firebaseConfig = {
@@ -1825,35 +1963,50 @@
           patientCard.onclick = () => viewPatient(patientId);
 
           patientCard.innerHTML = `
-                    <div class="patient-header">
-                        <div class="patient-info">
-                            <div class="patient-avatar">${initials}</div>
-                            <div class="patient-details">
-                                <h3>${patient.name || "Patient"}</h3>
-                                <p>ID: ${patientId.substring(0, 8)} • ${
+  <div class="patient-header">
+    <div class="patient-info">
+      <div class="patient-avatar">${initials}</div>
+      <div class="patient-details">
+        <h3>${patient.name || "Patient"}</h3>
+        <p>ID: ${patientId.substring(0, 8)} • ${
             patient.conditions || "No conditions listed"
           }</p>
-                            </div>
-                        </div>
-                        <div class="adherence-badge ${adherenceClass}">${adherence}% Adherence</div>
-                    </div>
-                    <div class="patient-stats">
-                        <div class="patient-stat"><strong>${
-                          patient.medicationCount || 0
-                        }</strong> Medications</div>
-                        <div class="patient-stat"><strong>${
-                          patient.missedDoses || 0
-                        }</strong> Missed Doses</div>
-                        <div class="patient-stat">Last Check: <strong>${getTimeSince(
-                          patient.lastCheck
-                        )}</strong></div>
-                    </div>
-                    <div class="patient-actions">
-                        <button class="patient-action-btn primary" onclick="event.stopPropagation(); viewProfile('${patientId}')">View Profile</button>
-                        <button class="patient-action-btn" onclick="event.stopPropagation(); sendMessage('${patientId}')">Message</button>
-                        <button class="patient-action-btn" onclick="event.stopPropagation(); viewHistory('${patientId}')">History</button>
-                    </div>
-                `;
+      </div>
+    </div>
+    <div class="adherence-badge ${adherenceClass}">${adherence}% Adherence</div>
+  </div>
+  <div class="patient-stats">
+    <div class="patient-stat"><strong>${
+      patient.medicationCount || 0
+    }</strong> Medications</div>
+    <div class="patient-stat"><strong>${
+      patient.missedDoses || 0
+    }</strong> Missed Doses</div>
+    <div class="patient-stat">Last Check: <strong>${getTimeSince(
+      patient.lastCheck
+    )}</strong></div>
+  </div>
+  <div class="patient-actions">
+    <button class="patient-action-btn primary" onclick="event.stopPropagation(); viewPatientMedications('${patientId}', '${
+            patient.name || "Patient"
+          }')">
+      💊 Medications
+    </button>
+    <button class="patient-action-btn primary" onclick="event.stopPropagation(); addMedicationForPatient('${patientId}', '${
+            patient.name || "Patient"
+          }')">
+      + Add Med
+    </button>
+    <button class="patient-action-btn" onclick="event.stopPropagation(); viewProfile('${patientId}')">
+      View Profile
+    </button>
+    <button class="patient-action-btn" onclick="event.stopPropagation(); sendMessage('${patientId}')">
+      Message
+    </button>
+    <button class="patient-action-btn" onclick="event.stopPropagation(); viewHistory('${patientId}')">
+      History
+    </button>
+  </div>`;
 
           patientListContainer.appendChild(patientCard);
         });
@@ -2527,6 +2680,749 @@
               confirmButtonColor: "#5a9aae",
             });
           }
+        }
+      }
+
+      // Global variable to track current patient for medication
+      let currentMedicationPatientId = null;
+      let timeSlotCount = 1;
+
+      // Open Add Medication Modal
+      async function addMedicationForPatient(patientId, patientName) {
+        try {
+          currentMedicationPatientId = patientId;
+
+          // Set patient name
+          document.getElementById("medPatientName").value = patientName;
+
+          // Reset form
+          document.getElementById("medName").value = "";
+          document.getElementById("medDosage").value = "";
+          document.getElementById("medFrequency").value = "";
+          document.getElementById("medTime1").value = "09:00";
+          document.getElementById("medInstructions").value = "";
+          document.getElementById("medDuration").value = "ongoing";
+          document.getElementById("medRefills").value = "3";
+          document.getElementById("medNotes").value = "";
+          document.getElementById("customDurationGroup").style.display = "none";
+
+          // Reset time slots
+          timeSlotCount = 1;
+          document.getElementById("medicationTimes").innerHTML =
+            '<input type="time" id="medTime1" style="margin-bottom: 10px;" value="09:00">';
+
+          openModal("addMedicationModal");
+        } catch (error) {
+          console.error("Error opening medication modal:", error);
+          Swal.fire({
+            title: "Error",
+            text: "Could not open medication form",
+            icon: "error",
+            confirmButtonColor: "#5a9aae",
+          });
+        }
+      }
+
+      // Add another time slot
+      function addTimeSlot() {
+        timeSlotCount++;
+        const timesContainer = document.getElementById("medicationTimes");
+        const newTimeInput = document.createElement("input");
+        newTimeInput.type = "time";
+        newTimeInput.id = `medTime${timeSlotCount}`;
+        newTimeInput.style.marginBottom = "10px";
+        newTimeInput.value = "09:00";
+        timesContainer.appendChild(newTimeInput);
+      }
+
+      // Handle duration dropdown
+      document.addEventListener("DOMContentLoaded", () => {
+        const durationSelect = document.getElementById("medDuration");
+        if (durationSelect) {
+          durationSelect.addEventListener("change", function () {
+            const customGroup = document.getElementById("customDurationGroup");
+            if (this.value === "custom") {
+              customGroup.style.display = "block";
+            } else {
+              customGroup.style.display = "none";
+            }
+          });
+        }
+      });
+
+      // Submit Medication
+      async function submitMedication() {
+        console.log("🔵 Starting medication submission...");
+
+        const name = document.getElementById("medName").value.trim();
+        const dosage = document.getElementById("medDosage").value.trim();
+        const frequency = document.getElementById("medFrequency").value;
+        const instructions = document
+          .getElementById("medInstructions")
+          .value.trim();
+        const duration = document.getElementById("medDuration").value;
+        const refills = parseInt(document.getElementById("medRefills").value);
+        const notes = document.getElementById("medNotes").value.trim();
+
+        console.log("📋 Form data:", { name, dosage, frequency, duration });
+
+        // Validation
+        if (!name || !dosage || !frequency) {
+          Swal.fire({
+            title: "Missing Information",
+            text: "Please fill in medication name, dosage, and frequency",
+            icon: "warning",
+            confirmButtonColor: "#5a9aae",
+          });
+          return;
+        }
+
+        // Get all time slots
+        const times = [];
+        for (let i = 1; i <= timeSlotCount; i++) {
+          const timeInput = document.getElementById(`medTime${i}`);
+          if (timeInput && timeInput.value) {
+            times.push(timeInput.value);
+          }
+        }
+
+        console.log("⏰ Times collected:", times);
+
+        if (times.length === 0) {
+          Swal.fire({
+            title: "Missing Time",
+            text: "Please specify at least one time to take the medication",
+            icon: "warning",
+            confirmButtonColor: "#5a9aae",
+          });
+          return;
+        }
+
+        // Calculate end date
+        let endDate = null;
+        if (duration === "custom") {
+          const customEndDate = document.getElementById("medEndDate").value;
+          if (customEndDate) {
+            endDate = new Date(customEndDate);
+            console.log("📅 Custom end date:", endDate);
+          }
+        } else if (duration !== "ongoing") {
+          const days = parseInt(duration);
+          endDate = new Date();
+          endDate.setDate(endDate.getDate() + days);
+          console.log("📅 Calculated end date:", endDate, `(${days} days)`);
+        }
+
+        // Show loading
+        Swal.fire({
+          title: "Adding Medication...",
+          html: "Saving to database...",
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+
+        try {
+          console.log(
+            "🔍 Getting patient info for:",
+            currentMedicationPatientId
+          );
+
+          // Get patient info
+          const patientDoc = await db
+            .collection("users")
+            .doc(currentMedicationPatientId)
+            .get();
+
+          if (!patientDoc.exists) {
+            throw new Error("Patient not found");
+          }
+
+          const patient = patientDoc.data();
+          console.log("👤 Patient found:", patient.name);
+
+          // Create medication document
+          const medicationData = {
+            patientId: currentMedicationPatientId,
+            patientName: patient.name,
+            pharmacistId: currentUser.uid,
+            pharmacistName: currentPharmacist.name,
+
+            name: name,
+            dosage: dosage,
+            frequency: frequency,
+            times: times,
+            instructions: instructions,
+            notes: notes,
+
+            startDate: firebase.firestore.FieldValue.serverTimestamp(),
+            endDate: endDate,
+            duration: duration,
+
+            refillsRemaining: refills,
+            active: true,
+
+            adherenceTracking: {
+              totalDoses: 0,
+              takenDoses: 0,
+              missedDoses: 0,
+              adherenceRate: 100,
+            },
+
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          };
+
+          console.log("💾 Saving medication data...");
+
+          // Add to medications collection
+          const medRef = await db.collection("medications").add(medicationData);
+          console.log("✅ Medication saved with ID:", medRef.id);
+
+          // Create scheduled doses for the next 7 days
+          console.log("📅 Creating scheduled doses...");
+          try {
+            await createScheduledDoses(medRef.id, medicationData);
+            console.log("✅ Scheduled doses created");
+          } catch (doseError) {
+            console.warn(
+              "⚠️ Error creating scheduled doses (non-critical):",
+              doseError
+            );
+            // Continue anyway - this is not critical
+          }
+
+          // Update patient's medication count
+          console.log("🔢 Updating patient medication count...");
+          try {
+            const patientMedsSnapshot = await db
+              .collection("medications")
+              .where("patientId", "==", currentMedicationPatientId)
+              .where("active", "==", true)
+              .get();
+
+            await db
+              .collection("users")
+              .doc(currentMedicationPatientId)
+              .update({
+                medicationCount: patientMedsSnapshot.size,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+            console.log(
+              "✅ Patient medication count updated:",
+              patientMedsSnapshot.size
+            );
+          } catch (countError) {
+            console.warn(
+              "⚠️ Error updating medication count (non-critical):",
+              countError
+            );
+            // Continue anyway
+          }
+
+          // Send notification to patient
+          console.log("📧 Sending notification to patient...");
+          try {
+            await db.collection("messages").add({
+              from: currentUser.uid,
+              fromName: currentPharmacist.name,
+              to: currentMedicationPatientId,
+              toName: patient.name,
+              type: "medication_added",
+              message: `New medication prescribed: ${name} (${dosage}) - ${frequency}. Please check your medication list for details.`,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+              read: false,
+            });
+            console.log("✅ Notification sent");
+          } catch (messageError) {
+            console.warn(
+              "⚠️ Error sending notification (non-critical):",
+              messageError
+            );
+            // Continue anyway
+          }
+
+          console.log("🎉 All done! Showing success message...");
+
+          // Success!
+          Swal.fire({
+            title: "Medication Added! 💊",
+            html: `
+        <div style="text-align: center;">
+          <p style="color: #666; margin: 15px 0;">
+            <strong style="color: #2c5f6f;">${name}</strong> has been added to 
+            <strong style="color: #2c5f6f;">${
+              patient.name
+            }'s</strong> medication list.
+          </p>
+          <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin: 20px 0;">
+            <p style="color: #2e7d32; font-size: 14px; margin: 5px 0;">
+              <strong>Dosage:</strong> ${dosage}
+            </p>
+            <p style="color: #2e7d32; font-size: 14px; margin: 5px 0;">
+              <strong>Frequency:</strong> ${frequency.replace(/-/g, " ")}
+            </p>
+            <p style="color: #2e7d32; font-size: 14px; margin: 5px 0;">
+              <strong>Times:</strong> ${times.join(", ")}
+            </p>
+          </div>
+          <p style="color: #999; font-size: 13px;">
+            ✉️ Patient has been notified
+          </p>
+        </div>
+      `,
+            icon: "success",
+            confirmButtonColor: "#5a9aae",
+            confirmButtonText: "Great!",
+          });
+
+          closeModal("addMedicationModal");
+
+          // Refresh dashboard
+          console.log("🔄 Refreshing dashboard...");
+          try {
+            loadDashboardData();
+          } catch (refreshError) {
+            console.warn("⚠️ Error refreshing dashboard:", refreshError);
+          }
+        } catch (error) {
+          console.error("❌ ERROR in submitMedication:", error);
+          console.error("Error details:", {
+            code: error.code,
+            message: error.message,
+            stack: error.stack,
+          });
+
+          Swal.fire({
+            title: "Error",
+            html: `
+        <p>Failed to add medication.</p>
+        <p style="color: #999; font-size: 12px; margin-top: 10px;">
+          Error: ${error.message}
+        </p>
+        <p style="color: #999; font-size: 12px;">
+          Check the console for more details (F12)
+        </p>
+      `,
+            icon: "error",
+            confirmButtonColor: "#5a9aae",
+          });
+        }
+      }
+
+      // Create scheduled doses for medication
+      async function createScheduledDoses(medicationId, medicationData) {
+        console.log(
+          "📅 Creating scheduled doses for medication:",
+          medicationId
+        );
+
+        try {
+          const batch = db.batch();
+          const now = new Date();
+          let doseCount = 0;
+
+          // Create doses for next 7 days
+          for (let day = 0; day < 7; day++) {
+            const doseDate = new Date(now);
+            doseDate.setDate(doseDate.getDate() + day);
+
+            medicationData.times.forEach((time) => {
+              const [hours, minutes] = time.split(":");
+              const scheduledTime = new Date(doseDate);
+              scheduledTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+              // Don't create doses in the past
+              if (scheduledTime > now) {
+                const doseRef = db.collection("scheduledDoses").doc();
+                batch.set(doseRef, {
+                  medicationId: medicationId,
+                  patientId: medicationData.patientId,
+                  pharmacistId: medicationData.pharmacistId,
+                  medicationName: medicationData.name,
+                  dosage: medicationData.dosage,
+                  scheduledTime: scheduledTime,
+                  status: "pending", // pending, taken, missed, skipped
+                  takenAt: null,
+                  createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                });
+                doseCount++;
+              }
+            });
+          }
+
+          if (doseCount > 0) {
+            await batch.commit();
+            console.log(`✅ Created ${doseCount} scheduled doses`);
+          } else {
+            console.log("⚠️ No future doses to schedule");
+          }
+        } catch (error) {
+          console.error("❌ Error creating scheduled doses:", error);
+          // Don't throw - this is not critical
+        }
+      }
+
+      // View Patient Medications
+      async function viewPatientMedications(patientId, patientName) {
+        try {
+          Swal.fire({
+            title: "Loading...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
+          const medsSnapshot = await db
+            .collection("medications")
+            .where("patientId", "==", patientId)
+            .where("active", "==", true)
+            .get();
+
+          let medsHTML = `<h3 style="margin-bottom: 15px;">${patientName}'s Medications</h3>`;
+
+          if (medsSnapshot.empty) {
+            medsHTML +=
+              '<p style="text-align: center; color: #999;">No medications prescribed yet</p>';
+          } else {
+            medsHTML += '<div style="max-height: 400px; overflow-y: auto;">';
+            medsSnapshot.forEach((doc) => {
+              const med = doc.data();
+              const adherence = med.adherenceTracking?.adherenceRate || 100;
+              const adherenceColor =
+                adherence >= 80
+                  ? "#4caf50"
+                  : adherence >= 60
+                  ? "#ff9800"
+                  : "#f44336";
+
+              medsHTML += `
+          <div style="background: #f8fbfc; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid #5a9aae;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+              <div>
+                <div style="font-weight: 600; color: #2c5f6f; font-size: 16px;">${
+                  med.name
+                }</div>
+                <div style="color: #666; font-size: 14px;">${
+                  med.dosage
+                } - ${med.frequency.replace(/-/g, " ")}</div>
+              </div>
+              <div style="background: ${adherenceColor}; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                ${adherence}%
+              </div>
+            </div>
+            <div style="font-size: 13px; color: #666; margin: 8px 0;">
+              <strong>Times:</strong> ${med.times.join(", ")}
+            </div>
+            ${
+              med.instructions
+                ? `<div style="font-size: 13px; color: #666; margin: 8px 0;"><strong>Instructions:</strong> ${med.instructions}</div>`
+                : ""
+            }
+            <div style="font-size: 12px; color: #999; margin-top: 10px;">
+              Refills: ${med.refillsRemaining} | 
+              Doses: ${med.adherenceTracking?.takenDoses || 0}/${
+                med.adherenceTracking?.totalDoses || 0
+              }
+            </div>
+            <div style="margin-top: 10px; display: flex; gap: 8px;">
+              <button onclick="editMedication('${
+                doc.id
+              }')" style="padding: 6px 12px; background: #5a9aae; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">Edit</button>
+              <button onclick="discontinueMedication('${doc.id}', '${
+                med.name
+              }')" style="padding: 6px 12px; background: #f44336; color: white; border: none; border-radius: 6px; font-size: 12px; cursor: pointer;">Discontinue</button>
+            </div>
+          </div>
+        `;
+            });
+            medsHTML += "</div>";
+          }
+
+          Swal.fire({
+            title: "💊 Medications",
+            html: medsHTML,
+            width: "700px",
+            confirmButtonColor: "#5a9aae",
+            confirmButtonText: "Close",
+            showCancelButton: true,
+            cancelButtonText: "+ Add New Medication",
+            cancelButtonColor: "#4caf50",
+          }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.cancel) {
+              addMedicationForPatient(patientId, patientName);
+            }
+          });
+        } catch (error) {
+          console.error("Error viewing medications:", error);
+          Swal.fire({
+            title: "Error",
+            text: "Could not load medications",
+            icon: "error",
+            confirmButtonColor: "#5a9aae",
+          });
+        }
+      }
+
+      // Discontinue Medication
+      // IMPROVED DISCONTINUE MEDICATION FUNCTION
+      // Replace the discontinueMedication function in pharmacist-dashboard.html
+
+      async function discontinueMedication(medicationId, medicationName) {
+        const result = await Swal.fire({
+          title: "⚠️ Discontinue Medication?",
+          html: `
+      <div style="text-align: left; padding: 10px;">
+        <p style="color: #666; margin-bottom: 15px;">
+          Are you sure you want to discontinue <strong style="color: #2c5f6f;">${medicationName}</strong>?
+        </p>
+        <div style="background: #fff3e0; padding: 15px; border-radius: 10px; border-left: 4px solid #ff9800; margin: 15px 0;">
+          <p style="color: #e65100; font-size: 14px; margin: 0 0 10px 0;">
+            <strong>⚠️ This will:</strong>
+          </p>
+          <ul style="color: #666; font-size: 14px; margin: 5px 0 0 20px; line-height: 1.8;">
+            <li>Mark the medication as inactive</li>
+            <li>Remove it from patient's daily medication list</li>
+            <li>Send a notification to the patient</li>
+            <li>Keep records for history (not permanently deleted)</li>
+          </ul>
+        </div>
+        <div style="margin-top: 15px;">
+          <label style="display: block; color: #2c5f6f; font-weight: 600; margin-bottom: 8px;">
+            Reason for discontinuation (optional):
+          </label>
+          <textarea 
+            id="discontinueReason" 
+            placeholder="e.g., Treatment completed, Side effects, Switched to alternative..." 
+            style="width: 100%; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 14px; min-height: 80px;"
+          ></textarea>
+        </div>
+      </div>
+    `,
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#f44336",
+          cancelButtonColor: "#999",
+          confirmButtonText: "Yes, Discontinue",
+          cancelButtonText: "Cancel",
+          width: "550px",
+          preConfirm: () => {
+            return {
+              reason: document.getElementById("discontinueReason").value.trim(),
+            };
+          },
+        });
+
+        if (result.isConfirmed) {
+          try {
+            // Show loading
+            Swal.fire({
+              title: "Discontinuing Medication...",
+              allowOutsideClick: false,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+            });
+
+            // Get medication details for notification
+            const medDoc = await db
+              .collection("medications")
+              .doc(medicationId)
+              .get();
+            const medication = medDoc.data();
+
+            // Discontinue the medication
+            await db
+              .collection("medications")
+              .doc(medicationId)
+              .update({
+                active: false,
+                discontinuedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                discontinuedBy: currentUser.uid,
+                discontinuedByName: currentPharmacist.name,
+                discontinueReason: result.value.reason || "No reason provided",
+              });
+
+            console.log("✅ Medication discontinued");
+
+            // Cancel all future scheduled doses
+            const futureDosesSnapshot = await db
+              .collection("scheduledDoses")
+              .where("medicationId", "==", medicationId)
+              .where("status", "==", "pending")
+              .where("scheduledTime", ">", new Date())
+              .get();
+
+            const batch = db.batch();
+            futureDosesSnapshot.forEach((doc) => {
+              batch.update(doc.ref, {
+                status: "cancelled",
+                cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+              });
+            });
+            await batch.commit();
+
+            console.log(
+              `✅ Cancelled ${futureDosesSnapshot.size} future doses`
+            );
+
+            // Send notification to patient
+            const notificationMessage = result.value.reason
+              ? `Your medication "${medicationName}" has been discontinued by your pharmacist.\n\nReason: ${result.value.reason}\n\nPlease contact your pharmacist if you have any questions.`
+              : `Your medication "${medicationName}" has been discontinued by your pharmacist. Please contact them if you have any questions.`;
+
+            await db.collection("messages").add({
+              from: currentUser.uid,
+              fromName: currentPharmacist.name,
+              to: medication.patientId,
+              toName: medication.patientName,
+              type: "medication_discontinued",
+              subject: `Medication Discontinued: ${medicationName}`,
+              message: notificationMessage,
+              timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+              read: false,
+              priority: "high",
+            });
+
+            console.log("✅ Notification sent to patient");
+
+            // Update patient's medication count
+            const activeMedsSnapshot = await db
+              .collection("medications")
+              .where("patientId", "==", medication.patientId)
+              .where("active", "==", true)
+              .get();
+
+            await db.collection("users").doc(medication.patientId).update({
+              medicationCount: activeMedsSnapshot.size,
+              updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
+
+            console.log("✅ Patient medication count updated");
+
+            // Success message
+            Swal.fire({
+              title: "Medication Discontinued ✓",
+              html: `
+          <div style="text-align: center;">
+            <p style="color: #666; margin: 15px 0;">
+              <strong style="color: #2c5f6f;">${medicationName}</strong> has been discontinued.
+            </p>
+            <div style="background: #e8f5e9; padding: 15px; border-radius: 10px; margin: 20px 0;">
+              <p style="color: #2e7d32; font-size: 14px; margin: 0;">
+                ✓ Medication marked as inactive<br>
+                ✓ Future doses cancelled<br>
+                ✓ Patient notified
+              </p>
+            </div>
+            ${
+              result.value.reason
+                ? `
+              <div style="background: #f8fbfc; padding: 12px; border-radius: 8px; margin-top: 15px;">
+                <p style="color: #666; font-size: 13px; margin: 0;">
+                  <strong>Reason:</strong> ${result.value.reason}
+                </p>
+              </div>
+            `
+                : ""
+            }
+          </div>
+        `,
+              icon: "success",
+              confirmButtonColor: "#5a9aae",
+              confirmButtonText: "OK",
+            });
+
+            // Refresh dashboard
+            loadDashboardData();
+          } catch (error) {
+            console.error("❌ Error discontinuing medication:", error);
+            Swal.fire({
+              title: "Error",
+              html: `
+          <p>Could not discontinue medication.</p>
+          <p style="color: #999; font-size: 12px; margin-top: 10px;">
+            Error: ${error.message}
+          </p>
+        `,
+              icon: "error",
+              confirmButtonColor: "#5a9aae",
+            });
+          }
+        }
+      }
+
+      // BONUS: Function to view discontinued medications history
+      async function viewDiscontinuedMedications(patientId, patientName) {
+        try {
+          Swal.fire({
+            title: "Loading...",
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
+          const discontinuedSnapshot = await db
+            .collection("medications")
+            .where("patientId", "==", patientId)
+            .where("active", "==", false)
+            .orderBy("discontinuedAt", "desc")
+            .get();
+
+          let html = `<h3 style="margin-bottom: 15px;">Discontinued Medications - ${patientName}</h3>`;
+
+          if (discontinuedSnapshot.empty) {
+            html +=
+              '<p style="text-align: center; color: #999;">No discontinued medications</p>';
+          } else {
+            html += '<div style="max-height: 400px; overflow-y: auto;">';
+            discontinuedSnapshot.forEach((doc) => {
+              const med = doc.data();
+              const discontinuedDate = med.discontinuedAt?.toDate
+                ? med.discontinuedAt.toDate().toLocaleDateString()
+                : "Unknown";
+
+              html += `
+          <div style="background: #f8fbfc; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid #999;">
+            <div style="font-weight: 600; color: #666; font-size: 16px;">${
+              med.name
+            }</div>
+            <div style="color: #999; font-size: 14px; margin: 5px 0;">${
+              med.dosage
+            } - ${med.frequency.replace(/-/g, " ")}</div>
+            <div style="font-size: 13px; color: #999; margin-top: 8px;">
+              <strong>Discontinued:</strong> ${discontinuedDate}<br>
+              <strong>By:</strong> ${med.discontinuedByName || "Pharmacist"}<br>
+              ${
+                med.discontinueReason
+                  ? `<strong>Reason:</strong> ${med.discontinueReason}`
+                  : ""
+              }
+            </div>
+          </div>
+        `;
+            });
+            html += "</div>";
+          }
+
+          Swal.fire({
+            title: "📋 Medication History",
+            html: html,
+            width: "600px",
+            confirmButtonColor: "#5a9aae",
+            confirmButtonText: "Close",
+          });
+        } catch (error) {
+          console.error("Error viewing discontinued medications:", error);
+          Swal.fire({
+            title: "Error",
+            text: "Could not load discontinued medications",
+            icon: "error",
+            confirmButtonColor: "#5a9aae",
+          });
         }
       }
     </script>
