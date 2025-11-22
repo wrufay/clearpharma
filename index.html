@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClearPharma - Login</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #a8d5e2 0%, #e8f4f8 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 30px;
+        padding: 40px 30px;
+        max-width: 400px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo-icon {
+        width: 60px;
+        height: 60px;
+        background: #5a9aae;
+        border-radius: 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+
+      .logo-icon::before {
+        content: "+";
+        color: white;
+        font-size: 36px;
+        font-weight: 300;
+      }
+
+      .logo h1 {
+        color: #2d6a7a;
+        font-size: 28px;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+
+      .logo p {
+        color: #7ba8b5;
+        font-size: 14px;
+      }
+
+      .welcome {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .welcome h2 {
+        color: #2d6a7a;
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .welcome p {
+        color: #7ba8b5;
+        font-size: 14px;
+      }
+
+      .user-type {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 25px;
+      }
+
+      .user-type button {
+        flex: 1;
+        padding: 15px;
+        border: 2px solid #d0e8ef;
+        background: white;
+        border-radius: 15px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #7ba8b5;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .user-type button.active {
+        background: #5a9aae;
+        border-color: #5a9aae;
+        color: white;
+      }
+
+      .user-type button:hover {
+        border-color: #5a9aae;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group label {
+        display: block;
+        color: #2d6a7a;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #d0e8ef;
+        border-radius: 12px;
+        font-size: 15px;
+        color: #2d6a7a;
+        transition: all 0.3s ease;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #5a9aae;
+        background: #f8fcfd;
+      }
+
+      .input-group input::placeholder {
+        color: #b8d4dc;
+      }
+
+      .forgot-password {
+        text-align: right;
+        margin-bottom: 25px;
+      }
+
+      .forgot-password a {
+        color: #5a9aae;
+        font-size: 13px;
+        text-decoration: none;
+        font-weight: 500;
+      }
+
+      .forgot-password a:hover {
+        text-decoration: underline;
+      }
+
+      .login-btn {
+        width: 100%;
+        padding: 16px;
+        background: #5a9aae;
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+      }
+
+      .login-btn:hover {
+        background: #4a8a9e;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(90, 154, 174, 0.3);
+      }
+
+      .login-btn:active {
+        transform: translateY(0);
+      }
+
+      .login-btn:disabled {
+        background: #b8d4dc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .signup-link {
+        text-align: center;
+        color: #7ba8b5;
+        font-size: 14px;
+      }
+
+      .signup-link a {
+        color: #5a9aae;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .signup-link a:hover {
+        text-decoration: underline;
+      }
+
+      .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+      }
+
+      .success-message {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 30px 20px;
+        }
+
+        .logo h1 {
+          font-size: 24px;
+        }
+
+        .welcome h2 {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <div class="logo-icon"></div>
+        <h1>ClearPharma</h1>
+        <p>Your health, our mission</p>
+      </div>
+
+      <div class="welcome">
+        <h2>Welcome back</h2>
+        <p>Sign in to continue</p>
+      </div>
+
+      <div class="error-message" id="errorMessage"></div>
+      <div class="success-message" id="successMessage"></div>
+
+      <div class="user-type">
+        <button
+          class="active"
+          id="patientBtn"
+          onclick="selectUserType('patient')"
+        >
+          Patient
+        </button>
+        <button id="pharmacistBtn" onclick="selectUserType('pharmacist')">
+          Pharmacist
+        </button>
+      </div>
+
+      <div class="input-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter your email" />
+      </div>
+
+      <div class="input-group">
+        <label for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Enter your password"
+        />
+      </div>
+
+      <div class="forgot-password">
+        <a href="#" onclick="resetPassword(); return false;"
+          >Forgot password?</a
+        >
+      </div>
+
+      <button class="login-btn" id="loginBtn" onclick="handleLogin()">
+        Sign In
+      </button>
+
+      <div class="signup-link">
+        Don't have an account?
+        <a href="#" onclick="showSignup(); return false;">Sign up</a>
+      </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      // TODO: Replace with your Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyDwMTaAWC1crZgt-qYPA8coG_0ufUBpWBg",
+        authDomain: "clearpharma-d267f.firebaseapp.com",
+        projectId: "clearpharma-d267f",
+        storageBucket: "clearpharma-d267f.firebasestorage.app",
+        messagingSenderId: "163400096970",
+        appId: "1:163400096970:web:cf0c6a3e0662823570a833",
+        measurementId: "G-T0LF1E23E4",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // Make auth and db available globally
+      window.auth = auth;
+      window.db = db;
+      window.firebaseAuth = {
+        signInWithEmailAndPassword,
+        createUserWithEmailAndPassword,
+        sendPasswordResetEmail,
+      };
+      window.firestore = { doc, setDoc, getDoc };
+    </script>
+
+    <script>
+      let userType = "patient";
+
+      function selectUserType(type) {
+        userType = type;
+        const patientBtn = document.getElementById("patientBtn");
+        const pharmacistBtn = document.getElementById("pharmacistBtn");
+
+        if (type === "patient") {
+          patientBtn.classList.add("active");
+          pharmacistBtn.classList.remove("active");
+        } else {
+          pharmacistBtn.classList.add("active");
+          patientBtn.classList.remove("active");
+        }
+      }
+
+      function showError(message) {
+        const errorEl = document.getElementById("errorMessage");
+        errorEl.textContent = message;
+        errorEl.style.display = "block";
+        setTimeout(() => {
+          errorEl.style.display = "none";
+        }, 5000);
+      }
+
+      function showSuccess(message) {
+        const successEl = document.getElementById("successMessage");
+        successEl.textContent = message;
+        successEl.style.display = "block";
+        setTimeout(() => {
+          successEl.style.display = "none";
+        }, 3000);
+      }
+
+      async function handleLogin() {
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+        const loginBtn = document.getElementById("loginBtn");
+
+        if (!email || !password) {
+          showError("Please fill in all fields");
+          return;
+        }
+
+        loginBtn.disabled = true;
+        loginBtn.textContent = "Signing in...";
+
+        try {
+          // Sign in with Firebase
+          const userCredential =
+            await window.firebaseAuth.signInWithEmailAndPassword(
+              window.auth,
+              email,
+              password
+            );
+          const user = userCredential.user;
+
+          // Get user data from Firestore
+          const userDoc = await window.firestore.getDoc(
+            window.firestore.doc(window.db, "users", user.uid)
+          );
+
+          if (!userDoc.exists()) {
+            showError("User profile not found. Please contact support.");
+            loginBtn.disabled = false;
+            loginBtn.textContent = "Sign In";
+            return;
+          }
+
+          const userData = userDoc.data();
+
+          // Check if user role matches selected type
+          if (userData.role !== userType) {
+            showError(
+              `This account is registered as ${userData.role}. Please select the correct login type.`
+            );
+            loginBtn.disabled = false;
+            loginBtn.textContent = "Sign In";
+            return;
+          }
+
+          // Store user info in localStorage
+          localStorage.setItem("userId", user.uid);
+          localStorage.setItem("userEmail", user.email);
+          localStorage.setItem("userRole", userData.role);
+          localStorage.setItem("userName", userData.name);
+
+          showSuccess("Login successful! Redirecting...");
+
+          // Redirect based on role
+          setTimeout(() => {
+            if (userData.role === "patient") {
+              window.location.href = "patient-dashboard.html";
+            } else if (userData.role === "pharmacist") {
+              window.location.href = "pharmacist-dashboard.html";
+            } else if (userData.role === "service_team") {
+              window.location.href = "service-dashboard.html";
+            }
+          }, 1500);
+        } catch (error) {
+          console.error("Login error:", error);
+          let errorMessage = "Login failed. Please try again.";
+
+          if (error.code === "auth/user-not-found") {
+            errorMessage = "No account found with this email.";
+          } else if (error.code === "auth/wrong-password") {
+            errorMessage = "Incorrect password.";
+          } else if (error.code === "auth/invalid-email") {
+            errorMessage = "Invalid email address.";
+          } else if (error.code === "auth/too-many-requests") {
+            errorMessage = "Too many failed attempts. Please try again later.";
+          }
+
+          showError(errorMessage);
+          loginBtn.disabled = false;
+          loginBtn.textContent = "Sign In";
+        }
+      }
+
+      async function resetPassword() {
+        const email = document.getElementById("email").value.trim();
+
+        if (!email) {
+          showError("Please enter your email address first");
+          return;
+        }
+
+        try {
+          await window.firebaseAuth.sendPasswordResetEmail(window.auth, email);
+          showSuccess("Password reset email sent! Check your inbox.");
+        } catch (error) {
+          console.error("Password reset error:", error);
+          showError("Failed to send password reset email. Please try again.");
+        }
+      }
+
+      function showSignup() {
+        window.location.href = "signup.html";
+      }
+
+      // Allow Enter key to submit
+      document
+        .getElementById("password")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            handleLogin();
+          }
+        });
+    </script>
+  </body>
+</html>

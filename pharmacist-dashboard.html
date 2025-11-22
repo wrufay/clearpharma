@@ -1,0 +1,2184 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClearPharma - Pharmacist Dashboard</title>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #e8f4f8 0%, #f5f9fb 100%);
+        min-height: 100vh;
+        padding-bottom: 80px;
+      }
+
+      /* Header */
+      .header {
+        background: white;
+        padding: 20px 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 50;
+      }
+
+      .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .logo-icon {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .logo-text h1 {
+        color: #2c5f6f;
+        font-size: 24px;
+        margin-bottom: 2px;
+      }
+
+      .logo-text span {
+        color: #7ba8b5;
+        font-size: 12px;
+      }
+
+      .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .search-bar {
+        position: relative;
+        width: 400px;
+      }
+
+      .search-bar input {
+        width: 100%;
+        padding: 12px 45px 12px 20px;
+        border: 2px solid #e0e0e0;
+        border-radius: 25px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .search-bar input:focus {
+        outline: none;
+        border-color: #5a9aae;
+        box-shadow: 0 0 0 3px rgba(90, 154, 174, 0.1);
+      }
+
+      .search-icon {
+        position: absolute;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 18px;
+      }
+
+      .user-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .user-details {
+        text-align: right;
+      }
+
+      .user-details p {
+        color: #2c5f6f;
+        font-weight: 600;
+        font-size: 14px;
+      }
+
+      .user-details span {
+        color: #7ba8b5;
+        font-size: 12px;
+      }
+
+      .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      /* Main Content */
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 30px;
+      }
+
+      /* Stats Grid */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: transform 0.3s ease;
+      }
+
+      .stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .stat-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 15px;
+      }
+
+      .stat-card.blue .stat-icon {
+        background: #e3f2fd;
+        color: #2196f3;
+      }
+
+      .stat-card.red .stat-icon {
+        background: #ffebee;
+        color: #f44336;
+      }
+
+      .stat-card.green .stat-icon {
+        background: #e8f5e9;
+        color: #4caf50;
+      }
+
+      .stat-card.orange .stat-icon {
+        background: #fff3e0;
+        color: #ff9800;
+      }
+
+      .stat-value {
+        font-size: 32px;
+        font-weight: bold;
+        color: #2c5f6f;
+        margin-bottom: 5px;
+      }
+
+      .stat-label {
+        color: #7ba8b5;
+        font-size: 14px;
+      }
+
+      /* Action Buttons */
+      .action-buttons {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .action-btn.primary {
+        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
+        color: white;
+      }
+
+      .action-btn.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(90, 154, 174, 0.3);
+      }
+
+      .action-btn.secondary {
+        background: white;
+        color: #5a9aae;
+        border: 2px solid #5a9aae;
+      }
+
+      .action-btn.secondary:hover {
+        background: #f0f8fa;
+      }
+
+      /* Content Grid */
+      .content-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 30px;
+      }
+
+      /* Risk Alerts */
+      .section-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .section-title {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2c5f6f;
+      }
+
+      .view-all {
+        color: #5a9aae;
+        font-size: 14px;
+        cursor: pointer;
+        text-decoration: none;
+      }
+
+      .view-all:hover {
+        text-decoration: underline;
+      }
+
+      .alert-item {
+        padding: 15px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .alert-item:hover {
+        transform: translateX(5px);
+      }
+
+      .alert-item.critical {
+        background: #ffebee;
+        border-left: 4px solid #f44336;
+      }
+
+      .alert-item.warning {
+        background: #fff3e0;
+        border-left: 4px solid #ff9800;
+      }
+
+      .alert-item.info {
+        background: #e3f2fd;
+        border-left: 4px solid #2196f3;
+      }
+
+      .alert-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+      }
+
+      .alert-patient {
+        font-weight: 600;
+        color: #2c5f6f;
+        font-size: 15px;
+      }
+
+      .alert-time {
+        color: #999;
+        font-size: 12px;
+      }
+
+      .alert-message {
+        color: #555;
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      /* Patient List */
+      .patient-list {
+        margin-top: 20px;
+      }
+
+      .patient-item {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .patient-item:hover {
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        transform: translateY(-2px);
+      }
+
+      .patient-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 12px;
+      }
+
+      .patient-info {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .patient-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+      }
+
+      .patient-details h3 {
+        color: #2c5f6f;
+        font-size: 16px;
+        margin-bottom: 4px;
+      }
+
+      .patient-details p {
+        color: #999;
+        font-size: 13px;
+      }
+
+      .adherence-badge {
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+      }
+
+      .adherence-badge.high {
+        background: #e8f5e9;
+        color: #4caf50;
+      }
+
+      .adherence-badge.medium {
+        background: #fff3e0;
+        color: #ff9800;
+      }
+
+      .adherence-badge.low {
+        background: #ffebee;
+        color: #f44336;
+      }
+
+      .patient-stats {
+        display: flex;
+        gap: 20px;
+        margin-bottom: 12px;
+      }
+
+      .patient-stat {
+        font-size: 13px;
+        color: #666;
+      }
+
+      .patient-stat strong {
+        color: #2c5f6f;
+      }
+
+      .patient-actions {
+        display: flex;
+        gap: 10px;
+      }
+
+      .patient-action-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 8px;
+        font-size: 13px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #f5f5f5;
+        color: #555;
+      }
+
+      .patient-action-btn:hover {
+        background: #e0e0e0;
+      }
+
+      .patient-action-btn.primary {
+        background: #5a9aae;
+        color: white;
+      }
+
+      .patient-action-btn.primary:hover {
+        background: #4a8a9e;
+      }
+
+      /* Bottom Navigation */
+      .bottom-nav {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 15px 0;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-around;
+        z-index: 100;
+      }
+
+      .nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        color: #7ba8b5;
+        text-decoration: none;
+        font-size: 12px;
+        padding: 8px 20px;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .nav-item.active {
+        color: #5a9aae;
+        background: #e8f4f8;
+      }
+
+      .nav-item:hover {
+        background: #f0f8fa;
+      }
+
+      .nav-icon {
+        font-size: 24px;
+      }
+
+      /* Chat Float Button */
+      .chat-float {
+        position: fixed;
+        bottom: 100px;
+        right: 30px;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 28px;
+        box-shadow: 0 4px 20px rgba(90, 154, 174, 0.4);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .chat-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 30px rgba(90, 154, 174, 0.5);
+      }
+
+      /* Responsive */
+      @media (max-width: 1024px) {
+        .content-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .search-bar {
+          width: 100%;
+        }
+
+        .stats-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+          flex-direction: column;
+        }
+
+        .action-btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+
+      /* Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal.active {
+        display: flex;
+      }
+
+      .modal-content {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        max-width: 500px;
+        width: 90%;
+        max-height: 80vh;
+        overflow-y: auto;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .modal-header h2 {
+        color: #2c5f6f;
+        font-size: 22px;
+      }
+
+      .modal-close {
+        background: none;
+        border: none;
+        font-size: 28px;
+        color: #999;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+      }
+
+      .modal-close:hover {
+        color: #333;
+      }
+
+      .modal-body {
+        margin-bottom: 20px;
+      }
+
+      .form-group {
+        margin-bottom: 15px;
+      }
+
+      .form-group label {
+        display: block;
+        color: #2c5f6f;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 14px;
+      }
+
+      .form-group input,
+      .form-group textarea,
+      .form-group select {
+        width: 100%;
+        padding: 12px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 10px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus,
+      .form-group select:focus {
+        outline: none;
+        border-color: #5a9aae;
+        box-shadow: 0 0 0 3px rgba(90, 154, 174, 0.1);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 80px;
+      }
+
+      .modal-footer {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+      }
+
+      .modal-btn {
+        padding: 12px 24px;
+        border: none;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .modal-btn-primary {
+        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
+        color: white;
+      }
+
+      .modal-btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(90, 154, 174, 0.3);
+      }
+
+      .modal-btn-secondary {
+        background: #f5f5f5;
+        color: #666;
+      }
+
+      .modal-btn-secondary:hover {
+        background: #e0e0e0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header -->
+    <div class="header">
+      <div class="logo-section">
+        <div class="logo-icon">+</div>
+        <div class="logo-text">
+          <h1>ClearPharma</h1>
+          <span>Pharmacist Portal</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <div class="search-bar">
+          <input
+            type="text"
+            placeholder="Search patients by name or ID..."
+            id="searchInput"
+          />
+          <span class="search-icon">🔍</span>
+        </div>
+        <div class="user-info">
+          <div class="user-details">
+            <p>Dr. Sarah Johnson</p>
+            <span>License #PH-87654</span>
+          </div>
+          <div class="user-avatar">SJ</div>
+          <button
+            onclick="logout()"
+            style="
+              margin-left: 15px;
+              padding: 8px 16px;
+              background: #f44336;
+              color: white;
+              border: none;
+              border-radius: 8px;
+              cursor: pointer;
+              font-size: 14px;
+              font-weight: 600;
+            "
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card blue">
+          <div class="stat-icon">👥</div>
+          <div class="stat-value">156</div>
+          <div class="stat-label">Active Patients</div>
+        </div>
+        <div class="stat-card red">
+          <div class="stat-icon">⚠️</div>
+          <div class="stat-value">8</div>
+          <div class="stat-label">Risk Alerts</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-icon">💊</div>
+          <div class="stat-value">23</div>
+          <div class="stat-label">Refills Due This Week</div>
+        </div>
+        <div class="stat-card orange">
+          <div class="stat-icon">💬</div>
+          <div class="stat-value">5</div>
+          <div class="stat-label">Pending Messages</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="action-buttons">
+        <button class="action-btn primary" onclick="addNewPatient()">
+          <span>➕</span> Add New Patient
+        </button>
+        <button class="action-btn primary" onclick="generateReferralCode()">
+          <span>🔑</span> Generate Referral Code
+        </button>
+        <button class="action-btn secondary" onclick="viewReports()">
+          <span>📊</span> View Reports
+        </button>
+        <button class="action-btn secondary" onclick="contactServiceTeam()">
+          <span>👥</span> Contact Service Team
+        </button>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="content-grid">
+        <!-- Risk Alerts -->
+        <div class="section-card">
+          <div class="section-header">
+            <h2 class="section-title">🚨 Priority Alerts</h2>
+            <a href="#" class="view-all">View All</a>
+          </div>
+
+          <div class="alert-item critical" onclick="openConsultation('12345')">
+            <div class="alert-header">
+              <span class="alert-patient">John Doe (ID: 12345)</span>
+              <span class="alert-time">15 min ago</span>
+            </div>
+            <div class="alert-message">
+              🔴 <strong>Critical:</strong> Patient missed 3 consecutive insulin
+              doses. BP reading elevated (160/95). Immediate consultation
+              recommended.
+            </div>
+          </div>
+
+          <div class="alert-item warning" onclick="openConsultation('12346')">
+            <div class="alert-header">
+              <span class="alert-patient">Maria Garcia (ID: 12346)</span>
+              <span class="alert-time">2 hours ago</span>
+            </div>
+            <div class="alert-message">
+              ⚠️ <strong>Warning:</strong> Adherence dropped to 65% this week.
+              Patient reported side effects from new medication.
+            </div>
+          </div>
+
+          <div class="alert-item info" onclick="openConsultation('12347')">
+            <div class="alert-header">
+              <span class="alert-patient">Robert Chen (ID: 12347)</span>
+              <span class="alert-time">4 hours ago</span>
+            </div>
+            <div class="alert-message">
+              ℹ️ <strong>Info:</strong> Patient requested consultation regarding
+              new symptoms. Available for video call this afternoon.
+            </div>
+          </div>
+
+          <div class="alert-item warning" onclick="openConsultation('12348')">
+            <div class="alert-header">
+              <span class="alert-patient">Lisa Anderson (ID: 12348)</span>
+              <span class="alert-time">5 hours ago</span>
+            </div>
+            <div class="alert-message">
+              ⚠️ <strong>Warning:</strong> Multiple refill delays detected.
+              Service team flagged for follow-up.
+            </div>
+          </div>
+
+          <div class="alert-item critical" onclick="openConsultation('12349')">
+            <div class="alert-header">
+              <span class="alert-patient">Michael Brown (ID: 12349)</span>
+              <span class="alert-time">6 hours ago</span>
+            </div>
+            <div class="alert-message">
+              🔴 <strong>Critical:</strong> Risk prediction model flagged
+              potential drug interaction. Review medication list urgently.
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="section-card">
+          <div class="section-header">
+            <h2 class="section-title">📈 This Week</h2>
+          </div>
+
+          <div style="margin-top: 20px">
+            <div style="margin-bottom: 20px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin-bottom: 8px;
+                "
+              >
+                <span style="color: #666; font-size: 14px"
+                  >Average Adherence</span
+                >
+                <span style="color: #4caf50; font-weight: bold">87%</span>
+              </div>
+              <div
+                style="
+                  background: #f0f0f0;
+                  height: 8px;
+                  border-radius: 4px;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    background: linear-gradient(90deg, #4caf50, #8bc34a);
+                    width: 87%;
+                    height: 100%;
+                  "
+                ></div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 20px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin-bottom: 8px;
+                "
+              >
+                <span style="color: #666; font-size: 14px"
+                  >Consultations Completed</span
+                >
+                <span style="color: #2196f3; font-weight: bold">34/40</span>
+              </div>
+              <div
+                style="
+                  background: #f0f0f0;
+                  height: 8px;
+                  border-radius: 4px;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    background: linear-gradient(90deg, #2196f3, #42a5f5);
+                    width: 85%;
+                    height: 100%;
+                  "
+                ></div>
+              </div>
+            </div>
+
+            <div style="margin-bottom: 20px">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin-bottom: 8px;
+                "
+              >
+                <span style="color: #666; font-size: 14px"
+                  >Refills Processed</span
+                >
+                <span style="color: #ff9800; font-weight: bold">67/89</span>
+              </div>
+              <div
+                style="
+                  background: #f0f0f0;
+                  height: 8px;
+                  border-radius: 4px;
+                  overflow: hidden;
+                "
+              >
+                <div
+                  style="
+                    background: linear-gradient(90deg, #ff9800, #ffa726);
+                    width: 75%;
+                    height: 100%;
+                  "
+                ></div>
+              </div>
+            </div>
+
+            <div
+              style="
+                background: #e8f4f8;
+                padding: 15px;
+                border-radius: 12px;
+                margin-top: 25px;
+              "
+            >
+              <div style="font-size: 13px; color: #5a9aae; margin-bottom: 8px">
+                💡 Quick Tip
+              </div>
+              <div style="font-size: 14px; color: #2c5f6f; line-height: 1.5">
+                Patients with adherence above 80% show 3x better health
+                outcomes. Keep up the great work!
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Patient List -->
+      <div class="section-card" style="margin-top: 30px">
+        <div class="section-header">
+          <h2 class="section-title">👥 Your Patients</h2>
+          <a href="#" class="view-all">View All (156)</a>
+        </div>
+
+        <div class="patient-list">
+          <div class="patient-item" onclick="viewPatient('12345')">
+            <div class="patient-header">
+              <div class="patient-info">
+                <div class="patient-avatar">JD</div>
+                <div class="patient-details">
+                  <h3>John Doe</h3>
+                  <p>ID: 12345 • Type 2 Diabetes, Hypertension</p>
+                </div>
+              </div>
+              <div class="adherence-badge low">62% Adherence</div>
+            </div>
+            <div class="patient-stats">
+              <div class="patient-stat"><strong>5</strong> Medications</div>
+              <div class="patient-stat"><strong>2</strong> Missed Doses</div>
+              <div class="patient-stat">
+                Last Check: <strong>2 days ago</strong>
+              </div>
+            </div>
+            <div class="patient-actions">
+              <button
+                class="patient-action-btn primary"
+                onclick="event.stopPropagation(); viewProfile('12345')"
+              >
+                View Profile
+              </button>
+              <button
+                class="patient-action-btn"
+                onclick="event.stopPropagation(); sendMessage('12345')"
+              >
+                Message
+              </button>
+              <button
+                class="patient-action-btn"
+                onclick="event.stopPropagation(); viewHistory('12345')"
+              >
+                History
+              </button>
+            </div>
+          </div>
+
+          <div class="patient-item" onclick="viewPatient('12346')">
+            <div class="patient-header">
+              <div class="patient-info">
+                <div class="patient-avatar">MG</div>
+                <div class="patient-details">
+                  <h3>Maria Garcia</h3>
+                  <p>ID: 12346 • COPD, Asthma</p>
+                </div>
+              </div>
+              <div class="adherence-badge medium">78% Adherence</div>
+            </div>
+            <div class="patient-stats">
+              <div class="patient-stat"><strong>4</strong> Medications</div>
+              <div class="patient-stat"><strong>1</strong> Missed Dose</div>
+              <div class="patient-stat">
+                Last Check: <strong>5 days ago</strong>
+              </div>
+            </div>
+            <div class="patient-actions">
+              <button
+                class="patient-action-btn primary"
+                onclick="event.stopPropagation(); viewProfile('12346')"
+              >
+                View Profile
+              </button>
+              <button
+                class="patient-action-btn"
+                onclick="event.stopPropagation(); sendMessage('12346')"
+              >
+                Message
+              </button>
+              <button
+                class="patient-action-btn"
+                onclick="event.stopPropagation(); viewHistory('12346')"
+              >
+                History
+              </button>
+            </div>
+          </div>
+
+          <div class="patient-item" onclick="viewPatient('12347')">
+            <div class="patient-header">
+              <div class="patient-info">
+                <div class="patient-avatar">RC</div>
+                <div class="patient-details">
+                  <h3>Robert Chen</h3>
+                  <p>ID: 12347 • Heart Disease, High Cholesterol</p>
+                </div>
+              </div>
+              <div class="adherence-badge high">94% Adherence</div>
+            </div>
+            <div class="patient-stats">
+              <div class="patient-stat"><strong>6</strong> Medications</div>
+              <div class="patient-stat"><strong>0</strong> Missed Doses</div>
+              <div class="patient-stat">
+                Last Check: <strong>1 day ago</strong>
+              </div>
+            </div>
+            <div class="patient-actions">
+              <button
+                class="patient-action-btn primary"
+                onclick="event.stopPropagation(); viewProfile('12347')"
+              >
+                View Profile
+              </button>
+              <button
+                class="patient-action-btn"
+                onclick="event.stopPropagation(); sendMessage('12347')"
+              >
+                Message
+              </button>
+              <button
+                class="patient-action-btn"
+                onclick="event.stopPropagation(); viewHistory('12347')"
+              >
+                History
+              </button>
+            </div>
+          </div>
+
+          <div class="patient-item" onclick="viewPatient('12348')">
+            <div class="patient-header">
+              <div class="patient-info">
+                <div class="patient-avatar">LA</div>
+                <div class="patient-details">
+                  <h3>Lisa Anderson</h3>
+                  <p>ID: 12348 • Chronic Kidney Disease</p>
+                </div>
+              </div>
+              <div class="adherence-badge high">91% Adherence</div>
+            </div>
+            <div class="patient-stats">
+              <div class="patient-stat"><strong>3</strong> Medications</div>
+              <div class="patient-stat"><strong>0</strong> Missed Doses</div>
+              <div class="patient-stat">
+                Last Check: <strong>3 days ago</strong>
+              </div>
+            </div>
+            <div class="patient-actions">
+              <button
+                class="patient-action-btn primary"
+                onclick="event.stopPropagation(); viewProfile('12348')"
+              >
+                View Profile
+              </button>
+              <button
+                class="patient-action-btn"
+                onclick="event.stopPropagation(); sendMessage('12348')"
+              >
+                Message
+              </button>
+              <button
+                class="patient-action-btn"
+                onclick="event.stopPropagation(); viewHistory('12348')"
+              >
+                History
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chat Float Button -->
+    <div
+      class="chat-float"
+      onclick="openServiceTeamChat()"
+      title="Chat with Service Team"
+    >
+      💬
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <div class="nav-item active">
+        <div class="nav-icon">🏠</div>
+        <span>Dashboard</span>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">👥</div>
+        <span>Patients</span>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">📊</div>
+        <span>Reports</span>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">💬</div>
+        <span>Messages</span>
+      </div>
+      <div class="nav-item">
+        <div class="nav-icon">⚙️</div>
+        <span>Settings</span>
+      </div>
+    </div>
+
+    <!-- Add Patient Modal -->
+    <div id="addPatientModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Add New Patient</h2>
+          <button class="modal-close" onclick="closeModal('addPatientModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Patient Name</label>
+            <input
+              type="text"
+              id="newPatientName"
+              placeholder="Enter full name"
+            />
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input
+              type="email"
+              id="newPatientEmail"
+              placeholder="patient@example.com"
+            />
+          </div>
+          <div class="form-group">
+            <label>Phone Number (optional)</label>
+            <input
+              type="tel"
+              id="newPatientPhone"
+              placeholder="(123) 456-7890"
+            />
+          </div>
+          <div class="form-group">
+            <label>Conditions</label>
+            <textarea
+              id="newPatientConditions"
+              placeholder="e.g., Type 2 Diabetes, Hypertension"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-btn modal-btn-secondary"
+            onclick="closeModal('addPatientModal')"
+          >
+            Cancel
+          </button>
+          <button
+            class="modal-btn modal-btn-primary"
+            onclick="submitNewPatient()"
+          >
+            Add Patient
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Patient Modal -->
+    <div id="messageModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Send Message</h2>
+          <button class="modal-close" onclick="closeModal('messageModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>To: <span id="messagePatientName"></span></label>
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea
+              id="messageText"
+              placeholder="Type your message here..."
+              rows="6"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-btn modal-btn-secondary"
+            onclick="closeModal('messageModal')"
+          >
+            Cancel
+          </button>
+          <button class="modal-btn modal-btn-primary" onclick="submitMessage()">
+            Send Message
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Patient Profile Modal -->
+    <div id="viewPatientModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Patient Profile</h2>
+          <button class="modal-close" onclick="closeModal('viewPatientModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body" id="patientProfileContent">
+          <p>Loading...</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-btn modal-btn-secondary"
+            onclick="closeModal('viewPatientModal')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Patient History Modal -->
+    <div id="historyModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Medication History</h2>
+          <button class="modal-close" onclick="closeModal('historyModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body" id="historyContent">
+          <p>Loading...</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-btn modal-btn-secondary"
+            onclick="closeModal('historyModal')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Reports Modal -->
+    <div id="reportsModal" class="modal">
+      <div class="modal-content" style="max-width: 700px">
+        <div class="modal-header">
+          <h2>📊 Analytics & Reports</h2>
+          <button class="modal-close" onclick="closeModal('reportsModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body" id="reportsContent">
+          <p>Loading reports...</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-btn modal-btn-secondary"
+            onclick="closeModal('reportsModal')"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Service Team Chat Modal -->
+    <div id="serviceTeamModal" class="modal">
+      <div class="modal-content" style="max-width: 600px; max-height: 90vh">
+        <div class="modal-header">
+          <h2>💬 Service Team Chat</h2>
+          <button class="modal-close" onclick="closeModal('serviceTeamModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div
+            id="chatMessages"
+            style="
+              height: 400px;
+              overflow-y: auto;
+              border: 2px solid #e0e0e0;
+              border-radius: 12px;
+              padding: 15px;
+              margin-bottom: 15px;
+              background: #f8fbfc;
+            "
+          >
+            <p style="text-align: center; color: #999">
+              Start a conversation with the service team
+            </p>
+          </div>
+          <div class="form-group">
+            <textarea
+              id="chatMessageInput"
+              placeholder="Type your message..."
+              rows="3"
+            ></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-btn modal-btn-secondary"
+            onclick="closeModal('serviceTeamModal')"
+          >
+            Close
+          </button>
+          <button
+            class="modal-btn modal-btn-primary"
+            onclick="sendServiceTeamMessage()"
+          >
+            Send Message
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Consultation Modal -->
+    <div id="consultationModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Patient Consultation</h2>
+          <button class="modal-close" onclick="closeModal('consultationModal')">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body" id="consultationContent">
+          <p>Loading...</p>
+        </div>
+        <div class="modal-footer">
+          <button
+            class="modal-btn modal-btn-secondary"
+            onclick="closeModal('consultationModal')"
+          >
+            Close
+          </button>
+          <button
+            class="modal-btn modal-btn-primary"
+            onclick="respondToConsultation()"
+          >
+            Respond
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Firebase Configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyDwMTaAWC1crZgt-qYPA8coG_0ufUBpWBg",
+        authDomain: "clearpharma-d267f.firebaseapp.com",
+        projectId: "clearpharma-d267f",
+        storageBucket: "clearpharma-d267f.firebasestorage.app",
+        messagingSenderId: "163400096970",
+        appId: "1:163400096970:web:cf0c6a3e0662823570a833",
+        measurementId: "G-T0LF1E23E4",
+      };
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
+
+      // TEST MODE: Set this to true to view dashboard without logging in
+      const TEST_MODE = false; // Set to false for production - requires login
+
+      let currentUser = null;
+      let currentPharmacist = null;
+
+      // Check if user is logged in and is a pharmacist
+      auth.onAuthStateChanged(async (user) => {
+        if (user) {
+          currentUser = user;
+
+          try {
+            // Get pharmacist data
+            const pharmacistDoc = await db
+              .collection("users")
+              .doc(user.uid)
+              .get();
+
+            if (
+              pharmacistDoc.exists &&
+              pharmacistDoc.data().role === "pharmacist"
+            ) {
+              currentPharmacist = pharmacistDoc.data();
+
+              // Update UI with pharmacist info
+              document.querySelector(".user-details p").textContent =
+                currentPharmacist.name || "Pharmacist";
+              document.querySelector(
+                ".user-details span"
+              ).textContent = `License #${
+                currentPharmacist.licenseNumber || "N/A"
+              }`;
+
+              // Get initials for avatar
+              const initials = (currentPharmacist.name || "PH")
+                .split(" ")
+                .map((n) => n[0])
+                .join("")
+                .toUpperCase();
+              document.querySelector(".user-avatar").textContent = initials;
+
+              // Load dashboard data
+              loadDashboardData();
+            } else {
+              // Not a pharmacist, redirect to login
+              alert("Access denied. Pharmacist account required.");
+              if (window.location.pathname.includes("index.html") === false) {
+                window.location.href = "index.html";
+              }
+            }
+          } catch (error) {
+            console.error("Error loading pharmacist data:", error);
+            alert("Error loading pharmacist data. Please log in again.");
+          }
+        } else {
+          // Not logged in
+          if (TEST_MODE) {
+            console.log("TEST MODE: Running dashboard without authentication");
+            // Load dashboard with placeholder data
+            loadDashboardData();
+          } else {
+            // Redirect to login page
+            const shouldRedirect = confirm(
+              "You need to log in to access the pharmacist dashboard. Redirect to login page?"
+            );
+            if (shouldRedirect) {
+              window.location.href = "index.html";
+            }
+          }
+        }
+      });
+
+      // Load dashboard statistics and data
+      async function loadDashboardData() {
+        try {
+          // If in test mode and not logged in, show placeholder data
+          if (TEST_MODE && !currentUser) {
+            console.log("Loading placeholder data in test mode");
+            const patientListContainer =
+              document.querySelector(".patient-list");
+            patientListContainer.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: #999;">
+                            <p style="font-size: 18px; margin-bottom: 10px;">🧪 TEST MODE</p>
+                            <p style="font-size: 14px;">Log in as a pharmacist to see real patient data</p>
+                            <p style="font-size: 12px; margin-top: 10px;">The buttons work but won't save data until you're logged in</p>
+                        </div>
+                    `;
+            return;
+          }
+
+          // Get all patients linked to this pharmacist
+          const patientsSnapshot = await db
+            .collection("users")
+            .where("role", "==", "patient")
+            .where("pharmacistId", "==", currentUser.uid)
+            .get();
+
+          const activePatients = patientsSnapshot.size;
+
+          // Update stats
+          document.querySelector(".stat-card.blue .stat-value").textContent =
+            activePatients;
+
+          // Get risk alerts (this would be from a real risk detection system)
+          // For now, we'll use placeholder data
+
+          // Load recent patients into the list
+          loadPatientList(patientsSnapshot.docs);
+        } catch (error) {
+          console.error("Error loading dashboard data:", error);
+        }
+      }
+
+      // Load patient list
+      function loadPatientList(patientDocs) {
+        const patientListContainer = document.querySelector(".patient-list");
+
+        if (patientDocs.length === 0) {
+          patientListContainer.innerHTML = `
+                    <div style="text-align: center; padding: 40px; color: #999;">
+                        <p style="font-size: 18px; margin-bottom: 10px;">📋 No patients yet</p>
+                        <p style="font-size: 14px;">Generate a referral code to start adding patients!</p>
+                    </div>
+                `;
+          return;
+        }
+
+        patientListContainer.innerHTML = "";
+
+        patientDocs.forEach((doc) => {
+          const patient = doc.data();
+          const patientId = doc.id;
+
+          const initials = (patient.name || "PT")
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase();
+          const adherence =
+            patient.adherenceRate || Math.floor(Math.random() * 40) + 60; // Random for demo
+          const adherenceClass =
+            adherence >= 80 ? "high" : adherence >= 60 ? "medium" : "low";
+
+          const patientCard = document.createElement("div");
+          patientCard.className = "patient-item";
+          patientCard.onclick = () => viewPatient(patientId);
+
+          patientCard.innerHTML = `
+                    <div class="patient-header">
+                        <div class="patient-info">
+                            <div class="patient-avatar">${initials}</div>
+                            <div class="patient-details">
+                                <h3>${patient.name || "Patient"}</h3>
+                                <p>ID: ${patientId.substring(0, 8)} • ${
+            patient.conditions || "No conditions listed"
+          }</p>
+                            </div>
+                        </div>
+                        <div class="adherence-badge ${adherenceClass}">${adherence}% Adherence</div>
+                    </div>
+                    <div class="patient-stats">
+                        <div class="patient-stat"><strong>${
+                          patient.medicationCount || 0
+                        }</strong> Medications</div>
+                        <div class="patient-stat"><strong>${
+                          patient.missedDoses || 0
+                        }</strong> Missed Doses</div>
+                        <div class="patient-stat">Last Check: <strong>${getTimeSince(
+                          patient.lastCheck
+                        )}</strong></div>
+                    </div>
+                    <div class="patient-actions">
+                        <button class="patient-action-btn primary" onclick="event.stopPropagation(); viewProfile('${patientId}')">View Profile</button>
+                        <button class="patient-action-btn" onclick="event.stopPropagation(); sendMessage('${patientId}')">Message</button>
+                        <button class="patient-action-btn" onclick="event.stopPropagation(); viewHistory('${patientId}')">History</button>
+                    </div>
+                `;
+
+          patientListContainer.appendChild(patientCard);
+        });
+      }
+
+      // Helper function to get time since last check
+      function getTimeSince(timestamp) {
+        if (!timestamp) return "Never";
+
+        const now = new Date();
+        const then = timestamp.toDate
+          ? timestamp.toDate()
+          : new Date(timestamp);
+        const diffMs = now - then;
+        const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 0) return "Today";
+        if (diffDays === 1) return "1 day ago";
+        return `${diffDays} days ago`;
+      }
+
+      // Search functionality
+      document.addEventListener("DOMContentLoaded", () => {
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) {
+          searchInput.addEventListener("input", async function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+
+            if (searchTerm === "") {
+              loadDashboardData(); // Reload all patients
+              return;
+            }
+
+            // Search patients
+            const patientsSnapshot = await db
+              .collection("users")
+              .where("role", "==", "patient")
+              .where("pharmacistId", "==", currentUser.uid)
+              .get();
+
+            const filteredPatients = patientsSnapshot.docs.filter((doc) => {
+              const patient = doc.data();
+              const name = (patient.name || "").toLowerCase();
+              const id = doc.id.toLowerCase();
+              return name.includes(searchTerm) || id.includes(searchTerm);
+            });
+
+            loadPatientList(filteredPatients);
+          });
+        }
+      });
+
+      // Modal functions
+      function openModal(modalId) {
+        document.getElementById(modalId).classList.add("active");
+      }
+
+      function closeModal(modalId) {
+        document.getElementById(modalId).classList.remove("active");
+      }
+
+      // Add New Patient - open modal
+      function addNewPatient() {
+        openModal("addPatientModal");
+      }
+
+      // Submit new patient from modal
+      async function submitNewPatient() {
+        const name = document.getElementById("newPatientName").value.trim();
+        const email = document.getElementById("newPatientEmail").value.trim();
+        const phone = document.getElementById("newPatientPhone").value.trim();
+        const conditions = document
+          .getElementById("newPatientConditions")
+          .value.trim();
+
+        if (!name || !email) {
+          alert("Please enter patient name and email");
+          return;
+        }
+
+        try {
+          const newPatient = {
+            name: name,
+            email: email,
+            phone: phone || "",
+            role: "patient",
+            pharmacistId: currentUser.uid,
+            conditions: conditions || "",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            adherenceRate: 100,
+            medicationCount: 0,
+            missedDoses: 0,
+          };
+
+          const docRef = await db.collection("users").add(newPatient);
+
+          alert(
+            `✅ Patient "${name}" added successfully!\nPatient ID: ${docRef.id.substring(
+              0,
+              8
+            )}`
+          );
+
+          // Clear form
+          document.getElementById("newPatientName").value = "";
+          document.getElementById("newPatientEmail").value = "";
+          document.getElementById("newPatientPhone").value = "";
+          document.getElementById("newPatientConditions").value = "";
+
+          closeModal("addPatientModal");
+          loadDashboardData();
+        } catch (error) {
+          console.error("Error adding patient:", error);
+          alert("Error adding patient. Please try again.");
+        }
+      }
+
+      // Generate Referral Code
+      async function generateReferralCode() {
+        try {
+          // Generate unique code
+          const code =
+            "RX-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+
+          // Save to Firebase
+          await db.collection("referralCodes").add({
+            code: code,
+            pharmacistId: currentUser.uid,
+            pharmacistName: currentPharmacist.name,
+            used: false,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000), // 30 days
+          });
+
+          // Show code to pharmacist
+          alert(
+            `✅ Referral Code Generated Successfully!\n\n${code}\n\nShare this code with your patient to complete their registration.\n\nValid for 30 days.`
+          );
+
+          // Optional: Copy to clipboard
+          if (navigator.clipboard) {
+            navigator.clipboard.writeText(code);
+            console.log("Code copied to clipboard!");
+          }
+        } catch (error) {
+          console.error("Error generating referral code:", error);
+          alert("Error generating code. Please try again.");
+        }
+      }
+
+      // View Reports
+      async function viewReports() {
+        try {
+          const patientsSnapshot = await db
+            .collection("users")
+            .where("role", "==", "patient")
+            .where("pharmacistId", "==", currentUser.uid)
+            .get();
+
+          const totalPatients = patientsSnapshot.size;
+          let totalAdherence = 0;
+          let highRiskCount = 0;
+          let excellentCount = 0;
+
+          patientsSnapshot.forEach((doc) => {
+            const patient = doc.data();
+            const adherence = patient.adherenceRate || 0;
+            totalAdherence += adherence;
+
+            if (adherence < 70) highRiskCount++;
+            if (adherence >= 90) excellentCount++;
+          });
+
+          const avgAdherence =
+            totalPatients > 0 ? Math.round(totalAdherence / totalPatients) : 0;
+
+          const reportsHTML = `
+                    <div style="line-height: 2;">
+                        <h3 style="margin-bottom: 20px; color: #2c5f6f;">Patient Overview</h3>
+                        
+                        <div style="background: #e3f2fd; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                            <div style="font-size: 32px; font-weight: bold; color: #2196f3;">${totalPatients}</div>
+                            <div style="color: #666;">Total Active Patients</div>
+                        </div>
+                        
+                        <div style="background: #e8f5e9; padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                            <div style="font-size: 32px; font-weight: bold; color: #4caf50;">${avgAdherence}%</div>
+                            <div style="color: #666;">Average Adherence Rate</div>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div style="background: #fff3e0; padding: 15px; border-radius: 12px;">
+                                <div style="font-size: 24px; font-weight: bold; color: #ff9800;">${highRiskCount}</div>
+                                <div style="color: #666; font-size: 14px;">High Risk Patients</div>
+                                <div style="color: #999; font-size: 12px;">(&lt;70% adherence)</div>
+                            </div>
+                            
+                            <div style="background: #e8f5e9; padding: 15px; border-radius: 12px;">
+                                <div style="font-size: 24px; font-weight: bold; color: #4caf50;">${excellentCount}</div>
+                                <div style="color: #666; font-size: 14px;">Excellent Adherence</div>
+                                <div style="color: #999; font-size: 12px;">(&gt;90% adherence)</div>
+                            </div>
+                        </div>
+                        
+                        <div style="margin-top: 20px; padding: 15px; background: #f8fbfc; border-radius: 12px;">
+                            <div style="font-size: 14px; color: #2c5f6f; font-weight: 600; margin-bottom: 10px;">💡 Insights</div>
+                            <ul style="color: #666; font-size: 14px; padding-left: 20px;">
+                                <li>Focus on the ${highRiskCount} high-risk patients for intervention</li>
+                                <li>${excellentCount} patients are maintaining excellent adherence</li>
+                                <li>Overall patient health outcomes are ${
+                                  avgAdherence >= 80
+                                    ? "strong"
+                                    : "showing room for improvement"
+                                }</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+
+          document.getElementById("reportsContent").innerHTML = reportsHTML;
+          openModal("reportsModal");
+        } catch (error) {
+          console.error("Error loading reports:", error);
+          alert("Error loading reports. Please try again.");
+        }
+      }
+
+      // Contact Service Team
+      function contactServiceTeam() {
+        alert(
+          "🏥 Service Team Contact\n\nEmail: support@clearpharma.com\nPhone: 1-800-PHARMA\n\n(Live chat integration coming soon!)"
+        );
+      }
+
+      // View Patient Details
+      async function viewPatient(patientId) {
+        try {
+          const patientDoc = await db.collection("users").doc(patientId).get();
+
+          if (patientDoc.exists) {
+            const patient = patientDoc.data();
+
+            const profileHTML = `
+                        <div style="line-height: 1.8;">
+                            <p><strong>Name:</strong> ${patient.name}</p>
+                            <p><strong>Email:</strong> ${patient.email}</p>
+                            <p><strong>Phone:</strong> ${
+                              patient.phone || "Not provided"
+                            }</p>
+                            <p><strong>Conditions:</strong> ${
+                              patient.conditions || "None listed"
+                            }</p>
+                            <p><strong>Adherence Rate:</strong> ${
+                              patient.adherenceRate || 0
+                            }%</p>
+                            <p><strong>Medications:</strong> ${
+                              patient.medicationCount || 0
+                            }</p>
+                            <p><strong>Missed Doses:</strong> ${
+                              patient.missedDoses || 0
+                            }</p>
+                        </div>
+                    `;
+
+            document.getElementById("patientProfileContent").innerHTML =
+              profileHTML;
+            openModal("viewPatientModal");
+          }
+        } catch (error) {
+          console.error("Error viewing patient:", error);
+          alert("Error loading patient data.");
+        }
+      }
+
+      // View Profile
+      function viewProfile(patientId) {
+        viewPatient(patientId);
+      }
+
+      // Send Message - open modal
+      let currentMessagePatientId = null;
+
+      async function sendMessage(patientId) {
+        try {
+          currentMessagePatientId = patientId;
+          const patientDoc = await db.collection("users").doc(patientId).get();
+          const patient = patientDoc.data();
+
+          document.getElementById("messagePatientName").textContent =
+            patient.name;
+          document.getElementById("messageText").value = "";
+          openModal("messageModal");
+        } catch (error) {
+          console.error("Error loading patient:", error);
+          alert("Error loading patient data.");
+        }
+      }
+
+      // Submit message from modal
+      async function submitMessage() {
+        const message = document.getElementById("messageText").value.trim();
+
+        if (!message) {
+          alert("Please enter a message");
+          return;
+        }
+
+        try {
+          const patientDoc = await db
+            .collection("users")
+            .doc(currentMessagePatientId)
+            .get();
+          const patient = patientDoc.data();
+
+          await db.collection("messages").add({
+            from: currentUser.uid,
+            fromName: currentPharmacist.name,
+            to: currentMessagePatientId,
+            toName: patient.name,
+            message: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            read: false,
+          });
+
+          alert(`✅ Message sent to ${patient.name}!`);
+          closeModal("messageModal");
+        } catch (error) {
+          console.error("Error sending message:", error);
+          alert("Error sending message. Please try again.");
+        }
+      }
+
+      // View History
+      async function viewHistory(patientId) {
+        try {
+          const patientDoc = await db.collection("users").doc(patientId).get();
+          const patient = patientDoc.data();
+
+          // Get medication history
+          const medsSnapshot = await db
+            .collection("medications")
+            .where("patientId", "==", patientId)
+            .orderBy("scheduledTime", "desc")
+            .limit(20)
+            .get();
+
+          let historyHTML = `<h3 style="margin-bottom: 15px;">${patient.name}'s Medication History</h3>`;
+
+          if (medsSnapshot.empty) {
+            historyHTML +=
+              '<p style="text-align: center; color: #999;">No medication history found</p>';
+          } else {
+            historyHTML += '<div style="max-height: 400px; overflow-y: auto;">';
+            medsSnapshot.forEach((doc) => {
+              const med = doc.data();
+              const statusColor =
+                med.status === "taken"
+                  ? "#4caf50"
+                  : med.status === "missed"
+                  ? "#f44336"
+                  : "#2196f3";
+              const time = med.scheduledTime
+                ? med.scheduledTime.toDate
+                  ? med.scheduledTime.toDate()
+                  : new Date(med.scheduledTime)
+                : new Date();
+              historyHTML += `
+                            <div style="padding: 12px; background: #f8fbfc; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid ${statusColor};">
+                                <div style="font-weight: 600; color: #2c5f6f;">${
+                                  med.name || "Medication"
+                                }</div>
+                                <div style="font-size: 13px; color: #666;">${
+                                  med.dosage || "Standard dose"
+                                }</div>
+                                <div style="font-size: 12px; color: #999; margin-top: 5px;">
+                                    ${time.toLocaleDateString()} ${time.toLocaleTimeString()} - ${
+                med.status || "Scheduled"
+              }
+                                </div>
+                            </div>
+                        `;
+            });
+            historyHTML += "</div>";
+          }
+
+          document.getElementById("historyContent").innerHTML = historyHTML;
+          openModal("historyModal");
+        } catch (error) {
+          console.error("Error viewing history:", error);
+          alert("Error loading medication history.");
+        }
+      }
+
+      // Open Consultation
+      async function openConsultation(patientId) {
+        try {
+          const patientDoc = await db.collection("users").doc(patientId).get();
+          const patient = patientDoc.data();
+
+          // Get consultation requests
+          const consultSnapshot = await db
+            .collection("consultations")
+            .where("patientId", "==", patientId)
+            .where("status", "==", "pending")
+            .orderBy("createdAt", "desc")
+            .limit(1)
+            .get();
+
+          let consultHTML = `<h3 style="margin-bottom: 15px;">Consultation Request - ${patient.name}</h3>`;
+
+          if (consultSnapshot.empty) {
+            consultHTML +=
+              '<p style="text-align: center; color: #999;">No pending consultation requests</p>';
+          } else {
+            const consult = consultSnapshot.docs[0].data();
+            const timestamp = consult.createdAt
+              ? consult.createdAt.toDate
+                ? consult.createdAt.toDate()
+                : new Date(consult.createdAt)
+              : new Date();
+            consultHTML += `
+                        <div style="background: #f8fbfc; padding: 20px; border-radius: 12px;">
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-weight: 600; color: #2c5f6f; margin-bottom: 5px;">Reason:</div>
+                                <div style="color: #666;">${
+                                  consult.reason || "Not specified"
+                                }</div>
+                            </div>
+                            <div style="margin-bottom: 15px;">
+                                <div style="font-weight: 600; color: #2c5f6f; margin-bottom: 5px;">Details:</div>
+                                <div style="color: #666;">${
+                                  consult.details || "No additional details"
+                                }</div>
+                            </div>
+                            <div>
+                                <div style="font-weight: 600; color: #2c5f6f; margin-bottom: 5px;">Submitted:</div>
+                                <div style="color: #999; font-size: 13px;">${timestamp.toLocaleDateString()} ${timestamp.toLocaleTimeString()}</div>
+                            </div>
+                        </div>
+                    `;
+          }
+
+          document.getElementById("consultationContent").innerHTML =
+            consultHTML;
+          openModal("consultationModal");
+        } catch (error) {
+          console.error("Error opening consultation:", error);
+          alert("Error loading consultation.");
+        }
+      }
+
+      function respondToConsultation() {
+        alert(
+          "Opening consultation response interface...\n\nYou can:\n• Send a message to the patient\n• Schedule a video call\n• Update medication plan\n• Escalate to service team"
+        );
+        closeModal("consultationModal");
+      }
+
+      // Open Service Team Chat
+      function openServiceTeamChat() {
+        loadServiceTeamMessages();
+        openModal("serviceTeamModal");
+      }
+
+      // Load service team messages
+      async function loadServiceTeamMessages() {
+        try {
+          const messagesSnapshot = await db
+            .collection("serviceTeamMessages")
+            .where("userId", "==", currentUser.uid)
+            .orderBy("timestamp", "asc")
+            .limit(50)
+            .get();
+
+          const chatContainer = document.getElementById("chatMessages");
+
+          if (messagesSnapshot.empty) {
+            chatContainer.innerHTML =
+              '<p style="text-align: center; color: #999;">No messages yet. Start a conversation!</p>';
+          } else {
+            chatContainer.innerHTML = "";
+            messagesSnapshot.forEach((doc) => {
+              const msg = doc.data();
+              const isUser = msg.senderId === currentUser.uid;
+              const timestamp = msg.timestamp
+                ? msg.timestamp.toDate
+                  ? msg.timestamp.toDate()
+                  : new Date(msg.timestamp)
+                : new Date();
+
+              const messageDiv = document.createElement("div");
+              messageDiv.style.cssText = `
+                            margin-bottom: 12px;
+                            text-align: ${isUser ? "right" : "left"};
+                        `;
+
+              messageDiv.innerHTML = `
+                            <div style="
+                                display: inline-block;
+                                max-width: 70%;
+                                padding: 10px 15px;
+                                background: ${isUser ? "#5a9aae" : "#f0f0f0"};
+                                color: ${isUser ? "white" : "#333"};
+                                border-radius: 12px;
+                                text-align: left;
+                            ">
+                                <div style="font-size: 14px;">${
+                                  msg.message
+                                }</div>
+                                <div style="font-size: 11px; opacity: 0.7; margin-top: 5px;">
+                                    ${timestamp.toLocaleTimeString()}
+                                </div>
+                            </div>
+                        `;
+
+              chatContainer.appendChild(messageDiv);
+            });
+
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+          }
+        } catch (error) {
+          console.error("Error loading messages:", error);
+        }
+      }
+
+      // Send message to service team
+      async function sendServiceTeamMessage() {
+        const messageInput = document.getElementById("chatMessageInput");
+        const message = messageInput.value.trim();
+
+        if (!message) {
+          alert("Please enter a message");
+          return;
+        }
+
+        try {
+          await db.collection("serviceTeamMessages").add({
+            userId: currentUser.uid,
+            userName: currentPharmacist.name,
+            userRole: "pharmacist",
+            senderId: currentUser.uid,
+            message: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            read: false,
+          });
+
+          messageInput.value = "";
+          loadServiceTeamMessages();
+        } catch (error) {
+          console.error("Error sending message:", error);
+          alert("Error sending message. Please try again.");
+        }
+      }
+
+      // Contact Service Team
+      function contactServiceTeam() {
+        openServiceTeamChat();
+      }
+
+      // Simulate real-time notifications
+      setTimeout(() => {
+        console.log("New risk alert received for Patient #12349");
+        // In real implementation, this would show a toast notification
+      }, 5000);
+
+      // Logout function (add this to settings or profile menu)
+      async function logout() {
+        try {
+          await auth.signOut();
+          window.location.href = "index.html";
+        } catch (error) {
+          console.error("Error logging out:", error);
+          alert("Error logging out. Please try again.");
+        }
+      }
+    </script>
+  </body>
+</html>

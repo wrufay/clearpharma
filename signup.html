@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ClearPharma - Sign Up</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        background: linear-gradient(135deg, #a8d5e2 0%, #e8f4f8 100%);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 30px;
+        padding: 40px 30px;
+        max-width: 450px;
+        width: 100%;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo-icon {
+        width: 60px;
+        height: 60px;
+        background: #5a9aae;
+        border-radius: 15px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+
+      .logo-icon::before {
+        content: "+";
+        color: white;
+        font-size: 36px;
+        font-weight: 300;
+      }
+
+      .logo h1 {
+        color: #2d6a7a;
+        font-size: 28px;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+
+      .logo p {
+        color: #7ba8b5;
+        font-size: 14px;
+      }
+
+      .welcome {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .welcome h2 {
+        color: #2d6a7a;
+        font-size: 24px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .welcome p {
+        color: #7ba8b5;
+        font-size: 14px;
+      }
+
+      .user-type {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 25px;
+      }
+
+      .user-type button {
+        flex: 1;
+        padding: 15px;
+        border: 2px solid #d0e8ef;
+        background: white;
+        border-radius: 15px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #7ba8b5;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .user-type button.active {
+        background: #5a9aae;
+        border-color: #5a9aae;
+        color: white;
+      }
+
+      .user-type button:hover {
+        border-color: #5a9aae;
+      }
+
+      .input-group {
+        margin-bottom: 20px;
+      }
+
+      .input-group label {
+        display: block;
+        color: #2d6a7a;
+        font-size: 13px;
+        font-weight: 500;
+        margin-bottom: 8px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 15px;
+        border: 2px solid #d0e8ef;
+        border-radius: 12px;
+        font-size: 15px;
+        color: #2d6a7a;
+        transition: all 0.3s ease;
+      }
+
+      .input-group input:focus {
+        outline: none;
+        border-color: #5a9aae;
+        background: #f8fcfd;
+      }
+
+      .input-group input::placeholder {
+        color: #b8d4dc;
+      }
+
+      .info-box {
+        background: #e8f4f8;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        font-size: 13px;
+        color: #2d6a7a;
+        line-height: 1.5;
+      }
+
+      .signup-btn {
+        width: 100%;
+        padding: 16px;
+        background: #5a9aae;
+        border: none;
+        border-radius: 12px;
+        color: white;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-bottom: 20px;
+      }
+
+      .signup-btn:hover {
+        background: #4a8a9e;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(90, 154, 174, 0.3);
+      }
+
+      .signup-btn:active {
+        transform: translateY(0);
+      }
+
+      .signup-btn:disabled {
+        background: #b8d4dc;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .login-link {
+        text-align: center;
+        color: #7ba8b5;
+        font-size: 14px;
+      }
+
+      .login-link a {
+        color: #5a9aae;
+        text-decoration: none;
+        font-weight: 600;
+      }
+
+      .login-link a:hover {
+        text-decoration: underline;
+      }
+
+      .error-message {
+        background: #f8d7da;
+        color: #721c24;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+      }
+
+      .success-message {
+        background: #d4edda;
+        color: #155724;
+        padding: 12px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: none;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      @media (max-width: 480px) {
+        .container {
+          padding: 30px 20px;
+        }
+
+        .logo h1 {
+          font-size: 24px;
+        }
+
+        .welcome h2 {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="logo">
+        <div class="logo-icon"></div>
+        <h1>ClearPharma</h1>
+        <p>Your health, our mission</p>
+      </div>
+
+      <div class="welcome">
+        <h2>Create Account</h2>
+        <p>Join ClearPharma today</p>
+      </div>
+
+      <div class="error-message" id="errorMessage"></div>
+      <div class="success-message" id="successMessage"></div>
+
+      <div class="user-type">
+        <button
+          class="active"
+          id="patientBtn"
+          onclick="selectUserType('patient')"
+        >
+          Patient
+        </button>
+        <button id="pharmacistBtn" onclick="selectUserType('pharmacist')">
+          Pharmacist
+        </button>
+      </div>
+
+      <!-- Patient Signup Form -->
+      <div id="patientForm">
+        <div class="info-box">
+          📋 Patients need a referral code from their pharmacist to sign up
+        </div>
+
+        <div class="input-group">
+          <label for="referralCode">Referral Code</label>
+          <input
+            type="text"
+            id="referralCode"
+            placeholder="Enter code from your pharmacist"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="patientName">Full Name</label>
+          <input
+            type="text"
+            id="patientName"
+            placeholder="Enter your full name"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="patientEmail">Email</label>
+          <input
+            type="email"
+            id="patientEmail"
+            placeholder="Enter your email"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="patientPassword">Password</label>
+          <input
+            type="password"
+            id="patientPassword"
+            placeholder="Create a password (min 6 characters)"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="patientConfirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="patientConfirmPassword"
+            placeholder="Confirm your password"
+          />
+        </div>
+
+        <button
+          class="signup-btn"
+          id="patientSignupBtn"
+          onclick="handlePatientSignup()"
+        >
+          Create Patient Account
+        </button>
+      </div>
+
+      <!-- Pharmacist Signup Form -->
+      <div id="pharmacistForm" class="hidden">
+        <div class="info-box">
+          👨‍⚕️ Pharmacist registration requires admin approval. Please contact
+          support@clearpharma.com
+        </div>
+
+        <div class="input-group">
+          <label for="pharmacistName">Full Name</label>
+          <input
+            type="text"
+            id="pharmacistName"
+            placeholder="Enter your full name"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="pharmacistEmail">Email</label>
+          <input
+            type="email"
+            id="pharmacistEmail"
+            placeholder="Enter your work email"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="pharmacistLicense">License Number</label>
+          <input
+            type="text"
+            id="pharmacistLicense"
+            placeholder="Enter your pharmacy license number"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="pharmacistPassword">Password</label>
+          <input
+            type="password"
+            id="pharmacistPassword"
+            placeholder="Create a password (min 6 characters)"
+          />
+        </div>
+
+        <div class="input-group">
+          <label for="pharmacistConfirmPassword">Confirm Password</label>
+          <input
+            type="password"
+            id="pharmacistConfirmPassword"
+            placeholder="Confirm your password"
+          />
+        </div>
+
+        <button
+          class="signup-btn"
+          id="pharmacistSignupBtn"
+          onclick="handlePharmacistSignup()"
+        >
+          Request Pharmacist Account
+        </button>
+      </div>
+
+      <div class="login-link">
+        Already have an account? <a href="index.html">Sign in</a>
+      </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        getFirestore,
+        doc,
+        setDoc,
+        getDoc,
+        updateDoc,
+        collection,
+        query,
+        where,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+      // TODO: Replace with your Firebase config
+      const firebaseConfig = {
+        apiKey: "AIzaSyDwMTaAWC1crZgt-qYPA8coG_0ufUBpWBg",
+        authDomain: "clearpharma-d267f.firebaseapp.com",
+        projectId: "clearpharma-d267f",
+        storageBucket: "clearpharma-d267f.firebasestorage.app",
+        messagingSenderId: "163400096970",
+        appId: "1:163400096970:web:cf0c6a3e0662823570a833",
+        measurementId: "G-T0LF1E23E4",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+
+      // Make available globally
+      window.auth = auth;
+      window.db = db;
+      window.firebaseAuth = { createUserWithEmailAndPassword };
+      window.firestore = {
+        doc,
+        setDoc,
+        getDoc,
+        updateDoc,
+        collection,
+        query,
+        where,
+        getDocs,
+      };
+    </script>
+
+    <script>
+      let userType = "patient";
+
+      function selectUserType(type) {
+        userType = type;
+        const patientBtn = document.getElementById("patientBtn");
+        const pharmacistBtn = document.getElementById("pharmacistBtn");
+        const patientForm = document.getElementById("patientForm");
+        const pharmacistForm = document.getElementById("pharmacistForm");
+
+        if (type === "patient") {
+          patientBtn.classList.add("active");
+          pharmacistBtn.classList.remove("active");
+          patientForm.classList.remove("hidden");
+          pharmacistForm.classList.add("hidden");
+        } else {
+          pharmacistBtn.classList.add("active");
+          patientBtn.classList.remove("active");
+          pharmacistForm.classList.remove("hidden");
+          patientForm.classList.add("hidden");
+        }
+      }
+
+      function showError(message) {
+        const errorEl = document.getElementById("errorMessage");
+        errorEl.textContent = message;
+        errorEl.style.display = "block";
+        setTimeout(() => {
+          errorEl.style.display = "none";
+        }, 5000);
+      }
+
+      function showSuccess(message) {
+        const successEl = document.getElementById("successMessage");
+        successEl.textContent = message;
+        successEl.style.display = "block";
+        setTimeout(() => {
+          successEl.style.display = "none";
+        }, 3000);
+      }
+
+      async function handlePatientSignup() {
+        const referralCode = document
+          .getElementById("referralCode")
+          .value.trim();
+        const name = document.getElementById("patientName").value.trim();
+        const email = document.getElementById("patientEmail").value.trim();
+        const password = document.getElementById("patientPassword").value;
+        const confirmPassword = document.getElementById(
+          "patientConfirmPassword"
+        ).value;
+        const signupBtn = document.getElementById("patientSignupBtn");
+
+        // Validation
+        if (!referralCode || !name || !email || !password || !confirmPassword) {
+          showError("Please fill in all fields");
+          return;
+        }
+
+        if (password.length < 6) {
+          showError("Password must be at least 6 characters");
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError("Passwords do not match");
+          return;
+        }
+
+        signupBtn.disabled = true;
+        signupBtn.textContent = "Creating account...";
+
+        try {
+          // Check if referral code exists and is unused
+          const codesRef = window.firestore.collection(
+            window.db,
+            "referralCodes"
+          );
+          const q = window.firestore.query(
+            codesRef,
+            window.firestore.where("code", "==", referralCode)
+          );
+          const querySnapshot = await window.firestore.getDocs(q);
+
+          if (querySnapshot.empty) {
+            showError(
+              "Invalid referral code. Please check with your pharmacist."
+            );
+            signupBtn.disabled = false;
+            signupBtn.textContent = "Create Patient Account";
+            return;
+          }
+
+          const codeDoc = querySnapshot.docs[0];
+          const codeData = codeDoc.data();
+
+          if (codeData.used) {
+            showError("This referral code has already been used.");
+            signupBtn.disabled = false;
+            signupBtn.textContent = "Create Patient Account";
+            return;
+          }
+
+          // Create Firebase auth user
+          const userCredential =
+            await window.firebaseAuth.createUserWithEmailAndPassword(
+              window.auth,
+              email,
+              password
+            );
+          const user = userCredential.user;
+
+          // Create user document in Firestore
+          await window.firestore.setDoc(
+            window.firestore.doc(window.db, "users", user.uid),
+            {
+              email: email,
+              name: name,
+              role: "patient",
+              createdAt: new Date(),
+              pharmacistId: codeData.pharmacistId,
+            }
+          );
+
+          // Create patient profile
+          await window.firestore.setDoc(
+            window.firestore.doc(window.db, "patients", user.uid),
+            {
+              userId: user.uid,
+              pharmacistId: codeData.pharmacistId,
+              name: name,
+              healthcareId:
+                "P-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
+              conditions: [],
+              medications: [],
+              adherenceRate: 100,
+              createdAt: new Date(),
+            }
+          );
+
+          // Mark referral code as used
+          await window.firestore.updateDoc(
+            window.firestore.doc(window.db, "referralCodes", codeDoc.id),
+            {
+              used: true,
+              usedBy: user.uid,
+              usedAt: new Date(),
+            }
+          );
+
+          showSuccess("Account created successfully! Redirecting to login...");
+
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 2000);
+        } catch (error) {
+          console.error("Signup error:", error);
+          let errorMessage = "Signup failed. Please try again.";
+
+          if (error.code === "auth/email-already-in-use") {
+            errorMessage = "This email is already registered. Please sign in.";
+          } else if (error.code === "auth/invalid-email") {
+            errorMessage = "Invalid email address.";
+          } else if (error.code === "auth/weak-password") {
+            errorMessage = "Password is too weak.";
+          }
+
+          showError(errorMessage);
+          signupBtn.disabled = false;
+          signupBtn.textContent = "Create Patient Account";
+        }
+      }
+
+      async function handlePharmacistSignup() {
+        const name = document.getElementById("pharmacistName").value.trim();
+        const email = document.getElementById("pharmacistEmail").value.trim();
+        const license = document
+          .getElementById("pharmacistLicense")
+          .value.trim();
+        const password = document.getElementById("pharmacistPassword").value;
+        const confirmPassword = document.getElementById(
+          "pharmacistConfirmPassword"
+        ).value;
+        const signupBtn = document.getElementById("pharmacistSignupBtn");
+
+        // Validation
+        if (!name || !email || !license || !password || !confirmPassword) {
+          showError("Please fill in all fields");
+          return;
+        }
+
+        if (password.length < 6) {
+          showError("Password must be at least 6 characters");
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showError("Passwords do not match");
+          return;
+        }
+
+        signupBtn.disabled = true;
+        signupBtn.textContent = "Submitting request...";
+
+        try {
+          // Create Firebase auth user
+          const userCredential =
+            await window.firebaseAuth.createUserWithEmailAndPassword(
+              window.auth,
+              email,
+              password
+            );
+          const user = userCredential.user;
+
+          // Create user document with pending status
+          await window.firestore.setDoc(
+            window.firestore.doc(window.db, "users", user.uid),
+            {
+              email: email,
+              name: name,
+              role: "pharmacist",
+              licenseNumber: license,
+              approved: false, // Requires admin approval
+              createdAt: new Date(),
+            }
+          );
+
+          showSuccess(
+            "Registration request submitted! Admin will review and approve your account."
+          );
+
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 3000);
+        } catch (error) {
+          console.error("Signup error:", error);
+          let errorMessage = "Signup failed. Please try again.";
+
+          if (error.code === "auth/email-already-in-use") {
+            errorMessage = "This email is already registered.";
+          } else if (error.code === "auth/invalid-email") {
+            errorMessage = "Invalid email address.";
+          }
+
+          showError(errorMessage);
+          signupBtn.disabled = false;
+          signupBtn.textContent = "Request Pharmacist Account";
+        }
+      }
+    </script>
+  </body>
+</html>
