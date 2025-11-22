@@ -9,12 +9,12 @@
       rel="stylesheet"
       href="https://i.icomoon.io/public/temp/92804d2d14/UntitledProject/style.css"
     />
-    
+
     <!-- Firebase SDKs - Using compat version to match pharmacist dashboard -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    
+
     <style>
       @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Stack+Sans+Headline:wght@200..700&display=swap");
       * {
@@ -35,7 +35,7 @@
         padding: 40px 20px;
         position: relative;
       }
-      
+
       /* Animated background particles */
       body::before {
         content: "";
@@ -277,7 +277,7 @@
         body {
           padding: 20px;
         }
-        
+
         .container {
           padding: 30px 20px;
         }
@@ -535,14 +535,19 @@
 
         try {
           console.log("Looking for referral code:", referralCode);
-          
+
           // Check if referral code exists and is unused - FIXED QUERY
           const querySnapshot = await db
             .collection("referralCodes")
             .where("code", "==", referralCode)
             .get();
 
-          console.log("Query result:", querySnapshot.empty ? "No results" : `Found ${querySnapshot.size} result(s)`);
+          console.log(
+            "Query result:",
+            querySnapshot.empty
+              ? "No results"
+              : `Found ${querySnapshot.size} result(s)`
+          );
 
           if (querySnapshot.empty) {
             showError(
@@ -555,7 +560,7 @@
 
           const codeDoc = querySnapshot.docs[0];
           const codeData = codeDoc.data();
-          
+
           console.log("Code data:", codeData);
 
           if (codeData.used) {
@@ -567,9 +572,13 @@
 
           // Check if code is expired
           if (codeData.expiresAt) {
-            const expiryDate = codeData.expiresAt.toDate ? codeData.expiresAt.toDate() : new Date(codeData.expiresAt);
+            const expiryDate = codeData.expiresAt.toDate
+              ? codeData.expiresAt.toDate()
+              : new Date(codeData.expiresAt);
             if (expiryDate < new Date()) {
-              showError("This referral code has expired. Please request a new one from your pharmacist.");
+              showError(
+                "This referral code has expired. Please request a new one from your pharmacist."
+              );
               signupBtn.disabled = false;
               signupBtn.textContent = "Create Patient Account";
               return;
@@ -593,17 +602,20 @@
           });
 
           // Create patient profile
-          await db.collection("patients").doc(user.uid).set({
-            userId: user.uid,
-            pharmacistId: codeData.pharmacistId,
-            name: name,
-            healthcareId:
-              "P-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
-            conditions: [],
-            medications: [],
-            adherenceRate: 100,
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+          await db
+            .collection("patients")
+            .doc(user.uid)
+            .set({
+              userId: user.uid,
+              pharmacistId: codeData.pharmacistId,
+              name: name,
+              healthcareId:
+                "P-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
+              conditions: [],
+              medications: [],
+              adherenceRate: 100,
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+            });
 
           // Mark referral code as used
           await db.collection("referralCodes").doc(codeDoc.id).update({
