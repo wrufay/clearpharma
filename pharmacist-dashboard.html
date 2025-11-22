@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ClearPharma - Pharmacist Dashboard</title>
 
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
@@ -739,22 +742,22 @@
       <div class="stats-grid">
         <div class="stat-card blue">
           <div class="stat-icon">👥</div>
-          <div class="stat-value">156</div>
+          <div class="stat-value" id="statActivePatients">0</div>
           <div class="stat-label">Active Patients</div>
         </div>
         <div class="stat-card red">
           <div class="stat-icon">⚠️</div>
-          <div class="stat-value">8</div>
+          <div class="stat-value" id="statRiskAlerts">0</div>
           <div class="stat-label">Risk Alerts</div>
         </div>
         <div class="stat-card green">
           <div class="stat-icon">💊</div>
-          <div class="stat-value">23</div>
+          <div class="stat-value" id="statRefills">0</div>
           <div class="stat-label">Refills Due This Week</div>
         </div>
         <div class="stat-card orange">
           <div class="stat-icon">💬</div>
-          <div class="stat-value">5</div>
+          <div class="stat-value" id="statMessages">0</div>
           <div class="stat-label">Pending Messages</div>
         </div>
       </div>
@@ -784,60 +787,10 @@
             <a href="#" class="view-all">View All</a>
           </div>
 
-          <div class="alert-item critical" onclick="openConsultation('12345')">
-            <div class="alert-header">
-              <span class="alert-patient">John Doe (ID: 12345)</span>
-              <span class="alert-time">15 min ago</span>
-            </div>
-            <div class="alert-message">
-              🔴 <strong>Critical:</strong> Patient missed 3 consecutive insulin
-              doses. BP reading elevated (160/95). Immediate consultation
-              recommended.
-            </div>
-          </div>
-
-          <div class="alert-item warning" onclick="openConsultation('12346')">
-            <div class="alert-header">
-              <span class="alert-patient">Maria Garcia (ID: 12346)</span>
-              <span class="alert-time">2 hours ago</span>
-            </div>
-            <div class="alert-message">
-              ⚠️ <strong>Warning:</strong> Adherence dropped to 65% this week.
-              Patient reported side effects from new medication.
-            </div>
-          </div>
-
-          <div class="alert-item info" onclick="openConsultation('12347')">
-            <div class="alert-header">
-              <span class="alert-patient">Robert Chen (ID: 12347)</span>
-              <span class="alert-time">4 hours ago</span>
-            </div>
-            <div class="alert-message">
-              ℹ️ <strong>Info:</strong> Patient requested consultation regarding
-              new symptoms. Available for video call this afternoon.
-            </div>
-          </div>
-
-          <div class="alert-item warning" onclick="openConsultation('12348')">
-            <div class="alert-header">
-              <span class="alert-patient">Lisa Anderson (ID: 12348)</span>
-              <span class="alert-time">5 hours ago</span>
-            </div>
-            <div class="alert-message">
-              ⚠️ <strong>Warning:</strong> Multiple refill delays detected.
-              Service team flagged for follow-up.
-            </div>
-          </div>
-
-          <div class="alert-item critical" onclick="openConsultation('12349')">
-            <div class="alert-header">
-              <span class="alert-patient">Michael Brown (ID: 12349)</span>
-              <span class="alert-time">6 hours ago</span>
-            </div>
-            <div class="alert-message">
-              🔴 <strong>Critical:</strong> Risk prediction model flagged
-              potential drug interaction. Review medication list urgently.
-            </div>
+          <div id="priorityAlertsContainer">
+            <p style="text-align: center; color: #999; padding: 20px">
+              Loading alerts...
+            </p>
           </div>
         </div>
 
@@ -847,116 +800,8 @@
             <h2 class="section-title">📈 This Week</h2>
           </div>
 
-          <div style="margin-top: 20px">
-            <div style="margin-bottom: 20px">
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  margin-bottom: 8px;
-                "
-              >
-                <span style="color: #666; font-size: 14px"
-                  >Average Adherence</span
-                >
-                <span style="color: #4caf50; font-weight: bold">87%</span>
-              </div>
-              <div
-                style="
-                  background: #f0f0f0;
-                  height: 8px;
-                  border-radius: 4px;
-                  overflow: hidden;
-                "
-              >
-                <div
-                  style="
-                    background: linear-gradient(90deg, #4caf50, #8bc34a);
-                    width: 87%;
-                    height: 100%;
-                  "
-                ></div>
-              </div>
-            </div>
-
-            <div style="margin-bottom: 20px">
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  margin-bottom: 8px;
-                "
-              >
-                <span style="color: #666; font-size: 14px"
-                  >Consultations Completed</span
-                >
-                <span style="color: #2196f3; font-weight: bold">34/40</span>
-              </div>
-              <div
-                style="
-                  background: #f0f0f0;
-                  height: 8px;
-                  border-radius: 4px;
-                  overflow: hidden;
-                "
-              >
-                <div
-                  style="
-                    background: linear-gradient(90deg, #2196f3, #42a5f5);
-                    width: 85%;
-                    height: 100%;
-                  "
-                ></div>
-              </div>
-            </div>
-
-            <div style="margin-bottom: 20px">
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  margin-bottom: 8px;
-                "
-              >
-                <span style="color: #666; font-size: 14px"
-                  >Refills Processed</span
-                >
-                <span style="color: #ff9800; font-weight: bold">67/89</span>
-              </div>
-              <div
-                style="
-                  background: #f0f0f0;
-                  height: 8px;
-                  border-radius: 4px;
-                  overflow: hidden;
-                "
-              >
-                <div
-                  style="
-                    background: linear-gradient(90deg, #ff9800, #ffa726);
-                    width: 75%;
-                    height: 100%;
-                  "
-                ></div>
-              </div>
-            </div>
-
-            <div
-              style="
-                background: #e8f4f8;
-                padding: 15px;
-                border-radius: 12px;
-                margin-top: 25px;
-              "
-            >
-              <div style="font-size: 13px; color: #5a9aae; margin-bottom: 8px">
-                💡 Quick Tip
-              </div>
-              <div style="font-size: 14px; color: #2c5f6f; line-height: 1.5">
-                Patients with adherence above 80% show 3x better health
-                outcomes. Keep up the great work!
-              </div>
-            </div>
+          <div style="margin-top: 20px" id="weeklyStatsContainer">
+            <p style="text-align: center; color: #999">Loading stats...</p>
           </div>
         </div>
       </div>
@@ -965,7 +810,7 @@
       <div class="section-card" style="margin-top: 30px">
         <div class="section-header">
           <h2 class="section-title">👥 Your Patients</h2>
-          <a href="#" class="view-all">View All (156)</a>
+          <a href="#" class="view-all" id="viewAllPatientsLink">View All (0)</a>
         </div>
 
         <div class="patient-list">
@@ -1525,23 +1370,205 @@
 
           const activePatients = patientsSnapshot.size;
 
-          // Update stats
-          document.querySelector(".stat-card.blue .stat-value").textContent =
+          // Update active patients stat
+          document.getElementById("statActivePatients").textContent =
             activePatients;
 
-          // Get risk alerts (this would be from a real risk detection system)
-          // For now, we'll use placeholder data
+          // Get pending consultations (risk alerts)
+          const consultationsSnapshot = await db
+            .collection("consultations")
+            .where("pharmacistId", "==", currentUser.uid)
+            .where("status", "==", "pending")
+            .get();
 
-          // Load recent patients into the list
+          document.getElementById("statRiskAlerts").textContent =
+            consultationsSnapshot.size;
+
+          // Get unread messages
+          const messagesSnapshot = await db
+            .collection("messages")
+            .where("to", "==", currentUser.uid)
+            .where("read", "==", false)
+            .get();
+
+          document.getElementById("statMessages").textContent =
+            messagesSnapshot.size;
+
+          // Refills due (placeholder for now since we don't track refills yet)
+          document.getElementById("statRefills").textContent = "0";
+
+          // Store patients for search
+          if (window.storeAllPatients) {
+            window.storeAllPatients(patientsSnapshot.docs);
+          }
+
+          // Load patients list
           loadPatientList(patientsSnapshot.docs);
+
+          // Load priority alerts
+          loadPriorityAlerts();
+
+          // Load weekly stats
+          loadWeeklyStats(patientsSnapshot.docs, consultationsSnapshot.size);
         } catch (error) {
           console.error("Error loading dashboard data:", error);
         }
       }
 
+      // Load priority alerts from consultations
+      async function loadPriorityAlerts() {
+        try {
+          const consultationsSnapshot = await db
+            .collection("consultations")
+            .where("pharmacistId", "==", currentUser.uid)
+            .where("status", "==", "pending")
+            .limit(5)
+            .get();
+
+          const alertsContainer = document.getElementById(
+            "priorityAlertsContainer"
+          );
+
+          if (consultationsSnapshot.empty) {
+            alertsContainer.innerHTML =
+              '<p style="text-align: center; color: #999; padding: 20px;">No pending alerts</p>';
+            return;
+          }
+
+          alertsContainer.innerHTML = "";
+
+          consultationsSnapshot.forEach((doc) => {
+            const consult = doc.data();
+            const alertClass =
+              consult.reason === "side-effects" ||
+              consult.reason === "dosage-concern"
+                ? "critical"
+                : "info";
+            const alertIcon = alertClass === "critical" ? "🔴" : "ℹ️";
+            const timestamp = consult.createdAt
+              ? consult.createdAt.toDate
+                ? consult.createdAt.toDate()
+                : new Date(consult.createdAt)
+              : new Date();
+            const timeAgo = getTimeAgo(timestamp);
+
+            const alertDiv = document.createElement("div");
+            alertDiv.className = `alert-item ${alertClass}`;
+            alertDiv.onclick = () => openConsultation(consult.patientId);
+            alertDiv.innerHTML = `
+                        <div class="alert-header">
+                            <span class="alert-patient">${
+                              consult.patientName || "Patient"
+                            }</span>
+                            <span class="alert-time">${timeAgo}</span>
+                        </div>
+                        <div class="alert-message">
+                            ${alertIcon} <strong>${consult.reason
+              .replace(/-/g, " ")
+              .replace(/\b\w/g, (l) => l.toUpperCase())}:</strong> ${
+              consult.details || "No details provided"
+            }
+                        </div>
+                    `;
+
+            alertsContainer.appendChild(alertDiv);
+          });
+        } catch (error) {
+          console.error("Error loading alerts:", error);
+          document.getElementById("priorityAlertsContainer").innerHTML =
+            '<p style="text-align: center; color: #999; padding: 20px;">No pending alerts</p>';
+        }
+      }
+
+      // Load weekly stats
+      function loadWeeklyStats(patientDocs, consultationsCount) {
+        let totalAdherence = 0;
+        let patientCount = 0;
+
+        patientDocs.forEach((doc) => {
+          const patient = doc.data();
+          if (patient.adherenceRate) {
+            totalAdherence += patient.adherenceRate;
+            patientCount++;
+          }
+        });
+
+        const avgAdherence =
+          patientCount > 0 ? Math.round(totalAdherence / patientCount) : 0;
+
+        const statsHTML = `
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #666; font-size: 14px;">Average Adherence</span>
+                        <span style="color: #4caf50; font-weight: bold;">${avgAdherence}%</span>
+                    </div>
+                    <div style="background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: linear-gradient(90deg, #4caf50, #8bc34a); width: ${avgAdherence}%; height: 100%;"></div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #666; font-size: 14px;">Pending Consultations</span>
+                        <span style="color: #2196f3; font-weight: bold;">${consultationsCount}</span>
+                    </div>
+                    <div style="background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: linear-gradient(90deg, #2196f3, #42a5f5); width: ${Math.min(
+                          consultationsCount * 10,
+                          100
+                        )}%; height: 100%;"></div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span style="color: #666; font-size: 14px;">Active Patients</span>
+                        <span style="color: #ff9800; font-weight: bold;">${
+                          patientDocs.length
+                        }</span>
+                    </div>
+                    <div style="background: #f0f0f0; height: 8px; border-radius: 4px; overflow: hidden;">
+                        <div style="background: linear-gradient(90deg, #ff9800, #ffa726); width: ${Math.min(
+                          patientDocs.length * 2,
+                          100
+                        )}%; height: 100%;"></div>
+                    </div>
+                </div>
+
+                <div style="background: #e8f4f8; padding: 15px; border-radius: 12px; margin-top: 25px;">
+                    <div style="font-size: 13px; color: #5a9aae; margin-bottom: 8px;">💡 Quick Tip</div>
+                    <div style="font-size: 14px; color: #2c5f6f; line-height: 1.5;">
+                        ${
+                          avgAdherence >= 80
+                            ? "Great job! Your patients are maintaining excellent adherence."
+                            : "Focus on improving patient adherence for better health outcomes."
+                        }
+                    </div>
+                </div>
+            `;
+
+        document.getElementById("weeklyStatsContainer").innerHTML = statsHTML;
+      }
+
+      // Helper function to get time ago
+      function getTimeAgo(date) {
+        const seconds = Math.floor((new Date() - date) / 1000);
+
+        if (seconds < 60) return "Just now";
+        if (seconds < 3600) return `${Math.floor(seconds / 60)} min ago`;
+        if (seconds < 86400) return `${Math.floor(seconds / 3600)} hours ago`;
+        return `${Math.floor(seconds / 86400)} days ago`;
+      }
+
       // Load patient list
       function loadPatientList(patientDocs) {
         const patientListContainer = document.querySelector(".patient-list");
+
+        // Update View All link
+        const viewAllLink = document.getElementById("viewAllPatientsLink");
+        if (viewAllLink) {
+          viewAllLink.textContent = `View All (${patientDocs.length})`;
+        }
 
         if (patientDocs.length === 0) {
           patientListContainer.innerHTML = `
@@ -1628,26 +1655,31 @@
       document.addEventListener("DOMContentLoaded", () => {
         const searchInput = document.getElementById("searchInput");
         if (searchInput) {
-          searchInput.addEventListener("input", async function (e) {
-            const searchTerm = e.target.value.toLowerCase();
+          let allPatients = [];
+
+          // Store all patients when loaded
+          window.storeAllPatients = (patients) => {
+            allPatients = patients;
+          };
+
+          searchInput.addEventListener("input", function (e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
 
             if (searchTerm === "") {
-              loadDashboardData(); // Reload all patients
+              loadPatientList(allPatients);
               return;
             }
 
-            // Search patients
-            const patientsSnapshot = await db
-              .collection("users")
-              .where("role", "==", "patient")
-              .where("pharmacistId", "==", currentUser.uid)
-              .get();
-
-            const filteredPatients = patientsSnapshot.docs.filter((doc) => {
+            const filteredPatients = allPatients.filter((doc) => {
               const patient = doc.data();
               const name = (patient.name || "").toLowerCase();
+              const email = (patient.email || "").toLowerCase();
               const id = doc.id.toLowerCase();
-              return name.includes(searchTerm) || id.includes(searchTerm);
+              return (
+                name.includes(searchTerm) ||
+                email.includes(searchTerm) ||
+                id.includes(searchTerm)
+              );
             });
 
             loadPatientList(filteredPatients);
@@ -1845,6 +1877,42 @@
           if (patientDoc.exists) {
             const patient = patientDoc.data();
 
+            // Get recent symptoms
+            const symptomsSnapshot = await db
+              .collection("symptoms")
+              .where("patientId", "==", patientId)
+              .limit(5)
+              .get();
+
+            let symptomsHTML = "";
+            if (!symptomsSnapshot.empty) {
+              symptomsHTML =
+                '<div style="margin-top: 20px;"><strong>Recent Symptoms:</strong><div style="margin-top: 10px;">';
+              symptomsSnapshot.forEach((doc) => {
+                const symptom = doc.data();
+                const severityColor =
+                  symptom.severity === "severe"
+                    ? "#f44336"
+                    : symptom.severity === "moderate"
+                    ? "#ff9800"
+                    : "#4caf50";
+                symptomsHTML += `
+                                <div style="background: #f8fbfc; padding: 10px; border-radius: 8px; margin-bottom: 8px; border-left: 3px solid ${severityColor};">
+                                    <div style="font-weight: 600; color: #2c5f6f;">${
+                                      symptom.type
+                                    }</div>
+                                    <div style="font-size: 13px; color: #666;">${
+                                      symptom.description || "No description"
+                                    }</div>
+                                    <div style="font-size: 12px; color: #999; margin-top: 5px;">Severity: ${
+                                      symptom.severity
+                                    }</div>
+                                </div>
+                            `;
+              });
+              symptomsHTML += "</div></div>";
+            }
+
             const profileHTML = `
                         <div style="line-height: 1.8;">
                             <p><strong>Name:</strong> ${patient.name}</p>
@@ -1864,6 +1932,7 @@
                             <p><strong>Missed Doses:</strong> ${
                               patient.missedDoses || 0
                             }</p>
+                            ${symptomsHTML}
                         </div>
                     `;
 
@@ -2169,14 +2238,43 @@
         // In real implementation, this would show a toast notification
       }, 5000);
 
-      // Logout function (add this to settings or profile menu)
+      // Logout function with SweetAlert2
       async function logout() {
-        try {
-          await auth.signOut();
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Error logging out:", error);
-          alert("Error logging out. Please try again.");
+        const result = await Swal.fire({
+          title: "Logout?",
+          text: "Are you sure you want to log out?",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: "#5a9aae",
+          cancelButtonColor: "#999",
+          confirmButtonText: "Yes, logout",
+          cancelButtonText: "Cancel",
+        });
+
+        if (result.isConfirmed) {
+          try {
+            await auth.signOut();
+
+            Swal.fire({
+              title: "Logged Out!",
+              text: "See you next time!",
+              icon: "success",
+              timer: 1500,
+              showConfirmButton: false,
+            });
+
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 1500);
+          } catch (error) {
+            console.error("Error logging out:", error);
+            Swal.fire({
+              title: "Error!",
+              text: "Could not log out. Please try again.",
+              icon: "error",
+              confirmButtonColor: "#5a9aae",
+            });
+          }
         }
       }
     </script>
