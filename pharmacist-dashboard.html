@@ -4,6 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ClearPharma - Pharmacist Dashboard</title>
+    <link
+      rel="stylesheet"
+      href="https://i.icomoon.io/public/temp/92804d2d14/UntitledProject/style.css"
+    />
 
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -12,8 +16,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link rel="stylesheet" href="style.css" />
 
     <style>
+      @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Stack+Sans+Headline:wght@200..700&display=swap");
       * {
         margin: 0;
         padding: 0;
@@ -21,8 +27,9 @@
       }
 
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Oxygen, Ubuntu, Cantarell, sans-serif;
+        font-family: "Hammersmith One", sans-serif;
+        font-weight: 400;
+        font-style: normal;
         background: linear-gradient(135deg, #e8f4f8 0%, #f5f9fb 100%);
         min-height: 100vh;
         padding-bottom: 80px;
@@ -695,7 +702,9 @@
     <!-- Header -->
     <div class="header">
       <div class="logo-section">
-        <div class="logo-icon">+</div>
+        <div class="logo-icon">
+          <img src="search-svgrepo-com%20(1).svg" />
+        </div>
         <div class="logo-text">
           <h1>ClearPharma</h1>
           <span>Pharmacist Portal</span>
@@ -708,7 +717,26 @@
             placeholder="Search patients by name or ID..."
             id="searchInput"
           />
-          <span class="search-icon">🔍</span>
+          <span class="search-icon">
+            <span class="icon-search-svgrepo-com-1"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+              ><span class="path29"></span><span class="path30"></span
+              ><span class="path31"></span
+            ></span>
+          </span>
         </div>
         <div class="user-info">
           <div class="user-details">
@@ -741,22 +769,85 @@
       <!-- Stats Grid -->
       <div class="stats-grid">
         <div class="stat-card blue">
-          <div class="stat-icon">👥</div>
+          <div class="stat-icon">
+            <span class="icon-personal-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+            ></span>
+          </div>
           <div class="stat-value" id="statActivePatients">0</div>
           <div class="stat-label">Active Patients</div>
         </div>
         <div class="stat-card red">
-          <div class="stat-icon">⚠️</div>
+          <div class="stat-icon">
+            <span class="icon-bookmark-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span
+            ></span>
+          </div>
           <div class="stat-value" id="statRiskAlerts">0</div>
           <div class="stat-label">Risk Alerts</div>
         </div>
         <div class="stat-card green">
-          <div class="stat-icon">💊</div>
+          <div class="stat-icon">
+            <span class="icon-browse-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+            ></span>
+          </div>
           <div class="stat-value" id="statRefills">0</div>
           <div class="stat-label">Refills Due This Week</div>
         </div>
         <div class="stat-card orange">
-          <div class="stat-icon">💬</div>
+          <div class="stat-icon">
+            <span class="icon-information-svgrepo-com-1"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+              ><span class="path29"></span><span class="path30"></span
+              ><span class="path31"></span><span class="path32"></span
+              ><span class="path33"></span><span class="path34"></span
+              ><span class="path35"></span
+            ></span>
+          </div>
           <div class="stat-value" id="statMessages">0</div>
           <div class="stat-label">Pending Messages</div>
         </div>
@@ -765,16 +856,108 @@
       <!-- Action Buttons -->
       <div class="action-buttons">
         <button class="action-btn primary" onclick="addNewPatient()">
-          <span>➕</span> Add New Patient
+          <span
+            ><span class="icon-pen-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+              ><span class="path29"></span><span class="path30"></span
+              ><span class="path31"></span><span class="path32"></span
+              ><span class="path33"></span><span class="path34"></span
+              ><span class="path35"></span><span class="path36"></span
+              ><span class="path37"></span></span
+          ></span>
+          Add New Patient
         </button>
         <button class="action-btn primary" onclick="generateReferralCode()">
-          <span>🔑</span> Generate Referral Code
+          <span
+            ><span class="icon-key-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+              ><span class="path29"></span><span class="path30"></span
+              ><span class="path31"></span><span class="path32"></span
+              ><span class="path33"></span><span class="path34"></span
+              ><span class="path35"></span></span
+          ></span>
+          Generate Referral Code
         </button>
         <button class="action-btn secondary" onclick="viewReports()">
-          <span>📊</span> View Reports
+          <span
+            ><span class="icon-report-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+              ><span class="path29"></span><span class="path30"></span
+              ><span class="path31"></span><span class="path32"></span
+              ><span class="path33"></span><span class="path34"></span
+              ><span class="path35"></span><span class="path36"></span
+              ><span class="path37"></span><span class="path38"></span
+              ><span class="path39"></span><span class="path40"></span
+              ><span class="path41"></span><span class="path42"></span
+              ><span class="path43"></span><span class="path44"></span
+              ><span class="path45"></span><span class="path46"></span
+              ><span class="path47"></span><span class="path48"></span
+              ><span class="path49"></span><span class="path50"></span></span
+          ></span>
+          View Reports
         </button>
         <button class="action-btn secondary" onclick="contactServiceTeam()">
-          <span>👥</span> Contact Service Team
+          <span
+            ><span class="icon-information-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+              ><span class="path29"></span><span class="path30"></span
+              ><span class="path31"></span><span class="path32"></span
+              ><span class="path33"></span><span class="path34"></span
+              ><span class="path35"></span><span class="path36"></span></span
+          ></span>
+          Contact Service Team
         </button>
       </div>
 
@@ -783,7 +966,24 @@
         <!-- Risk Alerts -->
         <div class="section-card">
           <div class="section-header">
-            <h2 class="section-title">🚨 Priority Alerts</h2>
+            <h2 class="section-title">
+              <span class="icon-collect-svgrepo-com"
+                ><span class="path1"></span><span class="path2"></span
+                ><span class="path3"></span><span class="path4"></span
+                ><span class="path5"></span><span class="path6"></span
+                ><span class="path7"></span><span class="path8"></span
+                ><span class="path9"></span><span class="path10"></span
+                ><span class="path11"></span><span class="path12"></span
+                ><span class="path13"></span><span class="path14"></span
+                ><span class="path15"></span><span class="path16"></span
+                ><span class="path17"></span><span class="path18"></span
+                ><span class="path19"></span><span class="path20"></span
+                ><span class="path21"></span><span class="path22"></span
+                ><span class="path23"></span><span class="path24"></span
+                ><span class="path25"></span><span class="path26"></span
+              ></span>
+              Priority Alerts
+            </h2>
             <a href="#" class="view-all">View All</a>
           </div>
 
@@ -797,7 +997,26 @@
         <!-- Quick Stats -->
         <div class="section-card">
           <div class="section-header">
-            <h2 class="section-title">📈 This Week</h2>
+            <h2 class="section-title">
+              <span class="icon-menu-svgrepo-com"
+                ><span class="path1"></span><span class="path2"></span
+                ><span class="path3"></span><span class="path4"></span
+                ><span class="path5"></span><span class="path6"></span
+                ><span class="path7"></span><span class="path8"></span
+                ><span class="path9"></span><span class="path10"></span
+                ><span class="path11"></span><span class="path12"></span
+                ><span class="path13"></span><span class="path14"></span
+                ><span class="path15"></span><span class="path16"></span
+                ><span class="path17"></span><span class="path18"></span
+                ><span class="path19"></span><span class="path20"></span
+                ><span class="path21"></span><span class="path22"></span
+                ><span class="path23"></span><span class="path24"></span
+                ><span class="path25"></span><span class="path26"></span
+                ><span class="path27"></span><span class="path28"></span
+                ><span class="path29"></span
+              ></span>
+              This Week
+            </h2>
           </div>
 
           <div style="margin-top: 20px" id="weeklyStatsContainer">
@@ -809,7 +1028,25 @@
       <!-- Patient List -->
       <div class="section-card" style="margin-top: 30px">
         <div class="section-header">
-          <h2 class="section-title">👥 Your Patients</h2>
+          <h2 class="section-title">
+            <span class="icon-personal-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+            ></span>
+            Your Patients
+          </h2>
           <a href="#" class="view-all" id="viewAllPatientsLink">View All (0)</a>
         </div>
 
@@ -983,29 +1220,153 @@
       onclick="openServiceTeamChat()"
       title="Chat with Service Team"
     >
-      💬
+      <span class="icon-information-svgrepo-com-1"
+        ><span class="path1"></span><span class="path2"></span
+        ><span class="path3"></span><span class="path4"></span
+        ><span class="path5"></span><span class="path6"></span
+        ><span class="path7"></span><span class="path8"></span
+        ><span class="path9"></span><span class="path10"></span
+        ><span class="path11"></span><span class="path12"></span
+        ><span class="path13"></span><span class="path14"></span
+        ><span class="path15"></span><span class="path16"></span
+        ><span class="path17"></span><span class="path18"></span
+        ><span class="path19"></span><span class="path20"></span
+        ><span class="path21"></span><span class="path22"></span
+        ><span class="path23"></span><span class="path24"></span
+        ><span class="path25"></span><span class="path26"></span
+        ><span class="path27"></span><span class="path28"></span
+        ><span class="path29"></span><span class="path30"></span
+        ><span class="path31"></span><span class="path32"></span
+        ><span class="path33"></span><span class="path34"></span
+        ><span class="path35"></span
+      ></span>
     </div>
 
     <!-- Bottom Navigation -->
     <div class="bottom-nav">
       <div class="nav-item active">
-        <div class="nav-icon">🏠</div>
+        <div class="nav-icon">
+          <span class="icon-front-page-svgrepo-com"
+            ><span class="path1"></span><span class="path2"></span
+            ><span class="path3"></span><span class="path4"></span
+            ><span class="path5"></span><span class="path6"></span
+            ><span class="path7"></span><span class="path8"></span
+            ><span class="path9"></span><span class="path10"></span
+            ><span class="path11"></span><span class="path12"></span
+            ><span class="path13"></span><span class="path14"></span
+            ><span class="path15"></span><span class="path16"></span
+            ><span class="path17"></span><span class="path18"></span
+            ><span class="path19"></span><span class="path20"></span
+            ><span class="path21"></span><span class="path22"></span
+            ><span class="path23"></span><span class="path24"></span
+            ><span class="path25"></span><span class="path26"></span
+            ><span class="path27"></span><span class="path28"></span
+            ><span class="path29"></span><span class="path30"></span
+            ><span class="path31"></span><span class="path32"></span
+            ><span class="path33"></span><span class="path34"></span
+            ><span class="path35"></span><span class="path36"></span
+            ><span class="path37"></span><span class="path38"></span
+          ></span>
+        </div>
         <span>Dashboard</span>
       </div>
       <div class="nav-item">
-        <div class="nav-icon">👥</div>
+        <div class="nav-icon">
+          <span class="icon-personal-svgrepo-com"
+            ><span class="path1"></span><span class="path2"></span
+            ><span class="path3"></span><span class="path4"></span
+            ><span class="path5"></span><span class="path6"></span
+            ><span class="path7"></span><span class="path8"></span
+            ><span class="path9"></span><span class="path10"></span
+            ><span class="path11"></span><span class="path12"></span
+            ><span class="path13"></span><span class="path14"></span
+            ><span class="path15"></span><span class="path16"></span
+            ><span class="path17"></span><span class="path18"></span
+            ><span class="path19"></span><span class="path20"></span
+            ><span class="path21"></span><span class="path22"></span
+            ><span class="path23"></span><span class="path24"></span
+            ><span class="path25"></span><span class="path26"></span
+            ><span class="path27"></span><span class="path28"></span
+          ></span>
+        </div>
         <span>Patients</span>
       </div>
       <div class="nav-item">
-        <div class="nav-icon">📊</div>
+        <div class="nav-icon">
+          <span class="icon-report-svgrepo-com"
+            ><span class="path1"></span><span class="path2"></span
+            ><span class="path3"></span><span class="path4"></span
+            ><span class="path5"></span><span class="path6"></span
+            ><span class="path7"></span><span class="path8"></span
+            ><span class="path9"></span><span class="path10"></span
+            ><span class="path11"></span><span class="path12"></span
+            ><span class="path13"></span><span class="path14"></span
+            ><span class="path15"></span><span class="path16"></span
+            ><span class="path17"></span><span class="path18"></span
+            ><span class="path19"></span><span class="path20"></span
+            ><span class="path21"></span><span class="path22"></span
+            ><span class="path23"></span><span class="path24"></span
+            ><span class="path25"></span><span class="path26"></span
+            ><span class="path27"></span><span class="path28"></span
+            ><span class="path29"></span><span class="path30"></span
+            ><span class="path31"></span><span class="path32"></span
+            ><span class="path33"></span><span class="path34"></span
+            ><span class="path35"></span><span class="path36"></span
+            ><span class="path37"></span><span class="path38"></span
+            ><span class="path39"></span><span class="path40"></span
+            ><span class="path41"></span><span class="path42"></span
+            ><span class="path43"></span><span class="path44"></span
+            ><span class="path45"></span><span class="path46"></span
+            ><span class="path47"></span><span class="path48"></span
+            ><span class="path49"></span><span class="path50"></span
+          ></span>
+        </div>
         <span>Reports</span>
       </div>
       <div class="nav-item">
-        <div class="nav-icon">💬</div>
+        <div class="nav-icon">
+          <span class="icon-information-svgrepo-com-1"
+            ><span class="path1"></span><span class="path2"></span
+            ><span class="path3"></span><span class="path4"></span
+            ><span class="path5"></span><span class="path6"></span
+            ><span class="path7"></span><span class="path8"></span
+            ><span class="path9"></span><span class="path10"></span
+            ><span class="path11"></span><span class="path12"></span
+            ><span class="path13"></span><span class="path14"></span
+            ><span class="path15"></span><span class="path16"></span
+            ><span class="path17"></span><span class="path18"></span
+            ><span class="path19"></span><span class="path20"></span
+            ><span class="path21"></span><span class="path22"></span
+            ><span class="path23"></span><span class="path24"></span
+            ><span class="path25"></span><span class="path26"></span
+            ><span class="path27"></span><span class="path28"></span
+            ><span class="path29"></span><span class="path30"></span
+            ><span class="path31"></span><span class="path32"></span
+            ><span class="path33"></span><span class="path34"></span
+            ><span class="path35"></span
+          ></span>
+        </div>
         <span>Messages</span>
       </div>
       <div class="nav-item">
-        <div class="nav-icon">⚙️</div>
+        <div class="nav-icon">
+          <span class="icon-set-up-svgrepo-com"
+            ><span class="path1"></span><span class="path2"></span
+            ><span class="path3"></span><span class="path4"></span
+            ><span class="path5"></span><span class="path6"></span
+            ><span class="path7"></span><span class="path8"></span
+            ><span class="path9"></span><span class="path10"></span
+            ><span class="path11"></span><span class="path12"></span
+            ><span class="path13"></span><span class="path14"></span
+            ><span class="path15"></span><span class="path16"></span
+            ><span class="path17"></span><span class="path18"></span
+            ><span class="path19"></span><span class="path20"></span
+            ><span class="path21"></span><span class="path22"></span
+            ><span class="path23"></span><span class="path24"></span
+            ><span class="path25"></span><span class="path26"></span
+            ><span class="path27"></span
+          ></span>
+        </div>
         <span>Settings</span>
       </div>
     </div>
@@ -1155,7 +1516,35 @@
     <div id="reportsModal" class="modal">
       <div class="modal-content" style="max-width: 700px">
         <div class="modal-header">
-          <h2>📊 Analytics & Reports</h2>
+          <h2>
+            <span class="icon-report-svgrepo-com"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+              ><span class="path29"></span><span class="path30"></span
+              ><span class="path31"></span><span class="path32"></span
+              ><span class="path33"></span><span class="path34"></span
+              ><span class="path35"></span><span class="path36"></span
+              ><span class="path37"></span><span class="path38"></span
+              ><span class="path39"></span><span class="path40"></span
+              ><span class="path41"></span><span class="path42"></span
+              ><span class="path43"></span><span class="path44"></span
+              ><span class="path45"></span><span class="path46"></span
+              ><span class="path47"></span><span class="path48"></span
+              ><span class="path49"></span><span class="path50"></span></span
+            >Analytics & Reports
+          </h2>
           <button class="modal-close" onclick="closeModal('reportsModal')">
             &times;
           </button>
@@ -1178,7 +1567,29 @@
     <div id="serviceTeamModal" class="modal">
       <div class="modal-content" style="max-width: 600px; max-height: 90vh">
         <div class="modal-header">
-          <h2>💬 Service Team Chat</h2>
+          <h2>
+            <span class="icon-information-svgrepo-com-1"
+              ><span class="path1"></span><span class="path2"></span
+              ><span class="path3"></span><span class="path4"></span
+              ><span class="path5"></span><span class="path6"></span
+              ><span class="path7"></span><span class="path8"></span
+              ><span class="path9"></span><span class="path10"></span
+              ><span class="path11"></span><span class="path12"></span
+              ><span class="path13"></span><span class="path14"></span
+              ><span class="path15"></span><span class="path16"></span
+              ><span class="path17"></span><span class="path18"></span
+              ><span class="path19"></span><span class="path20"></span
+              ><span class="path21"></span><span class="path22"></span
+              ><span class="path23"></span><span class="path24"></span
+              ><span class="path25"></span><span class="path26"></span
+              ><span class="path27"></span><span class="path28"></span
+              ><span class="path29"></span><span class="path30"></span
+              ><span class="path31"></span><span class="path32"></span
+              ><span class="path33"></span><span class="path34"></span
+              ><span class="path35"></span
+            ></span>
+            Service Team Chat
+          </h2>
           <button class="modal-close" onclick="closeModal('serviceTeamModal')">
             &times;
           </button>
