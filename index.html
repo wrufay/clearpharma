@@ -27,15 +27,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
+        padding: 40px 20px;
         position: relative;
-        overflow: hidden;
       }
 
       /* Animated background particles */
       body::before {
         content: "";
-        position: absolute;
+        position: fixed;
         width: 200%;
         height: 200%;
         background: radial-gradient(
@@ -54,6 +53,7 @@
             transparent 50%
           );
         animation: float 20s ease-in-out infinite;
+        z-index: 0;
       }
 
       @keyframes float {
@@ -81,6 +81,7 @@
         z-index: 1;
         animation: slideInUp 0.6s ease-out;
         border: 1px solid rgba(255, 255, 255, 0.5);
+        margin: auto;
       }
 
       @keyframes slideInUp {
@@ -499,6 +500,7 @@
         border-radius: 50%;
         pointer-events: none;
         animation: floatParticle 15s linear infinite;
+        z-index: 0;
       }
 
       /* Loading spinner for button */
@@ -524,6 +526,10 @@
 
       /* Responsive */
       @media (max-width: 480px) {
+        body {
+          padding: 20px;
+        }
+
         .container {
           padding: 30px 20px;
         }
