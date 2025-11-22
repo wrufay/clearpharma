@@ -1074,7 +1074,6 @@
           const medsSnapshot = await db
             .collection("medications")
             .where("patientId", "==", currentUser.uid)
-            .orderBy("scheduledTime", "asc")
             .limit(5)
             .get();
 
@@ -1082,7 +1081,7 @@
 
           if (medsSnapshot.empty) {
             medicationsList.innerHTML =
-              '<p style="text-align: center; color: #999; padding: 20px;">No medications scheduled for today</p>';
+              '<p style="text-align: center; color: #999; padding: 20px;">No medications scheduled. Your pharmacist will add them soon!</p>';
             return;
           }
 
@@ -1126,7 +1125,7 @@
         } catch (error) {
           console.error("Error loading medications:", error);
           document.getElementById("medicationsList").innerHTML =
-            '<p style="text-align: center; color: #999; padding: 20px;">Error loading medications</p>';
+            '<p style="text-align: center; color: #999; padding: 20px;">No medications scheduled yet.</p>';
         }
       }
 
@@ -1349,14 +1348,24 @@
             loggedAt: firebase.firestore.FieldValue.serverTimestamp(),
           });
 
-          alert("✅ Symptom logged successfully!");
-
           // Clear form
           document.getElementById("symptomType").value = "";
           document.getElementById("symptomSeverity").value = "mild";
           document.getElementById("symptomDescription").value = "";
 
           closeModal("symptomsModal");
+
+          // Show success message in modal content instead of alert
+          const successDiv = document.createElement("div");
+          successDiv.style.cssText =
+            "position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
+          successDiv.textContent = "✅ Symptom logged successfully!";
+          document.body.appendChild(successDiv);
+
+          setTimeout(() => {
+            successDiv.remove();
+          }, 3000);
+
           loadSymptoms();
         } catch (error) {
           console.error("Error logging symptom:", error);
@@ -1374,7 +1383,6 @@
           const medsSnapshot = await db
             .collection("medications")
             .where("patientId", "==", currentUser.uid)
-            .orderBy("scheduledTime", "desc")
             .limit(30)
             .get();
 
@@ -1382,7 +1390,7 @@
 
           if (medsSnapshot.empty) {
             medsContainer.innerHTML =
-              '<p style="text-align: center; color: #999; padding: 20px;">No medications found</p>';
+              '<p style="text-align: center; color: #999; padding: 20px;">No medications found. Your pharmacist will add them soon!</p>';
             return;
           }
 
@@ -1431,7 +1439,7 @@
         } catch (error) {
           console.error("Error loading medications:", error);
           document.getElementById("medicationsContent").innerHTML =
-            '<p style="text-align: center; color: #f44336; padding: 20px;">Error loading medications</p>';
+            '<p style="text-align: center; color: #999; padding: 20px;">No medications found.</p>';
         }
       }
 
@@ -1574,12 +1582,25 @@
 
       // Logout function
       async function logout() {
-        try {
-          await auth.signOut();
-          window.location.href = "index.html";
-        } catch (error) {
-          console.error("Error logging out:", error);
-          alert("Error logging out. Please try again.");
+        if (confirm("Are you sure you want to log out?")) {
+          try {
+            await auth.signOut();
+
+            // Show logging out message
+            const logoutDiv = document.createElement("div");
+            logoutDiv.style.cssText =
+              "position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px 50px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center;";
+            logoutDiv.innerHTML =
+              '<div style="font-size: 18px; color: #2c5f6f; font-weight: 600;">Logging out...</div>';
+            document.body.appendChild(logoutDiv);
+
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 500);
+          } catch (error) {
+            console.error("Error logging out:", error);
+            alert("Error logging out. Please try again.");
+          }
         }
       }
     </script>
