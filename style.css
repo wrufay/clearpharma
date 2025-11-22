@@ -1,0 +1,17 @@
+button,
+input {
+  font-family: "Stack Sans Headline", sans-serif;
+}
+
+.photo-wrapper {
+  width: 100px;
+  width: 100px;
+}
+img {
+  width: 100%;
+  height: 100%;
+}
+
+.main {
+  font-size: 24px;
+}
