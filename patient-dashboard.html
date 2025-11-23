@@ -335,58 +335,9 @@
         </button>
       </div>
       <div class="modal-body" id="educationContent">
-        <div style="line-height: 1.8">
-          <h3 style="color: #2c5f6f; margin-bottom: 15px">
-            Medication Education
-          </h3>
-          <div style="
-                background: #f8fbfc;
-                padding: 15px;
-                border-radius: 12px;
-                margin-bottom: 15px;
-              ">
-            <h4 style="color: #5a9aae; margin-bottom: 10px">
-              Understanding Your Medications
-            </h4>
-            <p style="color: #666; font-size: 14px">
-              Learn about how your medications work, potential side effects,
-              and best practices for taking them.
-            </p>
-          </div>
-
-          <h3 style="color: #2c5f6f; margin: 20px 0 15px">
-            Condition Management
-          </h3>
-          <div style="
-                background: #f8fbfc;
-                padding: 15px;
-                border-radius: 12px;
-                margin-bottom: 15px;
-              ">
-            <h4 style="color: #5a9aae; margin-bottom: 10px">
-              Living with Chronic Conditions
-            </h4>
-            <p style="color: #666; font-size: 14px">
-              Tips and strategies for managing your chronic condition and
-              improving quality of life.
-            </p>
-          </div>
-
-          <h3 style="color: #2c5f6f; margin: 20px 0 15px">Lifestyle Tips</h3>
-          <div style="
-                background: #f8fbfc;
-                padding: 15px;
-                border-radius: 12px;
-                margin-bottom: 15px;
-              ">
-            <h4 style="color: #5a9aae; margin-bottom: 10px">
-              Healthy Habits
-            </h4>
-            <p style="color: #666; font-size: 14px">
-              Diet, exercise, and lifestyle modifications that can complement
-              your treatment plan.
-            </p>
-          </div>
+        <div style="text-align: center; padding: 40px;">
+          <div class="loading-spinner"></div>
+          <p>Analyzing your health data and generating personalized tips...</p>
         </div>
       </div>
       <div class="modal-footer">
@@ -495,6 +446,11 @@
 
     const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
     const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
+
+    // Expose AI model globally for use in other functions
+    window.aiModel = model;
+    window.GoogleGenerativeAI = GoogleGenerativeAI;
+    window.GEMINI_API_KEY = GEMINI_API_KEY;
 
     const SYSTEM_PROMPT = `You are a helpful AI health assistant for ClearPharma, a medication management platform.
 
@@ -1385,8 +1341,119 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
       }
     }
 
-    function viewEducation() {
+    async function viewEducation() {
       openModal("educationModal");
+
+      const educationContent = document.getElementById("educationContent");
+      educationContent.innerHTML = `
+        <div style="text-align: center; padding: 40px;">
+          <div class="loading-spinner"></div>
+          <p>Analyzing your health data and generating personalized tips...</p>
+        </div>
+      `;
+
+      try {
+        // Fetch patient's medications
+        const medsSnapshot = await db
+          .collection("medications")
+          .where("patientId", "==", currentUser.uid)
+          .where("active", "==", true)
+          .limit(20)
+          .get();
+
+        const medications = [];
+        medsSnapshot.forEach((doc) => {
+          const med = doc.data();
+          medications.push(med.name);
+        });
+
+        // Fetch patient's recent symptoms
+        const symptomsSnapshot = await db
+          .collection("symptoms")
+          .where("patientId", "==", currentUser.uid)
+          .limit(10)
+          .get();
+
+        const symptoms = [];
+        symptomsSnapshot.forEach((doc) => {
+          const symptom = doc.data();
+          symptoms.push({
+            type: symptom.type,
+            severity: symptom.severity
+          });
+        });
+
+        // Create AI prompt with patient data
+        const aiPrompt = `You are a helpful health education assistant for ClearPharma.
+
+Patient Information:
+- Current Medications: ${medications.length > 0 ? medications.join(", ") : "None prescribed yet"}
+- Recent Symptoms: ${symptoms.length > 0 ? symptoms.map(s => `${s.type} (${s.severity})`).join(", ") : "None reported"}
+
+Based on this patient's medications and symptoms, provide personalized health education tips in the following categories:
+
+1. Medication Management
+2. Symptom Management
+3. Lifestyle & Wellness Tips
+4. When to Contact Healthcare Provider
+
+Keep each section brief (2-3 sentences) and actionable. Use friendly, encouraging language. Do not provide medical diagnoses or replace professional medical advice.`;
+
+        // Get AI response using the globally exposed model
+        if (!window.aiModel) {
+          throw new Error("AI model not initialized yet. Please refresh the page.");
+        }
+
+        const result = await window.aiModel.generateContent(aiPrompt);
+        const response = await result.response;
+        const aiTips = response.text();
+
+        // Format and display the AI-generated tips
+        let formattedHTML = '<div style="line-height: 1.8;">';
+
+        // Parse the AI response and format it nicely
+        const sections = aiTips.split(/\d+\.\s+/);
+        const sectionTitles = aiTips.match(/\d+\.\s+([^:\n]+)/g) || [];
+
+        for (let i = 1; i < sections.length && i <= sectionTitles.length; i++) {
+          const title = sectionTitles[i - 1].replace(/\d+\.\s+/, '').trim();
+          const content = sections[i].trim();
+
+          formattedHTML += `
+            <div style="background: #f8fbfc; padding: 15px; border-radius: 12px; margin-bottom: 15px;">
+              <h4 style="color: #5a9aae; margin-bottom: 10px;">${title}</h4>
+              <p style="color: #666; font-size: 14px; white-space: pre-wrap;">${content}</p>
+            </div>
+          `;
+        }
+
+        // If parsing fails, just display the raw response
+        if (sections.length <= 1) {
+          formattedHTML = `
+            <div style="background: #f8fbfc; padding: 20px; border-radius: 12px;">
+              <p style="color: #666; font-size: 14px; line-height: 1.8; white-space: pre-wrap;">${aiTips}</p>
+            </div>
+          `;
+        }
+
+        formattedHTML += `
+          <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 10px; border-left: 4px solid #2196f3;">
+            <p style="font-size: 13px; color: #1565c0;"><strong>Disclaimer:</strong> This information is AI-generated based on your health data and is for educational purposes only. Always consult your pharmacist or healthcare provider for medical advice.</p>
+          </div>
+        `;
+
+        formattedHTML += '</div>';
+        educationContent.innerHTML = formattedHTML;
+
+      } catch (error) {
+        console.error("Error generating education content:", error);
+        educationContent.innerHTML = `
+          <div style="text-align: center; padding: 40px;">
+            <p style="color: #f44336; margin-bottom: 10px;">Unable to generate personalized tips</p>
+            <p style="color: #666; font-size: 14px;">${error.message}</p>
+          </div>
+        `;
+      }
     }
 
     function handleChatClick() {
