@@ -20,1022 +20,7 @@
     </script>
   <link rel="stylesheet" href="style.css" />
 
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Stack+Sans+Headline:wght@200..700&display=swap");
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-        Oxygen, Ubuntu, Cantarell, sans-serif;
-      background: linear-gradient(135deg, #e8f4f8 0%, #f5f9fb 100%);
-      min-height: 100vh;
-      padding-bottom: 80px;
-    }
-
-    /* Header */
-    .header {
-      background: white;
-      font-family: "Stack Sans Headline", sans-serif;
-      padding: 20px 25px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    }
-
-    .welcome-section {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .welcome-text h1 {
-      color: #2c5f6f;
-      font-size: 24px;
-      margin-bottom: 5px;
-    }
-
-    .welcome-text p {
-      color: #7ba8b5;
-      font-size: 14px;
-    }
-
-    .user-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-weight: bold;
-      font-size: 20px;
-    }
-
-    /* Alert Banner */
-    .alert-banner {
-      background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-      padding: 15px 20px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-top: 15px;
-    }
-
-    .alert-banner.critical {
-      background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-    }
-
-    .alert-icon {
-      font-size: 24px;
-    }
-
-    .alert-content {
-      flex: 1;
-    }
-
-    .alert-content strong {
-      color: #2c5f6f;
-      display: block;
-      margin-bottom: 3px;
-    }
-
-    .alert-content p {
-      color: #666;
-      font-size: 14px;
-    }
-
-    /* Container */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-
-    /* Quick Actions */
-    .quick-actions {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 25px;
-    }
-
-    .action-card {
-      background: white;
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    }
-
-    .action-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .action-icon {
-      font-size: 32px;
-      margin-bottom: 10px;
-    }
-
-    .action-label {
-      color: #2c5f6f;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    /* Card */
-    .card {
-      background: white;
-      border-radius: 16px;
-      padding: 25px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      margin-bottom: 20px;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .card-header h3 {
-      color: #2c5f6f;
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .view-all {
-      color: #5a9aae;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-    }
-
-    .view-all:hover {
-      text-decoration: underline;
-    }
-
-    /* Medication Item */
-    .medication-item {
-      padding: 15px;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      border-left: 4px solid #5a9aae;
-      background: #f8fbfc;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .medication-item:hover {
-      background: #f0f8fa;
-      transform: translateX(5px);
-    }
-
-    .medication-item.taken {
-      border-left-color: #4caf50;
-      opacity: 0.7;
-    }
-
-    .medication-item.missed {
-      border-left-color: #f44336;
-    }
-
-    .med-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-
-    .med-name {
-      font-weight: 600;
-      color: #2c5f6f;
-      font-size: 15px;
-    }
-
-    .med-status {
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .med-status.upcoming {
-      background: #e3f2fd;
-      color: #2196f3;
-    }
-
-    .med-status.taken {
-      background: #e8f5e9;
-      color: #4caf50;
-    }
-
-    .med-status.missed {
-      background: #ffebee;
-      color: #f44336;
-    }
-
-    .med-dosage {
-      color: #666;
-      font-size: 14px;
-      margin-bottom: 5px;
-    }
-
-    .med-time {
-      color: #999;
-      font-size: 13px;
-    }
-
-    /* Symptom Log */
-    .symptom-item {
-      padding: 12px 15px;
-      background: #f8fbfc;
-      border-radius: 8px;
-      margin-bottom: 10px;
-    }
-
-    .symptom-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5px;
-    }
-
-    .symptom-type {
-      font-weight: 600;
-      color: #2c5f6f;
-      font-size: 14px;
-    }
-
-    .symptom-severity {
-      padding: 3px 10px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .symptom-severity.mild {
-      background: #e8f5e9;
-      color: #4caf50;
-    }
-
-    .symptom-severity.moderate {
-      background: #fff3e0;
-      color: #ff9800;
-    }
-
-    .symptom-severity.severe {
-      background: #ffebee;
-      color: #f44336;
-    }
-
-    .symptom-description {
-      color: #666;
-      font-size: 13px;
-      margin-bottom: 5px;
-    }
-
-    .symptom-time {
-      color: #999;
-      font-size: 12px;
-    }
-
-    /* Symptom Action Buttons */
-    .symptom-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid #e0e0e0;
-    }
-
-    .symptom-btn {
-      flex: 1;
-      padding: 8px 16px;
-      border: none;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
-    }
-
-    .symptom-btn-resolve {
-      background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
-      color: white;
-    }
-
-    .symptom-btn-resolve:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
-    }
-
-    .symptom-btn-delete {
-      background: #f44336;
-      color: white;
-    }
-
-    .symptom-btn-delete:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(244, 67, 54, 0.3);
-    }
-
-    .symptom-item.resolved {
-      opacity: 0.6;
-      background: #f0f0f0;
-    }
-
-    .symptom-item.resolved .symptom-type {
-      text-decoration: line-through;
-    }
-
-    /* Metrics Grid */
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-
-    .metric-box {
-      background: #f8fbfc;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    .metric-value {
-      font-size: 28px;
-      font-weight: bold;
-      color: #2c5f6f;
-      margin-bottom: 5px;
-    }
-
-    .metric-label {
-      color: #7ba8b5;
-      font-size: 13px;
-      margin-bottom: 8px;
-    }
-
-    .metric-status {
-      font-size: 12px;
-      font-weight: 600;
-      padding: 4px 12px;
-      border-radius: 12px;
-      display: inline-block;
-    }
-
-    .status-normal {
-      background: #e8f5e9;
-      color: #4caf50;
-    }
-
-    .status-warning {
-      background: #fff3e0;
-      color: #ff9800;
-    }
-
-    .status-critical {
-      background: #ffebee;
-      color: #f44336;
-    }
-
-    /* Chat Float Button */
-    .chat-float {
-      position: fixed;
-      bottom: 100px;
-      right: 30px;
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 28px;
-      box-shadow: 0 4px 20px rgba(90, 154, 174, 0.4);
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .chat-float:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 30px rgba(90, 154, 174, 0.5);
-    }
-
-    /* Bottom Navigation */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      padding: 15px 0;
-      box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-      display: flex;
-      justify-content: space-around;
-      z-index: 100;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 5px;
-      color: #7ba8b5;
-      text-decoration: none;
-      font-size: 12px;
-      padding: 8px 20px;
-      border-radius: 12px;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-
-    .nav-item.active {
-      color: #5a9aae;
-      background: #e8f4f8;
-    }
-
-    .nav-item:hover {
-      background: #f0f8fa;
-    }
-
-    .nav-icon {
-      font-size: 24px;
-    }
-
-    /* Responsive */
-    @media (max-width: 768px) {
-      .quick-actions {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .metrics-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* Modal Styles */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .modal.active {
-      display: flex;
-    }
-
-    .modal-content {
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      max-width: 500px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    }
-
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .modal-header h2 {
-      color: #2c5f6f;
-      font-size: 22px;
-    }
-
-    .modal-close {
-      background: none;
-      border: none;
-      font-size: 28px;
-      color: #999;
-      cursor: pointer;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-    }
-
-    .modal-close:hover {
-      color: #333;
-    }
-
-    .modal-body {
-      margin-bottom: 20px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    .form-group label {
-      display: block;
-      color: #2c5f6f;
-      font-weight: 600;
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 12px 15px;
-      border: 2px solid #e0e0e0;
-      border-radius: 10px;
-      font-size: 14px;
-      transition: all 0.3s ease;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: #5a9aae;
-      box-shadow: 0 0 0 3px rgba(90, 154, 174, 0.1);
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    .modal-footer {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-    }
-
-    .modal-btn {
-      padding: 12px 24px;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .modal-btn-primary {
-      background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
-      color: white;
-    }
-
-    .modal-btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(90, 154, 174, 0.3);
-    }
-
-    .modal-btn-secondary {
-      background: #f5f5f5;
-      color: #666;
-    }
-
-    .modal-btn-secondary:hover {
-      background: #e0e0e0;
-    }
-
-    /* Medication Logging Styles */
-    .medication-section {
-      background: white;
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      margin-bottom: 30px;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 25px;
-    }
-
-    .section-title {
-      font-size: 24px;
-      font-weight: bold;
-      color: #2c5f6f;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .date-selector {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      background: #f8fbfc;
-      padding: 8px 15px;
-      border-radius: 25px;
-    }
-
-    .date-selector button {
-      background: none;
-      border: none;
-      color: #5a9aae;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 5px 10px;
-      border-radius: 50%;
-      transition: all 0.3s ease;
-    }
-
-    .date-selector button:hover {
-      background: #e8f4f8;
-    }
-
-    .date-selector span {
-      font-weight: 600;
-      color: #2c5f6f;
-      min-width: 120px;
-      text-align: center;
-    }
-
-    .medication-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
-
-    .medication-card {
-      background: linear-gradient(135deg, #f8fbfc 0%, #ffffff 100%);
-      border-radius: 16px;
-      padding: 20px;
-      border-left: 5px solid #5a9aae;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s ease;
-    }
-
-    .medication-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .medication-card.taken {
-      border-left-color: #4caf50;
-      background: linear-gradient(135deg, #e8f5e9 0%, #ffffff 100%);
-      opacity: 0.8;
-    }
-
-    .medication-card.missed {
-      border-left-color: #f44336;
-      background: linear-gradient(135deg, #ffebee 0%, #ffffff 100%);
-    }
-
-    .medication-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: start;
-      margin-bottom: 15px;
-    }
-
-    .medication-info {
-      flex: 1;
-    }
-
-    .medication-name {
-      font-size: 18px;
-      font-weight: 600;
-      color: #2c5f6f;
-      margin-bottom: 5px;
-    }
-
-    .medication-dosage {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 5px;
-    }
-
-    .medication-time {
-      font-size: 13px;
-      color: #999;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .medication-status {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      gap: 10px;
-    }
-
-    .status-badge {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .status-badge.pending {
-      background: #fff3e0;
-      color: #ff9800;
-    }
-
-    .status-badge.taken {
-      background: #e8f5e9;
-      color: #4caf50;
-    }
-
-    .status-badge.missed {
-      background: #ffebee;
-      color: #f44336;
-    }
-
-    .status-badge.skipped {
-      background: #f5f5f5;
-      color: #999;
-    }
-
-    .medication-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 15px;
-      padding-top: 15px;
-      border-top: 1px solid #e0e0e0;
-    }
-
-    .med-action-btn {
-      flex: 1;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 10px;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .med-action-btn.take {
-      background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
-      color: white;
-    }
-
-    .med-action-btn.take:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
-    }
-
-    .med-action-btn.skip {
-      background: #f5f5f5;
-      color: #666;
-    }
-
-    .med-action-btn.skip:hover {
-      background: #e0e0e0;
-    }
-
-    .med-action-btn.undo {
-      background: #ff9800;
-      color: white;
-    }
-
-    .med-action-btn.undo:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
-    }
-
-    .med-action-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none !important;
-    }
-
-    .instructions-box {
-      background: #e8f4f8;
-      padding: 12px;
-      border-radius: 10px;
-      margin-top: 10px;
-      font-size: 13px;
-      color: #2c5f6f;
-      line-height: 1.5;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: #999;
-    }
-
-    .empty-state-icon {
-      font-size: 64px;
-      margin-bottom: 20px;
-      opacity: 0.5;
-    }
-
-    .empty-state-text {
-      font-size: 18px;
-      color: #666;
-      margin-bottom: 10px;
-    }
-
-    .empty-state-subtext {
-      font-size: 14px;
-      color: #999;
-    }
-
-    .adherence-summary {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin-top: 25px;
-      padding-top: 25px;
-      border-top: 2px solid #e0e0e0;
-    }
-
-    .adherence-stat {
-      text-align: center;
-      padding: 15px;
-      background: #f8fbfc;
-      border-radius: 12px;
-    }
-
-    .adherence-stat-value {
-      font-size: 32px;
-      font-weight: bold;
-      margin-bottom: 5px;
-    }
-
-    .adherence-stat-value.taken {
-      color: #4caf50;
-    }
-
-    .adherence-stat-value.missed {
-      color: #f44336;
-    }
-
-    .adherence-stat-value.rate {
-      color: #5a9aae;
-    }
-
-    .adherence-stat-label {
-      font-size: 13px;
-      color: #666;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    @media (max-width: 768px) {
-      .medication-header {
-        flex-direction: column;
-        gap: 15px;
-      }
-
-      .medication-status {
-        align-items: flex-start;
-      }
-
-      .medication-actions {
-        flex-direction: column;
-      }
-
-      .adherence-summary {
-        grid-template-columns: 1fr;
-      }
-    }
-
-
-    /* AI Chat Styling */
-    .chat-message {
-      margin-bottom: 15px;
-      display: flex;
-      gap: 10px;
-      animation: fadeIn 0.3s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .chat-message.user {
-      flex-direction: row-reverse;
-    }
-
-    .chat-avatar {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .chat-message.ai .chat-avatar {
-      background: linear-gradient(135deg, #2da6c4 0%, #0e6378 100%);
-      color: white;
-    }
-
-    .chat-message.user .chat-avatar {
-      background: #5a9aae;
-      color: white;
-    }
-
-    .chat-bubble {
-      max-width: 75%;
-      padding: 12px 16px;
-      border-radius: 16px;
-      line-height: 1.5;
-      font-size: 14px;
-    }
-
-    .chat-message.ai .chat-bubble {
-      background: #f0f0f0;
-      color: #333;
-      border-bottom-left-radius: 4px;
-    }
-
-    .chat-message.user .chat-bubble {
-      background: #5a9aae;
-      color: white;
-      border-bottom-right-radius: 4px;
-    }
-
-    .typing-indicator {
-      display: none;
-      padding: 12px 16px;
-      background: #f0f0f0;
-      border-radius: 16px;
-      width: fit-content;
-      margin-bottom: 15px;
-    }
-
-    .typing-indicator.active {
-      display: flex;
-      gap: 5px;
-      align-items: center;
-    }
-
-    .typing-indicator span {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      background: #999;
-      border-radius: 50%;
-      animation: typing 1.4s infinite;
-    }
-
-    .typing-indicator span:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-
-    .typing-indicator span:nth-child(3) {
-      animation-delay: 0.4s;
-    }
-
-    @keyframes typing {
-
-      0%,
-      60%,
-      100% {
-        transform: translateY(0);
-      }
-
-      30% {
-        transform: translateY(-10px);
-      }
-    }
-  </style>
+  
 </head>
 
 <body>
@@ -1072,69 +57,19 @@
     <!-- Quick Actions -->
     <div class="quick-actions">
       <div class="action-card" onclick="logSymptoms()">
-        <div class="action-icon">
-          <span class="icon-report-svgrepo-com"><span class="path1"></span><span class="path2"></span><span
-              class="path3"></span><span class="path4"></span><span class="path5"></span><span
-              class="path6"></span><span class="path7"></span><span class="path8"></span><span
-              class="path9"></span><span class="path10"></span><span class="path11"></span><span
-              class="path12"></span><span class="path13"></span><span class="path14"></span><span
-              class="path15"></span><span class="path16"></span><span class="path17"></span><span
-              class="path18"></span><span class="path19"></span><span class="path20"></span><span
-              class="path21"></span><span class="path22"></span><span class="path23"></span><span
-              class="path24"></span><span class="path25"></span><span class="path26"></span><span
-              class="path27"></span><span class="path28"></span><span class="path29"></span><span
-              class="path30"></span><span class="path31"></span><span class="path32"></span><span
-              class="path33"></span><span class="path34"></span><span class="path35"></span><span
-              class="path36"></span><span class="path37"></span><span class="path38"></span><span
-              class="path39"></span><span class="path40"></span><span class="path41"></span><span
-              class="path42"></span><span class="path43"></span><span class="path44"></span><span
-              class="path45"></span><span class="path46"></span><span class="path47"></span><span
-              class="path48"></span><span class="path49"></span><span class="path50"></span></span>
-        </div>
+        
         <div class="action-label">Log Symptoms</div>
       </div>
       <div class="action-card" onclick="viewMedications()">
-        <div class="action-icon">
-          <span class="icon-lock-svgrepo-com"><span class="path1"></span><span class="path2"></span><span
-              class="path3"></span><span class="path4"></span><span class="path5"></span><span
-              class="path6"></span><span class="path7"></span><span class="path8"></span><span
-              class="path9"></span><span class="path10"></span><span class="path11"></span><span
-              class="path12"></span><span class="path13"></span><span class="path14"></span><span
-              class="path15"></span><span class="path16"></span><span class="path17"></span><span
-              class="path18"></span><span class="path19"></span><span class="path20"></span><span
-              class="path21"></span><span class="path22"></span><span class="path23"></span><span
-              class="path24"></span><span class="path25"></span><span class="path26"></span><span
-              class="path27"></span><span class="path28"></span><span class="path29"></span><span
-              class="path30"></span><span class="path31"></span><span class="path32"></span><span
-              class="path33"></span><span class="path34"></span><span class="path35"></span><span
-              class="path36"></span><span class="path37"></span></span>
-        </div>
+        
         <div class="action-label">Medications</div>
       </div>
       <div class="action-card" onclick="requestConsultation()">
-        <div class="action-icon">
-          <span class="icon-personal-svgrepo-com"><span class="path1"></span><span class="path2"></span><span
-              class="path3"></span><span class="path4"></span><span class="path5"></span><span
-              class="path6"></span><span class="path7"></span><span class="path8"></span><span
-              class="path9"></span><span class="path10"></span><span class="path11"></span><span
-              class="path12"></span><span class="path13"></span><span class="path14"></span><span
-              class="path15"></span><span class="path16"></span><span class="path17"></span><span
-              class="path18"></span><span class="path19"></span><span class="path20"></span><span
-              class="path21"></span><span class="path22"></span><span class="path23"></span><span
-              class="path24"></span><span class="path25"></span><span class="path26"></span><span
-              class="path27"></span><span class="path28"></span></span>
-        </div>
+
         <div class="action-label">Consultation</div>
       </div>
       <div class="action-card" onclick="viewEducation()">
-        <div class="action-icon">
-          <span class="icon-bookmark-svgrepo-com"><span class="path1"></span><span class="path2"></span><span
-              class="path3"></span><span class="path4"></span><span class="path5"></span><span
-              class="path6"></span><span class="path7"></span><span class="path8"></span><span
-              class="path9"></span><span class="path10"></span><span class="path11"></span><span
-              class="path12"></span><span class="path13"></span><span class="path14"></span><span
-              class="path15"></span><span class="path16"></span><span class="path17"></span></span>
-        </div>
+
         <div class="action-label">Education</div>
       </div>
     </div>
@@ -1143,7 +78,7 @@
 
     <div class="medication-section">
       <div class="section-header">
-        <h2 class="section-title">💊 Today's Medications</h2>
+        <h2 class="section-title"> Today's Medications</h2>
         <div class="date-selector">
           <button onclick="changeDate(-1)">◀</button>
           <span id="currentDate">Today</span>
@@ -1154,7 +89,7 @@
       <div id="medicationList" class="medication-list">
         <!-- Medications will be loaded here -->
         <div class="empty-state">
-          <div class="empty-state-icon">💊</div>
+          <div class="empty-state-icon"></div>
           <div class="empty-state-text">Loading your medications...</div>
         </div>
       </div>
@@ -1220,19 +155,6 @@
     <div class="card">
       <div class="card-header">
         <h3>
-          <span class="icon-pen-svgrepo-com"><span class="path1"></span><span class="path2"></span><span
-              class="path3"></span><span class="path4"></span><span class="path5"></span><span
-              class="path6"></span><span class="path7"></span><span class="path8"></span><span
-              class="path9"></span><span class="path10"></span><span class="path11"></span><span
-              class="path12"></span><span class="path13"></span><span class="path14"></span><span
-              class="path15"></span><span class="path16"></span><span class="path17"></span><span
-              class="path18"></span><span class="path19"></span><span class="path20"></span><span
-              class="path21"></span><span class="path22"></span><span class="path23"></span><span
-              class="path24"></span><span class="path25"></span><span class="path26"></span><span
-              class="path27"></span><span class="path28"></span><span class="path29"></span><span
-              class="path30"></span><span class="path31"></span><span class="path32"></span><span
-              class="path33"></span><span class="path34"></span><span class="path35"></span><span
-              class="path36"></span><span class="path37"></span></span>
           Recent Symptom Logs
         </h3>
         <a href="#" class="view-all" onclick="logSymptoms(); return false;">Log New</a>
@@ -1247,21 +169,47 @@
   </div>
 
   <!-- Chat Float Button -->
-  <div class="chat-float" onclick="openChat()" title="Chat with AI Assistant">
-    <span class="icon-information-svgrepo-com-1"><span class="path1"></span><span class="path2"></span><span
-        class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span
-        class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span
-        class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span
-        class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span
-        class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span
-        class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span
-        class="path27"></span><span class="path28"></span><span class="path29"></span><span class="path30"></span><span
-        class="path31"></span><span class="path32"></span><span class="path33"></span><span class="path34"></span><span
-        class="path35"></span></span>
+  <div class="chat-float" id="chatFloatBtn" onclick="handleChatClick()" title="Contact Service Team">
+    <span class="chat-float-icon">
+      <span class="icon-information-svgrepo-com-1"><span class="path1"></span><span class="path2"></span><span
+          class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span
+          class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span
+          class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span
+          class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span
+          class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span
+          class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span
+          class="path27"></span><span class="path28"></span><span class="path29"></span><span class="path30"></span><span
+          class="path31"></span><span class="path32"></span><span class="path33"></span><span class="path34"></span><span
+          class="path35"></span></span>
+    </span>
+    <span class="chat-float-label" id="chatFloatLabel">Service Team</span>
   </div>
 
 
   <!-- Log Symptoms Modal -->
+  <!-- Medication Details Modal -->
+  <div id="medicationDetailsModal" class="modal">
+    <div class="modal-content" style="max-width: 700px; max-height: 90vh">
+      <div class="modal-header">
+        <h2> Medication Details</h2>
+        <button class="modal-close" onclick="closeModal('medicationDetailsModal')">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body" id="medicationDetailsContent">
+        <div style="text-align: center; padding: 40px;">
+          <div class="loading-spinner"></div>
+          <p>Loading medication information...</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal('medicationDetailsModal')">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div id="symptomsModal" class="modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -1380,19 +328,7 @@
     <div class="modal-content" style="max-width: 700px">
       <div class="modal-header">
         <h2>
-          <span class="icon-forward-svgrepo-com"><span class="path1"></span><span class="path2"></span><span
-              class="path3"></span><span class="path4"></span><span class="path5"></span><span
-              class="path6"></span><span class="path7"></span><span class="path8"></span><span
-              class="path9"></span><span class="path10"></span><span class="path11"></span><span
-              class="path12"></span><span class="path13"></span><span class="path14"></span><span
-              class="path15"></span><span class="path16"></span><span class="path17"></span><span
-              class="path18"></span><span class="path19"></span><span class="path20"></span><span
-              class="path21"></span><span class="path22"></span><span class="path23"></span><span
-              class="path24"></span><span class="path25"></span><span class="path26"></span><span
-              class="path27"></span><span class="path28"></span><span class="path29"></span><span
-              class="path30"></span><span class="path31"></span><span class="path32"></span><span
-              class="path33"></span><span class="path34"></span><span class="path35"></span><span
-              class="path36"></span><span class="path37"></span><span class="path38"></span></span>Education Resources
+          Education Resources
         </h2>
         <button class="modal-close" onclick="closeModal('educationModal')">
           &times;
@@ -1466,44 +402,84 @@
   <div id="aiChatModal" class="modal">
     <div class="modal-content" style="max-width: 600px; max-height: 90vh">
       <div class="modal-header">
-        <h2>AI Health Assistant</h2>
+        <h2 id="chatModalTitle">Help & Support</h2>
         <button class="modal-close" onclick="closeModal('aiChatModal')">
           &times;
         </button>
       </div>
       <div class="modal-body">
-        <div id="chatMessages" style="
-          height: 400px;
-          overflow-y: auto;
-          border: 2px solid #e0e0e0;
-          border-radius: 12px;
-          padding: 15px;
-          margin-bottom: 15px;
-          background: #f8fbfc;
-        ">
-          <div class="chat-message ai">
-            <div class="chat-avatar"></div>
-            <div class="chat-bubble">
-              Hello! I'm your AI health assistant. I can help answer questions about your medications, symptoms, and
-              general health. How can I assist you today?
-            </div>
+        <!-- Choice Screen -->
+        <div id="chatChoiceScreen" style="text-align: center; padding: 40px 20px;">
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #2c5f6f; margin-bottom: 10px;">Hello! How can we help you today?</h3>
+            <p style="color: #666; font-size: 14px;">Choose how you'd like to get assistance</p>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
+            <button onclick="startAIChat()" style="
+              padding: 20px;
+              background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
+              color: white;
+              border: none;
+              border-radius: 12px;
+              cursor: pointer;
+              font-size: 16px;
+              font-weight: 600;
+              box-shadow: 0 4px 15px rgba(90, 154, 174, 0.3);
+              transition: transform 0.2s;
+            " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              Talk to AI Assistant
+              <div style="font-size: 13px; font-weight: 400; margin-top: 5px; opacity: 0.9;">Get instant answers to common questions</div>
+            </button>
+
+            <button onclick="startServiceTeamChat()" style="
+              padding: 20px;
+              background: white;
+              color: #5a9aae;
+              border: 2px solid #5a9aae;
+              border-radius: 12px;
+              cursor: pointer;
+              font-size: 16px;
+              font-weight: 600;
+              transition: all 0.2s;
+            " onmouseover="this.style.background='#f8fbfc'" onmouseout="this.style.background='white'">
+              Contact Service Team
+              <div style="font-size: 13px; font-weight: 400; margin-top: 5px; opacity: 0.8;">Connect with a real person</div>
+            </button>
           </div>
         </div>
-        <div class="typing-indicator" id="typingIndicator">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
-        <div class="form-group">
-          <textarea id="chatMessageInput" placeholder="Type your message..." rows="3"
-            onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendChatMessage(); }"></textarea>
+
+        <!-- Chat Interface -->
+        <div id="chatInterface" style="display: none;">
+          <div id="chatMessages" style="
+            height: 400px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8fbfc;
+          ">
+          </div>
+          <div class="typing-indicator" id="typingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="form-group">
+            <textarea id="chatMessageInput" placeholder="Type your message..." rows="3"
+              onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendChatMessage(); }"></textarea>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="chatBackBtn" onclick="backToChoice()" style="display: none;">
+          ← Back
+        </button>
         <button class="modal-btn modal-btn-secondary" onclick="closeModal('aiChatModal')">
           Close
         </button>
-        <button class="modal-btn modal-btn-primary" onclick="sendChatMessage()">
+        <button class="modal-btn modal-btn-primary" id="chatSendBtn" onclick="sendChatMessage()" style="display: none;">
           Send Message
         </button>
       </div>
@@ -1539,7 +515,12 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
       const message = messageInput.value.trim();
 
       if (!message) {
-        alert("Please enter a message");
+        Swal.fire({
+          title: 'Message Required',
+          text: 'Please enter a message',
+          icon: 'warning',
+          confirmButtonColor: '#5a9aae'
+        });
         return;
       }
 
@@ -1664,8 +645,14 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           setupMedicationListener();
         } else {
           // Not a patient, redirect to login
-          alert("Access denied. Patient account required.");
-          window.location.href = "index.html";
+          Swal.fire({
+            title: 'Access Denied',
+            text: 'Patient account required.',
+            icon: 'error',
+            confirmButtonColor: '#5a9aae'
+          }).then(() => {
+            window.location.href = "index.html";
+          });
         }
       } else {
         // Not logged in, redirect to login
@@ -1676,8 +663,8 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
     // Load dashboard data
     async function loadDashboardData() {
       try {
-        // Load medications
-        // loadMedications();
+        // Load today's medications
+        loadTodaysMedications();
 
         // Load symptoms
         loadSymptoms();
@@ -1725,7 +712,12 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
         }, 500);
       } catch (error) {
         console.error("Error resolving symptom:", error);
-        alert("Error resolving symptom: " + error.message);
+        Swal.fire({
+          title: 'Error',
+          text: 'Error resolving symptom: ' + error.message,
+          icon: 'error',
+          confirmButtonColor: '#5a9aae'
+        });
       }
     }
 
@@ -1759,7 +751,12 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
         }, 500);
       } catch (error) {
         console.error("Error deleting symptom:", error);
-        alert("Error deleting symptom: " + error.message);
+        Swal.fire({
+          title: 'Error',
+          text: 'Error deleting symptom: ' + error.message,
+          icon: 'error',
+          confirmButtonColor: '#5a9aae'
+        });
       }
     }
 
@@ -1915,22 +912,20 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           .doc(currentUser.uid)
           .get();
 
-        if (metricsDoc.exists) {
+        const adherenceValueEl = document.getElementById("adherenceValue");
+
+        if (metricsDoc.exists && adherenceValueEl) {
           const metrics = metricsDoc.data();
 
           // Update adherence
           if (metrics.adherence !== undefined) {
-            document.getElementById(
-              "adherenceValue"
-            ).textContent = `${metrics.adherence}%`;
+            adherenceValueEl.textContent = `${metrics.adherence}%`;
           }
         }
 
         // Update adherence from patient profile
-        if (currentPatient.adherenceRate !== undefined) {
-          document.getElementById(
-            "adherenceValue"
-          ).textContent = `${currentPatient.adherenceRate}%`;
+        if (currentPatient.adherenceRate !== undefined && adherenceValueEl) {
+          adherenceValueEl.textContent = `${currentPatient.adherenceRate}%`;
         }
       } catch (error) {
         console.error("Error loading health metrics:", error);
@@ -1940,6 +935,14 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
     // Load upcoming events
     async function loadUpcomingEvents() {
       try {
+        const eventsList = document.getElementById("upcomingEvents");
+
+        // Check if element exists, if not, skip this function
+        if (!eventsList) {
+          console.log("upcomingEvents element not found, skipping...");
+          return;
+        }
+
         const eventsSnapshot = await db
           .collection("events")
           .where("patientId", "==", currentUser.uid)
@@ -1947,8 +950,6 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           .orderBy("date", "asc")
           .limit(3)
           .get();
-
-        const eventsList = document.getElementById("upcomingEvents");
 
         if (eventsSnapshot.empty) {
           eventsList.innerHTML =
@@ -2064,7 +1065,12 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
         .value.trim();
 
       if (!symptomType) {
-        alert("Please enter a symptom type");
+        Swal.fire({
+          title: 'Symptom Type Required',
+          text: 'Please enter a symptom type',
+          icon: 'warning',
+          confirmButtonColor: '#5a9aae'
+        });
         return;
       }
 
@@ -2105,7 +1111,12 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
         }, 500);
       } catch (error) {
         console.error("Error logging symptom:", error);
-        alert("Error logging symptom: " + error.message);
+        Swal.fire({
+          title: 'Error',
+          text: 'Error logging symptom: ' + error.message,
+          icon: 'error',
+          confirmButtonColor: '#5a9aae'
+        });
       }
     }
 
@@ -2153,7 +1164,7 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
                 : "#2196f3";
 
           medsHTML += `
-                        <div style="padding: 15px; background: #f8fbfc; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid ${statusColor};">
+                        <div onclick="viewMedicationDetails('${med.name}', '${med.din || ''}', '${doc.id}')" style="padding: 15px; background: #f8fbfc; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid ${statusColor}; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#e8f4f7'" onmouseout="this.style.background='#f8fbfc'">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <div style="font-weight: 600; color: #2c5f6f; font-size: 15px;">${med.name || "Medication"
             }</div>
@@ -2164,6 +1175,7 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
                             <div style="color: #999; font-size: 13px;">${formatTime(
               med.scheduledTime
             )}</div>
+                            <div style="color: #5a9aae; font-size: 12px; margin-top: 8px; font-weight: 500;">Click for more information ›</div>
                         </div>
                     `;
         });
@@ -2177,6 +1189,149 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
       }
     }
 
+    // View Medication Details with API data
+    async function viewMedicationDetails(medName, din, medId) {
+      closeModal("medicationsModal");
+      openModal("medicationDetailsModal");
+
+      const detailsContent = document.getElementById("medicationDetailsContent");
+      detailsContent.innerHTML = `
+        <div style="text-align: center; padding: 40px;">
+          <div class="loading-spinner"></div>
+          <p>Loading medication information...</p>
+        </div>
+      `;
+
+      try {
+        // Extract common drug name from full medication name
+        // Remove brand prefixes (APO-, TEVA-, etc.) and dosage info (TAB 600MG, etc.)
+        let commonName = medName
+          .replace(/^(APO-|TEVA-|MYLAN-|SANDOZ-|ACT-|PMS-|RATIO-|GD-|JAMP-|MINT-|MAR-|RAN-|NOVO-|NU-)/i, '') // Remove brand prefixes
+          .replace(/\s+(TAB|CAP|CAPS|TABLET|CAPSULE|MG|MCG|ML|G)\s*\d+.*$/i, '') // Remove dosage form and strength
+          .replace(/\s+\d+\s*(MG|MCG|ML|G).*$/i, '') // Remove any remaining dosage info
+          .trim();
+
+        console.log(`Original: ${medName} → Common name: ${commonName}`);
+
+        let detailsHTML = `<h3 style="color: #2c5f6f; margin-bottom: 20px;">${medName}</h3>`;
+        detailsHTML += `<p style="color: #666; font-size: 13px; margin-top: -10px; margin-bottom: 20px;">Searching for: <strong>${commonName}</strong></p>`;
+
+        // Fetch from Health Canada API for DIN and basic info
+        detailsHTML += '<h4 style="color: #5a9aae; margin-top: 20px;">Drug Information</h4>';
+        try {
+          // Try searching by brand name first, then fall back to common name
+          const searchQuery = din ? `din=${din}` : `brand_name=${encodeURIComponent(commonName)}`;
+          const healthCanadaResponse = await fetch(`https://health-products.canada.ca/api/drug/drugproduct/?${searchQuery}&type=json`);
+
+          if (healthCanadaResponse.ok) {
+            const healthCanadaData = await healthCanadaResponse.json();
+
+            if (healthCanadaData && healthCanadaData.length > 0) {
+              const drugData = healthCanadaData[0];
+
+              detailsHTML += '<div style="background: #f8fbfc; padding: 15px; border-radius: 10px; margin-top: 10px;">';
+
+              if (drugData.drug_identification_number) {
+                detailsHTML += `<p><strong>DIN:</strong> ${drugData.drug_identification_number}</p>`;
+              }
+
+              if (drugData.brand_name) {
+                detailsHTML += `<p><strong>Brand Name:</strong> ${drugData.brand_name}</p>`;
+              }
+
+              if (drugData.company_name) {
+                detailsHTML += `<p><strong>Manufacturer:</strong> ${drugData.company_name}</p>`;
+              }
+
+              if (drugData.active_ingredient) {
+                detailsHTML += `<p><strong>Active Ingredient:</strong> ${drugData.active_ingredient}</p>`;
+              }
+
+              if (drugData.dosage_form) {
+                detailsHTML += `<p><strong>Dosage Form:</strong> ${drugData.dosage_form}</p>`;
+              }
+
+              if (drugData.route_of_administration) {
+                detailsHTML += `<p><strong>Route:</strong> ${drugData.route_of_administration}</p>`;
+              }
+
+              if (drugData.therapeutic_class) {
+                detailsHTML += `<p><strong>Therapeutic Class:</strong> ${drugData.therapeutic_class}</p>`;
+              }
+
+              detailsHTML += '</div>';
+            } else {
+              detailsHTML += '<p style="color: #999; font-style: italic;">No Health Canada data found for this medication.</p>';
+            }
+          }
+        } catch (error) {
+          console.error("Health Canada API error:", error);
+          detailsHTML += '<p style="color: #f44336;">Unable to fetch Health Canada data at this time.</p>';
+        }
+
+        // Fetch from FDA API for side effects and warnings
+        detailsHTML += '<h4 style="color: #5a9aae; margin-top: 25px;">Side Effects & Warnings</h4>';
+        try {
+          const fdaResponse = await fetch(`https://api.fda.gov/drug/label.json?search=openfda.generic_name:"${commonName}"&limit=1`);
+
+          if (fdaResponse.ok) {
+            const fdaData = await fdaResponse.json();
+
+            if (fdaData.results && fdaData.results.length > 0) {
+              const drugLabel = fdaData.results[0];
+
+              detailsHTML += '<div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 10px; border-left: 4px solid #ffc107;">';
+
+              // Adverse Reactions / Side Effects
+              if (drugLabel.adverse_reactions && drugLabel.adverse_reactions.length > 0) {
+                detailsHTML += '<div style="margin-bottom: 15px;">';
+                detailsHTML += '<p style="font-weight: 600; color: #856404; margin-bottom: 8px;">Common Side Effects:</p>';
+                detailsHTML += `<p style="font-size: 14px; line-height: 1.6;">${drugLabel.adverse_reactions[0].substring(0, 500)}...</p>`;
+                detailsHTML += '</div>';
+              }
+
+              // Warnings
+              if (drugLabel.warnings && drugLabel.warnings.length > 0) {
+                detailsHTML += '<div style="margin-bottom: 15px;">';
+                detailsHTML += '<p style="font-weight: 600; color: #856404; margin-bottom: 8px;">Warnings:</p>';
+                detailsHTML += `<p style="font-size: 14px; line-height: 1.6;">${drugLabel.warnings[0].substring(0, 500)}...</p>`;
+                detailsHTML += '</div>';
+              }
+
+              // Drug Interactions
+              if (drugLabel.drug_interactions && drugLabel.drug_interactions.length > 0) {
+                detailsHTML += '<div>';
+                detailsHTML += '<p style="font-weight: 600; color: #856404; margin-bottom: 8px;">Drug Interactions:</p>';
+                detailsHTML += `<p style="font-size: 14px; line-height: 1.6;">${drugLabel.drug_interactions[0].substring(0, 500)}...</p>`;
+                detailsHTML += '</div>';
+              }
+
+              detailsHTML += '</div>';
+            } else {
+              detailsHTML += '<p style="color: #999; font-style: italic;">No FDA data found for this medication.</p>';
+            }
+          }
+        } catch (error) {
+          console.error("FDA API error:", error);
+          detailsHTML += '<p style="color: #f44336;">Unable to fetch FDA data at this time.</p>';
+        }
+
+        detailsHTML += '<div style="margin-top: 25px; padding: 15px; background: #e3f2fd; border-radius: 10px; border-left: 4px solid #2196f3;">';
+        detailsHTML += '<p style="font-size: 13px; color: #1565c0;"><strong>Important:</strong> This information is for reference only. Always consult your healthcare provider or pharmacist about your medications.</p>';
+        detailsHTML += '</div>';
+
+        detailsContent.innerHTML = detailsHTML;
+      } catch (error) {
+        console.error("Error fetching medication details:", error);
+        detailsContent.innerHTML = `
+          <div style="text-align: center; padding: 40px;">
+            <p style="color: #f44336; margin-bottom: 10px;">Error loading medication details</p>
+            <p style="color: #666; font-size: 14px;">${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
     function requestConsultation() {
       openModal("consultationModal");
     }
@@ -2187,7 +1342,12 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
       const contactMethod = document.getElementById("consultContact").value;
 
       if (!details) {
-        alert("Please provide details about your consultation request");
+        Swal.fire({
+          title: 'Details Required',
+          text: 'Please provide details about your consultation request',
+          icon: 'warning',
+          confirmButtonColor: '#5a9aae'
+        });
         return;
       }
 
@@ -2203,16 +1363,25 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         });
 
-        alert(
-          "✅ Consultation request submitted!\n\nYour pharmacist or service team will respond soon."
-        );
+        Swal.fire({
+          title: 'Consultation Submitted',
+          text: 'Your pharmacist or service team will respond soon.',
+          icon: 'success',
+          confirmButtonColor: '#5a9aae',
+          timer: 3000
+        });
 
         // Clear form
         document.getElementById("consultDetails").value = "";
         closeModal("consultationModal");
       } catch (error) {
         console.error("Error submitting consultation:", error);
-        alert("Error submitting consultation request. Please try again.");
+        Swal.fire({
+          title: 'Error',
+          text: 'Error submitting consultation request. Please try again.',
+          icon: 'error',
+          confirmButtonColor: '#5a9aae'
+        });
       }
     }
 
@@ -2220,12 +1389,89 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
       openModal("educationModal");
     }
 
-    function openChat() {
-      loadChatMessages();
-      openModal("serviceTeamModal");
+    function handleChatClick() {
+      const chatBtn = document.getElementById('chatFloatBtn');
+      const hasClickedBefore = localStorage.getItem('chatButtonClicked');
+
+      if (!hasClickedBefore) {
+        // First time clicking - collapse the button
+        chatBtn.classList.add('collapsed');
+        localStorage.setItem('chatButtonClicked', 'true');
+      }
+
+      // Open the chat
+      openChat();
     }
 
-    async function loadChatMessages() {
+    let chatMode = null; // 'ai' or 'serviceTeam'
+
+    function openChat() {
+      // Reset to choice screen
+      chatMode = null;
+      document.getElementById('chatChoiceScreen').style.display = 'block';
+      document.getElementById('chatInterface').style.display = 'none';
+      document.getElementById('chatBackBtn').style.display = 'none';
+      document.getElementById('chatSendBtn').style.display = 'none';
+      document.getElementById('chatModalTitle').textContent = 'Help & Support';
+      openModal("aiChatModal");
+    }
+
+    function startAIChat() {
+      chatMode = 'ai';
+      document.getElementById('chatChoiceScreen').style.display = 'none';
+      document.getElementById('chatInterface').style.display = 'block';
+      document.getElementById('chatBackBtn').style.display = 'inline-block';
+      document.getElementById('chatSendBtn').style.display = 'inline-block';
+      document.getElementById('chatModalTitle').textContent = 'AI Assistant';
+
+      // Initialize AI chat with welcome message
+      const chatContainer = document.getElementById("chatMessages");
+      chatContainer.innerHTML = `
+        <div class="chat-message ai">
+          <div class="chat-avatar"></div>
+          <div class="chat-bubble">
+            Hello! I'm your AI health assistant. I can help answer questions about your medications, symptoms, and general health. How can I assist you today?
+          </div>
+        </div>
+      `;
+    }
+
+    function startServiceTeamChat() {
+      chatMode = 'serviceTeam';
+      document.getElementById('chatChoiceScreen').style.display = 'none';
+      document.getElementById('chatInterface').style.display = 'block';
+      document.getElementById('chatBackBtn').style.display = 'inline-block';
+      document.getElementById('chatSendBtn').style.display = 'inline-block';
+      document.getElementById('chatModalTitle').textContent = 'Service Team';
+
+      // Load service team messages
+      loadServiceTeamMessages();
+    }
+
+    function backToChoice() {
+      chatMode = null;
+      document.getElementById('chatChoiceScreen').style.display = 'block';
+      document.getElementById('chatInterface').style.display = 'none';
+      document.getElementById('chatBackBtn').style.display = 'none';
+      document.getElementById('chatSendBtn').style.display = 'none';
+      document.getElementById('chatModalTitle').textContent = 'Help & Support';
+
+      // Clear chat
+      document.getElementById('chatMessages').innerHTML = '';
+      document.getElementById('chatMessageInput').value = '';
+    }
+
+    // Check on page load if button should be collapsed
+    window.addEventListener('DOMContentLoaded', () => {
+      const hasClickedBefore = localStorage.getItem('chatButtonClicked');
+      const chatBtn = document.getElementById('chatFloatBtn');
+
+      if (hasClickedBefore && chatBtn) {
+        chatBtn.classList.add('collapsed');
+      }
+    });
+
+    async function loadServiceTeamMessages() {
       try {
         const messagesSnapshot = await db
           .collection("serviceTeamMessages")
@@ -2237,8 +1483,14 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
         const chatContainer = document.getElementById("chatMessages");
 
         if (messagesSnapshot.empty) {
-          chatContainer.innerHTML =
-            '<p style="text-align: center; color: #999;">No messages yet. Start a conversation!</p>';
+          chatContainer.innerHTML = `
+            <div class="chat-message ai">
+              <div class="chat-avatar"></div>
+              <div class="chat-bubble">
+                Hello! You've reached the ClearPharma service team. How can we help you today?
+              </div>
+            </div>
+          `;
         } else {
           chatContainer.innerHTML = "";
           messagesSnapshot.forEach((doc) => {
@@ -2286,30 +1538,48 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
     }
 
     async function sendChatMessage() {
-      const messageInput = document.getElementById("chatMessageInput");
-      const message = messageInput.value.trim();
+      if (chatMode === 'ai') {
+        // Use the AI chat function from the module
+        if (window.sendChatMessage) {
+          window.sendChatMessage();
+        }
+      } else if (chatMode === 'serviceTeam') {
+        // Send to service team via Firebase
+        const messageInput = document.getElementById("chatMessageInput");
+        const message = messageInput.value.trim();
 
-      if (!message) {
-        alert("Please enter a message");
-        return;
-      }
-
-      try {
-        await db.collection("serviceTeamMessages").add({
-          userId: currentUser.uid,
-          userName: currentPatient.name,
-          userRole: "patient",
-          senderId: currentUser.uid,
-          message: message,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          read: false,
+        if (!message) {
+          Swal.fire({
+          title: 'Message Required',
+          text: 'Please enter a message',
+          icon: 'warning',
+          confirmButtonColor: '#5a9aae'
         });
+          return;
+        }
 
-        messageInput.value = "";
-        loadChatMessages();
-      } catch (error) {
-        console.error("Error sending message:", error);
-        alert("Error sending message. Please try again.");
+        try {
+          await db.collection("serviceTeamMessages").add({
+            userId: currentUser.uid,
+            userName: currentPatient.name,
+            userRole: "patient",
+            senderId: currentUser.uid,
+            message: message,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+            read: false,
+          });
+
+          messageInput.value = "";
+          loadServiceTeamMessages();
+        } catch (error) {
+          console.error("Error sending message:", error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Error sending message. Please try again.',
+            icon: 'error',
+            confirmButtonColor: '#5a9aae'
+          });
+        }
       }
     }
 
@@ -2332,18 +1602,188 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           }, 500);
         } catch (error) {
           console.error("Error logging out:", error);
-          alert("Error logging out. Please try again.");
+          Swal.fire({
+            title: 'Error',
+            text: 'Error logging out. Please try again.',
+            icon: 'error',
+            confirmButtonColor: '#5a9aae'
+          });
         }
       }
     }
 
-    // PATIENT MEDICATION LOGGING JAVASCRIPT
-    // Add these functions to your patient dashboard
+    // Helper function: Check if a date is today
+    function isToday(date) {
+      const today = new Date();
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    }
 
+    // Helper function: Show toast notification
+    function showToast(message, type = "info") {
+      const toast = document.createElement("div");
+      toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-weight: 600;
+        animation: slideIn 0.3s ease;
+      `;
+
+      const colors = {
+        success: "#4caf50",
+        error: "#f44336",
+        info: "#2196f3"
+      };
+
+      toast.style.background = colors[type] || colors.info;
+      toast.style.color = "white";
+      toast.textContent = message;
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = "slideOut 0.3s ease";
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Helper function: Update date display
+    function updateDateDisplay() {
+      const dateDisplay = document.getElementById("currentDate");
+      if (dateDisplay) {
+        if (isToday(currentViewDate)) {
+          dateDisplay.textContent = "Today";
+        } else {
+          dateDisplay.textContent = currentViewDate.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+          });
+        }
+      }
+    }
+
+    // Helper function: Update medication adherence
+    async function updateMedicationAdherence(medId) {
+      try {
+        // Calculate adherence across ALL patient's medications, not just one
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        // Get ALL doses for this patient in the last 30 days
+        const dosesSnapshot = await db
+          .collection("scheduledDoses")
+          .where("patientId", "==", currentPatientUser.uid)
+          .where("scheduledTime", ">=", thirtyDaysAgo)
+          .get();
+
+        if (dosesSnapshot.empty) return;
+
+        let takenCount = 0;
+        let totalCount = 0;
+        const now = new Date();
+
+        dosesSnapshot.forEach((doc) => {
+          const dose = doc.data();
+          const scheduledTime = dose.scheduledTime.toDate ? dose.scheduledTime.toDate() : new Date(dose.scheduledTime);
+
+          // Only count doses that should have been taken (scheduled time is in the past)
+          if (scheduledTime <= now) {
+            totalCount++;
+            if (dose.status === "taken") {
+              takenCount++;
+            }
+          }
+        });
+
+        // If no doses are due yet, don't update adherence
+        if (totalCount === 0) return;
+
+        const adherenceRate = Math.round((takenCount / totalCount) * 100);
+
+        console.log(`Adherence calculation: ${takenCount} taken / ${totalCount} total = ${adherenceRate}%`);
+
+        // Update patient adherence rate in users collection
+        if (currentPatientUser) {
+          await db.collection("users").doc(currentPatientUser.uid).update({
+            adherenceRate: adherenceRate,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      } catch (error) {
+        console.error("Error updating adherence:", error);
+      }
+    }
+
+    // Helper function: Create medication card
+    function createMedicationCard(medication, dose, doseId, medId) {
+      const card = document.createElement("div");
+      card.className = `medication-card ${dose.status}`;
+
+      const statusText = {
+        pending: "Pending",
+        taken: "Taken",
+        missed: "Missed",
+        skipped: "Skipped"
+      }[dose.status] || "Unknown";
+
+      const scheduledTime = dose.scheduledTime.toDate
+        ? dose.scheduledTime.toDate()
+        : new Date(dose.scheduledTime);
+
+      card.innerHTML = `
+        <div class="med-header">
+          <div class="med-name">${medication.name || "Medication"}</div>
+          <div class="status-badge ${dose.status}">${statusText}</div>
+        </div>
+        <div class="med-dosage">${medication.dosage || "Standard dose"}</div>
+        <div class="med-time">${formatTime(dose.scheduledTime)}</div>
+        ${medication.instructions ? `<div class="instructions-box">${medication.instructions}</div>` : ""}
+        <div class="medication-actions">
+          ${dose.status === "pending" ? `
+            <button class="med-action-btn take" onclick="markAsTaken('${doseId}', '${medId}')">
+              ✓ Mark as Taken
+            </button>
+            <button class="med-action-btn skip" onclick="markAsSkipped('${doseId}')">
+              Skip
+            </button>
+          ` : dose.status === "taken" ? `
+            <button class="med-action-btn undo" onclick="undoTaken('${doseId}')">
+              ↺ Undo
+            </button>
+          ` : ""}
+        </div>
+      `;
+
+      return card;
+    }
+
+    // CRITICAL FIX: Add a loading flag to prevent concurrent loads
+    let isLoadingMedications = false;
     let currentViewDate = new Date();
+    let medicationListenerUnsubscribe = null;
+    let hasInitialLoad = false;
+    let reloadTimeout = null;
+    let skipNextListenerReload = false;
 
     // Load medications for the selected date
     async function loadTodaysMedications() {
+      // PREVENT CONCURRENT LOADS
+      if (isLoadingMedications) {
+        console.log("⏳ Already loading medications, skipping...");
+        return;
+      }
+
+      isLoadingMedications = true;
+
       try {
         const medicationList = document.getElementById("medicationList");
 
@@ -2365,11 +1805,11 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
 
         if (!currentPatientUser || !currentPatientUser.uid) {
           medicationList.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
-          <div class="empty-state-text">Please log in to view medications</div>
-        </div>
-      `;
+            <div class="empty-state">
+              <div class="empty-state-icon">⚠️</div>
+              <div class="empty-state-text">Please log in to view medications</div>
+            </div>
+          `;
           return;
         }
 
@@ -2380,20 +1820,16 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           .where("active", "==", true)
           .get();
 
-        console.log(
-          "💊 Found",
-          medicationsSnapshot.size,
-          "active medications"
-        );
+        console.log(" Found", medicationsSnapshot.size, "active medications");
 
         if (medicationsSnapshot.empty) {
           medicationList.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">💊</div>
-          <div class="empty-state-text">No medications prescribed yet</div>
-          <div class="empty-state-subtext">Your pharmacist will add medications for you</div>
-        </div>
-      `;
+            <div class="empty-state">
+              <div class="empty-state-icon"></div>
+              <div class="empty-state-text">No medications prescribed yet</div>
+              <div class="empty-state-subtext">Your pharmacist will add medications for you</div>
+            </div>
+          `;
           return;
         }
 
@@ -2402,13 +1838,13 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
         let takenCount = 0;
         let missedCount = 0;
         let totalCount = 0;
-        let medicationsNeedingDoses = [];
 
-        // First pass - collect all doses and identify missing ones
+        // Process all medications
         for (const medDoc of medicationsSnapshot.docs) {
           const medication = medDoc.data();
           const medId = medDoc.id;
 
+          // Get doses for this medication on the selected date
           const dosesSnapshot = await db
             .collection("scheduledDoses")
             .where("medicationId", "==", medId)
@@ -2417,9 +1853,32 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
             .orderBy("scheduledTime", "asc")
             .get();
 
-          // Only create doses if we're viewing today AND no doses exist
+          // ONLY create doses if viewing today AND no doses exist
           if (dosesSnapshot.empty && isToday(currentViewDate)) {
-            medicationsNeedingDoses.push({ medId, medication });
+            console.log(`🔨 Creating doses for ${medication.name}`);
+            await createDosesForToday(medId, medication);
+
+            // Fetch the newly created doses
+            const newDosesSnapshot = await db
+              .collection("scheduledDoses")
+              .where("medicationId", "==", medId)
+              .where("scheduledTime", ">=", startOfDay)
+              .where("scheduledTime", "<=", endOfDay)
+              .orderBy("scheduledTime", "asc")
+              .get();
+
+            // Display the newly created doses
+            newDosesSnapshot.forEach((doseDoc) => {
+              const dose = doseDoc.data();
+              const doseId = doseDoc.id;
+              totalCount++;
+
+              if (dose.status === "taken") takenCount++;
+              if (dose.status === "missed") missedCount++;
+
+              const card = createMedicationCard(medication, dose, doseId, medId);
+              medicationList.appendChild(card);
+            });
           } else {
             // Display existing doses
             dosesSnapshot.forEach((doseDoc) => {
@@ -2430,34 +1889,10 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
               if (dose.status === "taken") takenCount++;
               if (dose.status === "missed") missedCount++;
 
-              const card = createMedicationCard(
-                medication,
-                dose,
-                doseId,
-                medId
-              );
+              const card = createMedicationCard(medication, dose, doseId, medId);
               medicationList.appendChild(card);
             });
           }
-        }
-
-        // Second pass - create missing doses (only once!)
-        if (medicationsNeedingDoses.length > 0) {
-          console.log(
-            `🔨 Need to create doses for ${medicationsNeedingDoses.length} medication(s)`
-          );
-
-          // Create all missing doses
-          for (const item of medicationsNeedingDoses) {
-            await createDosesForToday(item.medId, item.medication);
-          }
-
-          // Reload ONCE after creating doses
-          console.log("🔄 Reloading after creating doses...");
-          setTimeout(() => {
-            loadTodaysMedications();
-          }, 500);
-          return; // Exit to prevent duplicate rendering
         }
 
         // Update adherence summary
@@ -2472,10 +1907,7 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           if (takenCountEl) takenCountEl.textContent = takenCount;
           if (missedCountEl) missedCountEl.textContent = missedCount;
           if (adherenceRateEl) {
-            const adherenceRate =
-              totalCount > 0
-                ? Math.round((takenCount / totalCount) * 100)
-                : 100;
+            const adherenceRate = totalCount > 0 ? Math.round((takenCount / totalCount) * 100) : 100;
             adherenceRateEl.textContent = adherenceRate + "%";
           }
         }
@@ -2486,331 +1918,29 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
         const medicationList = document.getElementById("medicationList");
         if (medicationList) {
           medicationList.innerHTML = `
-        <div class="empty-state">
-          <div class="empty-state-icon">⚠️</div>
-          <div class="empty-state-text">Error loading medications</div>
-          <div class="empty-state-subtext">${error.message}</div>
-        </div>
-      `;
+            <div class="empty-state">
+              <div class="empty-state-icon">⚠️</div>
+              <div class="empty-state-text">Error loading medications</div>
+              <div class="empty-state-subtext">${error.message}</div>
+            </div>
+          `;
         }
-      }
-    }
-
-    // CLEANUP FUNCTION: Delete duplicate doses (run this once to clean up)
-    async function cleanupDuplicateDoses() {
-      console.log("🧹 Starting cleanup of duplicate doses...");
-
-      try {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        const tomorrow = new Date(today);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-
-        // Get all doses for today
-        const dosesSnapshot = await db
-          .collection("scheduledDoses")
-          .where("scheduledTime", ">=", today)
-          .where("scheduledTime", "<", tomorrow)
-          .get();
-
-        console.log(`Found ${dosesSnapshot.size} total doses for today`);
-
-        // Group doses by medication and time
-        const doseGroups = {};
-
-        dosesSnapshot.forEach((doc) => {
-          const dose = doc.data();
-          const key = `${dose.medicationId}_${dose.scheduledTime
-            .toDate()
-            .getTime()}`;
-
-          if (!doseGroups[key]) {
-            doseGroups[key] = [];
-          }
-          doseGroups[key].push({ id: doc.id, data: dose });
-        });
-
-        // Find and delete duplicates
-        let deletedCount = 0;
-        const batch = db.batch();
-
-        Object.keys(doseGroups).forEach((key) => {
-          const doses = doseGroups[key];
-
-          if (doses.length > 1) {
-            console.log(`Found ${doses.length} duplicates for key ${key}`);
-
-            // Keep the first one, delete the rest
-            for (let i = 1; i < doses.length; i++) {
-              batch.delete(db.collection("scheduledDoses").doc(doses[i].id));
-              deletedCount++;
-            }
-          }
-        });
-
-        if (deletedCount > 0) {
-          await batch.commit();
-          console.log(`✅ Deleted ${deletedCount} duplicate doses`);
-          alert(`Cleanup complete! Deleted ${deletedCount} duplicate doses.`);
-        } else {
-          console.log("✅ No duplicates found");
-          alert("No duplicates found. All good!");
-        }
-
-        // Reload medications
-        loadTodaysMedications();
-      } catch (error) {
-        console.error("❌ Error during cleanup:", error);
-        alert("Error during cleanup: " + error.message);
-      }
-    }
-
-    // Create medication card element
-    function createMedicationCard(medication, dose, doseId, medId) {
-      const card = document.createElement("div");
-      card.className = `medication-card ${dose.status}`;
-
-      const scheduledTime = dose.scheduledTime.toDate
-        ? dose.scheduledTime.toDate()
-        : new Date(dose.scheduledTime);
-      const timeString = scheduledTime.toLocaleTimeString("en-US", {
-        hour: "numeric",
-        minute: "2-digit",
-      });
-
-      const isPast = scheduledTime < new Date();
-      const canTake = dose.status === "pending" && !isPast;
-      const canUndo = dose.status === "taken" && isToday(currentViewDate);
-
-      let statusBadge = "";
-      let actionButtons = "";
-
-      // Status badge
-      if (dose.status === "taken") {
-        statusBadge = '<div class="status-badge taken">✓ Taken</div>';
-      } else if (dose.status === "missed") {
-        statusBadge = '<div class="status-badge missed">✗ Missed</div>';
-      } else if (dose.status === "skipped") {
-        statusBadge = '<div class="status-badge skipped">⊘ Skipped</div>';
-      } else if (isPast) {
-        statusBadge = '<div class="status-badge missed">⚠ Overdue</div>';
-      } else {
-        statusBadge = '<div class="status-badge pending">◷ Pending</div>';
-      }
-
-      // Action buttons
-      if (canTake) {
-        actionButtons = `
-      <button class="med-action-btn take" onclick="markAsTaken('${doseId}', '${medId}')">
-        ✓ Take Now
-      </button>
-      <button class="med-action-btn skip" onclick="markAsSkipped('${doseId}')">
-        Skip
-      </button>
-    `;
-      } else if (canUndo) {
-        actionButtons = `
-      <button class="med-action-btn undo" onclick="undoTaken('${doseId}')">
-        ↶ Undo
-      </button>
-    `;
-      } else if (isPast && dose.status === "pending") {
-        actionButtons = `
-      <button class="med-action-btn take" onclick="markAsTaken('${doseId}', '${medId}')">
-        ✓ Mark as Taken
-      </button>
-      <button class="med-action-btn skip" onclick="markAsMissed('${doseId}')">
-        Mark as Missed
-      </button>
-    `;
-      }
-
-      card.innerHTML = `
-    <div class="medication-header">
-      <div class="medication-info">
-        <div class="medication-name">${medication.name}</div>
-        <div class="medication-dosage">${medication.dosage
-        } - ${medication.frequency.replace(/-/g, " ")}</div>
-        <div class="medication-time">⏰ ${timeString}</div>
-      </div>
-      <div class="medication-status">
-        ${statusBadge}
-      </div>
-    </div>
-    ${medication.instructions
-          ? `<div class="instructions-box">📋 ${medication.instructions}</div>`
-          : ""
-        }
-    ${actionButtons
-          ? `<div class="medication-actions">${actionButtons}</div>`
-          : ""
-        }
-  `;
-
-      return card;
-    }
-
-    // Mark dose as taken
-    async function markAsTaken(doseId, medId) {
-      try {
-        const now = new Date();
-
-        // Update dose status
-        await db.collection("scheduledDoses").doc(doseId).update({
-          status: "taken",
-          takenAt: firebase.firestore.FieldValue.serverTimestamp(),
-          actualTakeTime: now,
-        });
-
-        // Update medication adherence tracking
-        await updateMedicationAdherence(medId);
-
-        // Show success feedback
-        showToast("✓ Medication marked as taken!", "success");
-
-        // Reload medications
-        loadTodaysMedications();
-      } catch (error) {
-        console.error("Error marking as taken:", error);
-        showToast("Error updating medication status", "error");
-      }
-    }
-
-    // Mark dose as skipped
-    async function markAsSkipped(doseId) {
-      try {
-        await db.collection("scheduledDoses").doc(doseId).update({
-          status: "skipped",
-          skippedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        showToast("Medication skipped", "info");
-        loadTodaysMedications();
-      } catch (error) {
-        console.error("Error marking as skipped:", error);
-        showToast("Error updating medication status", "error");
-      }
-    }
-
-    // Mark dose as missed
-    async function markAsMissed(doseId) {
-      try {
-        await db.collection("scheduledDoses").doc(doseId).update({
-          status: "missed",
-        });
-
-        showToast("Marked as missed", "info");
-        loadTodaysMedications();
-      } catch (error) {
-        console.error("Error marking as missed:", error);
-      }
-    }
-
-    // Undo taken status
-    async function undoTaken(doseId) {
-      try {
-        await db.collection("scheduledDoses").doc(doseId).update({
-          status: "pending",
-          takenAt: null,
-          actualTakeTime: null,
-        });
-
-        showToast("Status reset to pending", "info");
-        loadTodaysMedications();
-      } catch (error) {
-        console.error("Error undoing:", error);
-        showToast("Error updating medication status", "error");
-      }
-    }
-
-    // Update medication adherence tracking
-    async function updateMedicationAdherence(medId) {
-      try {
-        const dosesSnapshot = await db
-          .collection("scheduledDoses")
-          .where("medicationId", "==", medId)
-          .get();
-
-        let totalDoses = 0;
-        let takenDoses = 0;
-        let missedDoses = 0;
-
-        dosesSnapshot.forEach((doc) => {
-          const dose = doc.data();
-          totalDoses++;
-          if (dose.status === "taken") takenDoses++;
-          if (dose.status === "missed") missedDoses++;
-        });
-
-        const adherenceRate =
-          totalDoses > 0 ? Math.round((takenDoses / totalDoses) * 100) : 100;
-
-        await db.collection("medications").doc(medId).update({
-          "adherenceTracking.totalDoses": totalDoses,
-          "adherenceTracking.takenDoses": takenDoses,
-          "adherenceTracking.missedDoses": missedDoses,
-          "adherenceTracking.adherenceRate": adherenceRate,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-
-        // Update patient's overall adherence
-        await updatePatientAdherence();
-      } catch (error) {
-        console.error("Error updating adherence:", error);
-      }
-    }
-
-    // Update patient's overall adherence rate
-    async function updatePatientAdherence() {
-      try {
-        const medsSnapshot = await db
-          .collection("medications")
-          .where("patientId", "==", currentPatientUser.uid)
-          .where("active", "==", true)
-          .get();
-
-        let totalAdherence = 0;
-        let medCount = 0;
-
-        medsSnapshot.forEach((doc) => {
-          const med = doc.data();
-          if (
-            med.adherenceTracking &&
-            med.adherenceTracking.adherenceRate !== undefined
-          ) {
-            totalAdherence += med.adherenceTracking.adherenceRate;
-            medCount++;
-          }
-        });
-
-        const overallAdherence =
-          medCount > 0 ? Math.round(totalAdherence / medCount) : 100;
-
-        await db.collection("users").doc(currentPatientUser.uid).update({
-          adherenceRate: overallAdherence,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
-        });
-      } catch (error) {
-        console.error("Error updating patient adherence:", error);
+      } finally {
+        // ALWAYS reset the loading flag
+        isLoadingMedications = false;
       }
     }
 
     // Create doses for today if they don't exist
     async function createDosesForToday(medId, medication) {
       try {
-        console.log(
-          "🔍 Checking if doses already exist for medication:",
-          medication.name
-        );
-
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
         const tomorrow = new Date(today);
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        // IMPORTANT: Check if doses already exist for today
+        // DOUBLE CHECK: Make sure doses don't already exist
         const existingDosesCheck = await db
           .collection("scheduledDoses")
           .where("medicationId", "==", medId)
@@ -2819,11 +1949,11 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           .get();
 
         if (!existingDosesCheck.empty) {
-          console.log("✅ Doses already exist for today, skipping creation");
-          return; // Don't create duplicates!
+          console.log("Doses already exist, skipping creation");
+          return;
         }
 
-        console.log("📅 Creating new doses for today...");
+        console.log("Creating new doses for today...");
 
         const batch = db.batch();
         let doseCount = 0;
@@ -2849,96 +1979,203 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
         });
 
         await batch.commit();
-        console.log(`✅ Created ${doseCount} doses for ${medication.name}`);
+        console.log(`Created ${doseCount} doses for ${medication.name}`);
       } catch (error) {
-        console.error("❌ Error creating doses:", error);
+        console.error("Error creating doses:", error);
       }
+    }
+
+    // Mark dose as taken
+    async function markAsTaken(doseId, medId) {
+      try {
+        const now = new Date();
+
+        // Update dose status
+        await db.collection("scheduledDoses").doc(doseId).update({
+          status: "taken",
+          takenAt: firebase.firestore.FieldValue.serverTimestamp(),
+          actualTakeTime: now,
+        });
+
+        // Update medication adherence tracking
+        await updateMedicationAdherence(medId);
+
+        // Show success feedback
+        showToast("✓ Medication marked as taken!", "success");
+
+        // Skip listener reload since we're doing manual reload
+        skipNextListenerReload = true;
+
+        // Immediately reload to update UI
+        await loadTodaysMedications();
+      } catch (error) {
+        console.error("Error marking as taken:", error);
+        showToast("Error updating medication status", "error");
+      }
+    }
+
+    // Mark dose as skipped
+    async function markAsSkipped(doseId) {
+      try {
+        await db.collection("scheduledDoses").doc(doseId).update({
+          status: "skipped",
+          skippedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        showToast("Medication skipped", "info");
+
+        // Skip listener reload since we're doing manual reload
+        skipNextListenerReload = true;
+
+        // Immediately reload to update UI
+        await loadTodaysMedications();
+      } catch (error) {
+        console.error("Error marking as skipped:", error);
+        showToast("Error updating medication status", "error");
+      }
+    }
+
+    // Mark dose as missed
+    async function markAsMissed(doseId) {
+      try {
+        await db.collection("scheduledDoses").doc(doseId).update({
+          status: "missed",
+        });
+
+        showToast("Marked as missed", "info");
+
+        // Skip listener reload since we're doing manual reload
+        skipNextListenerReload = true;
+
+        // Immediately reload to update UI
+        await loadTodaysMedications();
+      } catch (error) {
+        console.error("Error marking as missed:", error);
+      }
+    }
+
+    // Undo taken status
+    async function undoTaken(doseId) {
+      try {
+        await db.collection("scheduledDoses").doc(doseId).update({
+          status: "pending",
+          takenAt: null,
+          actualTakeTime: null,
+        });
+
+        showToast("Status reset to pending", "info");
+
+        // Skip listener reload since we're doing manual reload
+        skipNextListenerReload = true;
+
+        // Immediately reload to update UI
+        await loadTodaysMedications();
+      } catch (error) {
+        console.error("Error undoing:", error);
+        showToast("Error updating medication status", "error");
+      }
+    }
+
+    // FIXED: Set up real-time listener that doesn't cause infinite loops
+    function setupMedicationListener() {
+      if (!currentPatientUser) return;
+
+      // Unsubscribe from previous listener if it exists
+      if (medicationListenerUnsubscribe) {
+        medicationListenerUnsubscribe();
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      // Reset initial load flag
+      hasInitialLoad = false;
+
+      // Listen to scheduledDoses changes for today only
+      medicationListenerUnsubscribe = db
+        .collection("scheduledDoses")
+        .where("patientId", "==", currentPatientUser.uid)
+        .where("scheduledTime", ">=", today)
+        .where("scheduledTime", "<", tomorrow)
+        .onSnapshot(
+          (snapshot) => {
+            // Skip the very first snapshot (initial load)
+            if (!hasInitialLoad) {
+              hasInitialLoad = true;
+              console.log("📊 Initial listener snapshot, skipping reload");
+              return;
+            }
+
+            // Skip if we just did a manual reload
+            if (skipNextListenerReload) {
+              skipNextListenerReload = false;
+              console.log("⏭️ Skipping listener reload after manual reload");
+              return;
+            }
+
+            // Skip if there are pending writes (our own changes)
+            if (snapshot.metadata.hasPendingWrites) {
+              console.log("✏️ Pending writes, skipping reload");
+              return;
+            }
+
+            // Skip if already loading
+            if (isLoadingMedications) {
+              console.log("⏳ Already loading, skipping reload");
+              return;
+            }
+
+            // Clear any existing timeout
+            if (reloadTimeout) {
+              clearTimeout(reloadTimeout);
+            }
+
+            // Debounce the reload to prevent multiple rapid calls
+            console.log("🔄 Dose updated, scheduling reload...");
+            reloadTimeout = setTimeout(() => {
+              loadTodaysMedications();
+              reloadTimeout = null;
+            }, 500);
+          },
+          (error) => {
+            console.error("Error in medication listener:", error);
+          }
+        );
     }
 
     // Change date view
     function changeDate(days) {
       currentViewDate.setDate(currentViewDate.getDate() + days);
       updateDateDisplay();
+
+      // Unsubscribe from listener when changing dates
+      if (medicationListenerUnsubscribe) {
+        medicationListenerUnsubscribe();
+        medicationListenerUnsubscribe = null;
+      }
+
+      // Clear any pending reload
+      if (reloadTimeout) {
+        clearTimeout(reloadTimeout);
+        reloadTimeout = null;
+      }
+
+      // Reset initial load flag
+      hasInitialLoad = false;
+
       loadTodaysMedications();
-    }
 
-    // Update date display
-    function updateDateDisplay() {
-      const dateSpan = document.getElementById("currentDate");
-
+      // Only set up listener if viewing today
       if (isToday(currentViewDate)) {
-        dateSpan.textContent = "Today";
-      } else if (isYesterday(currentViewDate)) {
-        dateSpan.textContent = "Yesterday";
-      } else if (isTomorrow(currentViewDate)) {
-        dateSpan.textContent = "Tomorrow";
-      } else {
-        dateSpan.textContent = currentViewDate.toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-        });
+        setupMedicationListener();
       }
     }
 
-    // Helper functions
-    function isToday(date) {
-      const today = new Date();
-      return date.toDateString() === today.toDateString();
-    }
 
-    function isYesterday(date) {
-      const yesterday = new Date();
-      yesterday.setDate(yesterday.getDate() - 1);
-      return date.toDateString() === yesterday.toDateString();
-    }
 
-    function isTomorrow(date) {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      return date.toDateString() === tomorrow.toDateString();
-    }
 
-    // Show toast notification
-    function showToast(message, type = "info") {
-      // Use SweetAlert toast or create simple toast
-      const toast = document.createElement("div");
-      toast.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: ${type === "success" ? "#4caf50" : type === "error" ? "#f44336" : "#5a9aae"
-        };
-    color: white;
-    padding: 15px 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    z-index: 10000;
-    animation: slideIn 0.3s ease-out;
-  `;
-      toast.textContent = message;
-      document.body.appendChild(toast);
-
-      setTimeout(() => {
-        toast.style.animation = "slideOut 0.3s ease-out";
-        setTimeout(() => toast.remove(), 300);
-      }, 3000);
-    }
-
-    // Set up real-time listener for medication updates
-    function setupMedicationListener() {
-      if (!currentPatientUser) return;
-
-      db.collection("medications")
-        .where("patientId", "==", currentPatientUser.uid)
-        .where("active", "==", true)
-        .onSnapshot(() => {
-          // Only reload if viewing today AND not the initial load
-          if (isToday(currentViewDate)) {
-            console.log("🔄 Medication change detected, reloading...");
-            loadTodaysMedications();
-          }
-        });
-    }
 
     // Add CSS animations
     const style = document.createElement("style");
@@ -2966,6 +2203,7 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
   }
 `;
     document.head.appendChild(style);
+
   </script>
 </body>
 
