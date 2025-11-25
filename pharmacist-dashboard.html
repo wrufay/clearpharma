@@ -945,21 +945,6 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
             confirmButtonColor: '#5a9aae'
           });
         }
-      } else {
-        // Not logged in
-        if (TEST_MODE) {
-          console.log("TEST MODE: Running dashboard without authentication");
-          // Load dashboard with placeholder data
-          loadDashboardData();
-        } else {
-          // Redirect to login page
-          const shouldRedirect = confirm(
-            "You need to log in to access the pharmacist dashboard. Redirect to login page?"
-          );
-          if (shouldRedirect) {
-            window.location.href = "index.html";
-          }
-        }
       }
     });
 
