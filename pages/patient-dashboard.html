@@ -685,12 +685,12 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
               icon: "error",
               confirmButtonColor: "#5a9aae",
             }).then(() => {
-              window.location.href = "index.html";
+              window.location.href = "..index.html";
             });
           }
         } else {
           // Not logged in, redirect to login
-          window.location.href = "index.html";
+          window.location.href = "..index.html";
         }
       });
 
@@ -1725,7 +1725,7 @@ Keep each section brief (2-3 sentences) and actionable. Use friendly, encouragin
           document.body.appendChild(logoutDiv);
 
           setTimeout(() => {
-            window.location.href = "index.html";
+            window.location.href = "../index.html";
           }, 500);
         } catch (error) {
           Swal.fire({
