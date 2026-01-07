@@ -5,20 +5,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClearPharma - Patient Dashboard</title>
-<<<<<<< HEAD
-=======
-  <link rel="icon" type="image/svg+xml" href="search-svgrepo-com (1).svg" />
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
   <link rel="stylesheet" href="https://i.icomoon.io/public/temp/92804d2d14/UntitledProject/style.css" />
 
   <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-<<<<<<< HEAD
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-=======
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
   <script type="importmap">
       {
         "imports": {
@@ -28,15 +21,9 @@
     </script>
   <link rel="stylesheet" href="style.css" />
 
-<<<<<<< HEAD
   
 </head>
 
-=======
-
-</head>
-
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
 <body>
   <!-- Header -->
   <div class="header">
@@ -71,19 +58,11 @@
     <!-- Quick Actions -->
     <div class="quick-actions">
       <div class="action-card" onclick="logSymptoms()">
-<<<<<<< HEAD
         
         <div class="action-label">Log Symptoms</div>
       </div>
       <div class="action-card" onclick="viewMedications()">
         
-=======
-
-        <div class="action-label">Log Symptoms</div>
-      </div>
-      <div class="action-card" onclick="viewMedications()">
-
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
         <div class="action-label">Medications</div>
       </div>
       <div class="action-card" onclick="requestConsultation()">
@@ -196,23 +175,12 @@
       <span class="icon-information-svgrepo-com-1"><span class="path1"></span><span class="path2"></span><span
           class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span
           class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span
-<<<<<<< HEAD
           class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span
           class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span
           class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span
           class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span
           class="path27"></span><span class="path28"></span><span class="path29"></span><span class="path30"></span><span
           class="path31"></span><span class="path32"></span><span class="path33"></span><span class="path34"></span><span
-=======
-          class="path11"></span><span class="path12"></span><span class="path13"></span><span
-          class="path14"></span><span class="path15"></span><span class="path16"></span><span
-          class="path17"></span><span class="path18"></span><span class="path19"></span><span
-          class="path20"></span><span class="path21"></span><span class="path22"></span><span
-          class="path23"></span><span class="path24"></span><span class="path25"></span><span
-          class="path26"></span><span class="path27"></span><span class="path28"></span><span
-          class="path29"></span><span class="path30"></span><span class="path31"></span><span
-          class="path32"></span><span class="path33"></span><span class="path34"></span><span
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
           class="path35"></span></span>
     </span>
     <span class="chat-float-label" id="chatFloatLabel">Service Team</span>
@@ -368,7 +336,6 @@
         </button>
       </div>
       <div class="modal-body" id="educationContent">
-<<<<<<< HEAD
         <div style="line-height: 1.8">
           <h3 style="color: #2c5f6f; margin-bottom: 15px">
             Medication Education
@@ -420,10 +387,7 @@
               Diet, exercise, and lifestyle modifications that can complement
               your treatment plan.
             </p>
-=======
-        <div style="text-align: center; padding: 40px;">
-          <div class="loading-spinner"></div>
-          <p>Analyzing your health data and generating personalized tips...</p>
+          </div>
         </div>
       </div>
       <div class="modal-footer">
@@ -434,105 +398,6 @@
     </div>
   </div>
 
-  <!-- Service Team Chat Modal -->
-  <!-- AI Chat Modal -->
-  <div id="aiChatModal" class="modal">
-    <div class="modal-content" style="max-width: 600px; max-height: 90vh">
-      <div class="modal-header">
-        <h2 id="chatModalTitle">Help & Support</h2>
-        <button class="modal-close" onclick="closeModal('aiChatModal')">
-          &times;
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Choice Screen -->
-        <div id="chatChoiceScreen" style="text-align: center; padding: 40px 20px;">
-          <div style="margin-bottom: 30px;">
-            <h3 style="color: #2c5f6f; margin-bottom: 10px;">Hello! How can we help you today?</h3>
-            <p style="color: #666; font-size: 14px;">Choose how you'd like to get assistance</p>
-          </div>
-
-          <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
-            <button onclick="startAIChat()" style="
-              padding: 20px;
-              background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
-              color: white;
-              border: none;
-              border-radius: 12px;
-              cursor: pointer;
-              font-size: 16px;
-              font-weight: 600;
-              box-shadow: 0 4px 15px rgba(90, 154, 174, 0.3);
-              transition: transform 0.2s;
-            " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-              Talk to AI Assistant
-              <div style="font-size: 13px; font-weight: 400; margin-top: 5px; opacity: 0.9;">Get instant answers to
-                common questions</div>
-            </button>
-
-            <button onclick="startServiceTeamChat()" style="
-              padding: 20px;
-              background: white;
-              color: #5a9aae;
-              border: 2px solid #5a9aae;
-              border-radius: 12px;
-              cursor: pointer;
-              font-size: 16px;
-              font-weight: 600;
-              transition: all 0.2s;
-            " onmouseover="this.style.background='#f8fbfc'" onmouseout="this.style.background='white'">
-              Contact Service Team
-              <div style="font-size: 13px; font-weight: 400; margin-top: 5px; opacity: 0.8;">Connect with a real person
-              </div>
-            </button>
-          </div>
-        </div>
-
-        <!-- Chat Interface -->
-        <div id="chatInterface" style="display: none;">
-          <div id="chatMessages" style="
-            height: 400px;
-            overflow-y: auto;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: #f8fbfc;
-          ">
-          </div>
-          <div class="typing-indicator" id="typingIndicator">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <div class="form-group">
-            <textarea id="chatMessageInput" placeholder="Type your message..." rows="3"
-              onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendChatMessage(); }"></textarea>
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-<<<<<<< HEAD
-        <button class="modal-btn modal-btn-secondary" onclick="closeModal('educationModal')">
-          Close
-        </button>
-=======
-        <button class="modal-btn modal-btn-secondary" id="chatBackBtn" onclick="backToChoice()" style="display: none;">
-          ← Back
-        </button>
-        <button class="modal-btn modal-btn-secondary" onclick="closeModal('aiChatModal')">
-          Close
-        </button>
-        <button class="modal-btn modal-btn-primary" id="chatSendBtn" onclick="sendChatMessage()" style="display: none;">
-          Send Message
-        </button>
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
-      </div>
-    </div>
-  </div>
-
-<<<<<<< HEAD
   <!-- Service Team Chat Modal -->
   <!-- AI Chat Modal -->
   <div id="aiChatModal" class="modal">
@@ -646,37 +511,6 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
 
     let chatHistory = [];
 
-=======
-
-  <script type="module">
-    import { GoogleGenerativeAI } from "@google/generative-ai";
-
-    const GEMINI_API_KEY = "AIzaSyBOO1S1t1-myCAC3HEadXeCCDM9-DqtK1A";
-    const GEMINI_MODEL = "gemini-2.0-flash-exp";
-
-    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
-
-    // Expose AI model globally for use in other functions
-    window.aiModel = model;
-    window.GoogleGenerativeAI = GoogleGenerativeAI;
-    window.GEMINI_API_KEY = GEMINI_API_KEY;
-
-    const SYSTEM_PROMPT = `You are a helpful AI health assistant for ClearPharma, a medication management platform.
-
-Your role is to:
-- Provide helpful, accurate information about medications and health
-- Be empathetic and professional
-- Always remind users to consult with their healthcare provider for medical decisions
-- Keep responses concise and actionable (2-3 paragraphs max)
-- Never provide specific medical diagnoses or treatment plans
-- Focus on medication adherence, general wellness, and education
-
-Important: You are an AI assistant, not a replacement for healthcare professionals.`;
-
-    let chatHistory = [];
-
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
     window.sendChatMessage = async function () {
       const messageInput = document.getElementById("chatMessageInput");
       const message = messageInput.value.trim();
@@ -1552,124 +1386,8 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
       }
     }
 
-<<<<<<< HEAD
     function viewEducation() {
       openModal("educationModal");
-=======
-    async function viewEducation() {
-      openModal("educationModal");
-
-      const educationContent = document.getElementById("educationContent");
-      educationContent.innerHTML = `
-        <div style="text-align: center; padding: 40px;">
-          <div class="loading-spinner"></div>
-          <p>Analyzing your health data and generating personalized tips...</p>
-        </div>
-      `;
-
-      try {
-        // Fetch patient's medications
-        const medsSnapshot = await db
-          .collection("medications")
-          .where("patientId", "==", currentUser.uid)
-          .where("active", "==", true)
-          .limit(20)
-          .get();
-
-        const medications = [];
-        medsSnapshot.forEach((doc) => {
-          const med = doc.data();
-          medications.push(med.name);
-        });
-
-        // Fetch patient's recent symptoms
-        const symptomsSnapshot = await db
-          .collection("symptoms")
-          .where("patientId", "==", currentUser.uid)
-          .limit(10)
-          .get();
-
-        const symptoms = [];
-        symptomsSnapshot.forEach((doc) => {
-          const symptom = doc.data();
-          symptoms.push({
-            type: symptom.type,
-            severity: symptom.severity
-          });
-        });
-
-        // Create AI prompt with patient data
-        const aiPrompt = `You are a helpful health education assistant for ClearPharma.
-
-Patient Information:
-- Current Medications: ${medications.length > 0 ? medications.join(", ") : "None prescribed yet"}
-- Recent Symptoms: ${symptoms.length > 0 ? symptoms.map(s => `${s.type} (${s.severity})`).join(", ") : "None reported"}
-
-Based on this patient's medications and symptoms, provide personalized health education tips in the following categories:
-
-1. Medication Management
-2. Symptom Management
-3. Lifestyle & Wellness Tips
-4. When to Contact Healthcare Provider
-
-Keep each section brief (2-3 sentences) and actionable. Use friendly, encouraging language. Do not provide medical diagnoses or replace professional medical advice.`;
-
-        // Get AI response using the globally exposed model
-        if (!window.aiModel) {
-          throw new Error("AI model not initialized yet. Please refresh the page.");
-        }
-
-        const result = await window.aiModel.generateContent(aiPrompt);
-        const response = await result.response;
-        const aiTips = response.text();
-
-        // Format and display the AI-generated tips
-        let formattedHTML = '<div style="line-height: 1.8;">';
-
-        // Parse the AI response and format it nicely
-        const sections = aiTips.split(/\d+\.\s+/);
-        const sectionTitles = aiTips.match(/\d+\.\s+([^:\n]+)/g) || [];
-
-        for (let i = 1; i < sections.length && i <= sectionTitles.length; i++) {
-          const title = sectionTitles[i - 1].replace(/\d+\.\s+/, '').trim();
-          const content = sections[i].trim();
-
-          formattedHTML += `
-            <div style="background: #f8fbfc; padding: 15px; border-radius: 12px; margin-bottom: 15px;">
-              <h4 style="color: #5a9aae; margin-bottom: 10px;">${title}</h4>
-              <p style="color: #666; font-size: 14px; white-space: pre-wrap;">${content}</p>
-            </div>
-          `;
-        }
-
-        // If parsing fails, just display the raw response
-        if (sections.length <= 1) {
-          formattedHTML = `
-            <div style="background: #f8fbfc; padding: 20px; border-radius: 12px;">
-              <p style="color: #666; font-size: 14px; line-height: 1.8; white-space: pre-wrap;">${aiTips}</p>
-            </div>
-          `;
-        }
-
-        formattedHTML += `
-          <div style="margin-top: 20px; padding: 15px; background: #e3f2fd; border-radius: 10px; border-left: 4px solid #2196f3;">
-            <p style="font-size: 13px; color: #1565c0;"><strong>Disclaimer:</strong> This information is AI-generated based on your health data and is for educational purposes only. Always consult your pharmacist or healthcare provider for medical advice.</p>
-          </div>
-        `;
-
-        formattedHTML += '</div>';
-        educationContent.innerHTML = formattedHTML;
-
-      } catch (error) {
-        console.error("Error generating education content:", error);
-        educationContent.innerHTML = `
-          <div style="text-align: center; padding: 40px;">
-            <p style="color: #f44336; margin-bottom: 10px;">Unable to generate personalized tips</p>
-            <p style="color: #666; font-size: 14px;">${error.message}</p>
-          </div>
-        `;
-      }
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
     }
 
     function handleChatClick() {
@@ -1833,19 +1551,11 @@ Keep each section brief (2-3 sentences) and actionable. Use friendly, encouragin
 
         if (!message) {
           Swal.fire({
-<<<<<<< HEAD
           title: 'Message Required',
           text: 'Please enter a message',
           icon: 'warning',
           confirmButtonColor: '#5a9aae'
         });
-=======
-            title: 'Message Required',
-            text: 'Please enter a message',
-            icon: 'warning',
-            confirmButtonColor: '#5a9aae'
-          });
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
           return;
         }
 
@@ -1876,7 +1586,6 @@ Keep each section brief (2-3 sentences) and actionable. Use friendly, encouragin
 
     // Logout function
     async function logout() {
-<<<<<<< HEAD
       if (confirm("Are you sure you want to log out?")) {
         try {
           await auth.signOut();
@@ -1901,30 +1610,6 @@ Keep each section brief (2-3 sentences) and actionable. Use friendly, encouragin
             confirmButtonColor: '#5a9aae'
           });
         }
-=======
-      try {
-        await auth.signOut();
-
-        // Show logging out message
-        const logoutDiv = document.createElement("div");
-        logoutDiv.style.cssText =
-          "position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px 50px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center;";
-        logoutDiv.innerHTML =
-          '<div style="font-size: 18px; color: #2c5f6f; font-weight: 600;">Logging out...</div>';
-        document.body.appendChild(logoutDiv);
-
-        setTimeout(() => {
-          window.location.href = "index.html";
-        }, 500);
-      } catch (error) {
-        console.error("Error logging out:", error);
-        Swal.fire({
-          title: 'Error',
-          text: 'Error logging out. Please try again.',
-          icon: 'error',
-          confirmButtonColor: '#5a9aae'
-        });
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
       }
     }
 
@@ -2420,20 +2105,14 @@ Keep each section brief (2-3 sentences) and actionable. Use friendly, encouragin
             // Skip the very first snapshot (initial load)
             if (!hasInitialLoad) {
               hasInitialLoad = true;
-<<<<<<< HEAD
               console.log("📊 Initial listener snapshot, skipping reload");
-=======
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
               return;
             }
 
             // Skip if we just did a manual reload
             if (skipNextListenerReload) {
               skipNextListenerReload = false;
-<<<<<<< HEAD
               console.log("⏭️ Skipping listener reload after manual reload");
-=======
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
               return;
             }
 
@@ -2529,8 +2208,4 @@ Keep each section brief (2-3 sentences) and actionable. Use friendly, encouragin
   </script>
 </body>
 
-<<<<<<< HEAD
 </html>
-=======
-</html>
->>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
