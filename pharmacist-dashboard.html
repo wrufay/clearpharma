@@ -5,6 +5,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ClearPharma - Pharmacist Dashboard</title>
+<<<<<<< HEAD
+=======
+  <link rel="icon" type="image/svg+xml" href="search-svgrepo-com (1).svg" />
+>>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
   <link rel="stylesheet" href="https://i.icomoon.io/public/temp/92804d2d14/UntitledProject/style.css" />
 
   <!-- SweetAlert2 -->
@@ -935,6 +939,7 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
                 window.location.href = "index.html";
               }
             });
+<<<<<<< HEAD
           }
         } catch (error) {
           console.error("Error loading pharmacist data:", error);
@@ -958,7 +963,17 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
           );
           if (shouldRedirect) {
             window.location.href = "index.html";
+=======
+>>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
           }
+        } catch (error) {
+          console.error("Error loading pharmacist data:", error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Error loading pharmacist data. Please log in again.',
+            icon: 'error',
+            confirmButtonColor: '#5a9aae'
+          });
         }
       }
     });
@@ -2709,4 +2724,8 @@ Important: You are an AI assistant, not a replacement for healthcare professiona
   </script>
 </body>
 
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 2fcb9be6c03e9ab45c5c851c2d62076ba92db232
