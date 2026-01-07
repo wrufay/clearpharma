@@ -1,579 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ClearPharma - Patient Dashboard</title>
-    <link
-      rel="stylesheet"
-      href="https://i.icomoon.io/public/temp/92804d2d14/UntitledProject/style.css"
-    />
 
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <link rel="stylesheet" href="style.css" />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClearPharma - Patient Dashboard</title>
+  <link rel="stylesheet" href="https://i.icomoon.io/public/temp/92804d2d14/UntitledProject/style.css" />
 
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Hammersmith+One&family=Stack+Sans+Headline:wght@200..700&display=swap");
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Oxygen, Ubuntu, Cantarell, sans-serif;
-        background: linear-gradient(135deg, #e8f4f8 0%, #f5f9fb 100%);
-        min-height: 100vh;
-        padding-bottom: 80px;
-      }
-
-      /* Header */
-      .header {
-        background: white;
-        font-family: "Stack Sans Headline", sans-serif;
-        padding: 20px 25px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-      }
-
-      .welcome-section {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-      }
-
-      .welcome-text h1 {
-        color: #2c5f6f;
-        font-size: 24px;
-        margin-bottom: 5px;
-      }
-
-      .welcome-text p {
-        color: #7ba8b5;
-        font-size: 14px;
-      }
-
-      .user-avatar {
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: bold;
-        font-size: 20px;
-      }
-
-      /* Alert Banner */
-      .alert-banner {
-        background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
-        padding: 15px 20px;
-        border-radius: 12px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-top: 15px;
-      }
-
-      .alert-banner.critical {
-        background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
-      }
-
-      .alert-icon {
-        font-size: 24px;
-      }
-
-      .alert-content {
-        flex: 1;
-      }
-
-      .alert-content strong {
-        color: #2c5f6f;
-        display: block;
-        margin-bottom: 3px;
-      }
-
-      .alert-content p {
-        color: #666;
-        font-size: 14px;
-      }
-
-      /* Container */
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-      }
-
-      /* Quick Actions */
-      .quick-actions {
-        display: grid;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 15px;
-        margin-bottom: 25px;
-      }
-
-      .action-card {
-        background: white;
-        padding: 20px;
-        border-radius: 16px;
-        text-align: center;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-      }
-
-      .action-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-      }
-
-      .action-icon {
-        font-size: 32px;
-        margin-bottom: 10px;
-      }
-
-      .action-label {
-        color: #2c5f6f;
-        font-size: 14px;
-        font-weight: 600;
-      }
-
-      /* Card */
-      .card {
-        background: white;
-        border-radius: 16px;
-        padding: 25px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        margin-bottom: 20px;
-      }
-
-      .card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      .card-header h3 {
-        color: #2c5f6f;
-        font-size: 18px;
-        font-weight: 600;
-      }
-
-      .view-all {
-        color: #5a9aae;
-        font-size: 14px;
-        cursor: pointer;
-        text-decoration: none;
-      }
-
-      .view-all:hover {
-        text-decoration: underline;
-      }
-
-      /* Medication Item */
-      .medication-item {
-        padding: 15px;
-        border-radius: 12px;
-        margin-bottom: 12px;
-        border-left: 4px solid #5a9aae;
-        background: #f8fbfc;
-        transition: all 0.3s ease;
-        cursor: pointer;
-      }
-
-      .medication-item:hover {
-        background: #f0f8fa;
-        transform: translateX(5px);
-      }
-
-      .medication-item.taken {
-        border-left-color: #4caf50;
-        opacity: 0.7;
-      }
-
-      .medication-item.missed {
-        border-left-color: #f44336;
-      }
-
-      .med-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-      }
-
-      .med-name {
-        font-weight: 600;
-        color: #2c5f6f;
-        font-size: 15px;
-      }
-
-      .med-status {
-        padding: 4px 12px;
-        border-radius: 12px;
-        font-size: 12px;
-        font-weight: 600;
-      }
-
-      .med-status.upcoming {
-        background: #e3f2fd;
-        color: #2196f3;
-      }
-
-      .med-status.taken {
-        background: #e8f5e9;
-        color: #4caf50;
-      }
-
-      .med-status.missed {
-        background: #ffebee;
-        color: #f44336;
-      }
-
-      .med-dosage {
-        color: #666;
-        font-size: 14px;
-        margin-bottom: 5px;
-      }
-
-      .med-time {
-        color: #999;
-        font-size: 13px;
-      }
-
-      /* Symptom Log */
-      .symptom-item {
-        padding: 12px 15px;
-        background: #f8fbfc;
-        border-radius: 8px;
-        margin-bottom: 10px;
-      }
-
-      .symptom-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 5px;
-      }
-
-      .symptom-type {
-        font-weight: 600;
-        color: #2c5f6f;
-        font-size: 14px;
-      }
-
-      .symptom-severity {
-        padding: 3px 10px;
-        border-radius: 10px;
-        font-size: 12px;
-        font-weight: 600;
-      }
-
-      .symptom-severity.mild {
-        background: #e8f5e9;
-        color: #4caf50;
-      }
-
-      .symptom-severity.moderate {
-        background: #fff3e0;
-        color: #ff9800;
-      }
-
-      .symptom-severity.severe {
-        background: #ffebee;
-        color: #f44336;
-      }
-
-      .symptom-description {
-        color: #666;
-        font-size: 13px;
-        margin-bottom: 5px;
-      }
-
-      .symptom-time {
-        color: #999;
-        font-size: 12px;
-      }
-
-      /* Metrics Grid */
-      .metrics-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-      }
-
-      .metric-box {
-        background: #f8fbfc;
-        padding: 20px;
-        border-radius: 12px;
-        text-align: center;
-      }
-
-      .metric-value {
-        font-size: 28px;
-        font-weight: bold;
-        color: #2c5f6f;
-        margin-bottom: 5px;
-      }
-
-      .metric-label {
-        color: #7ba8b5;
-        font-size: 13px;
-        margin-bottom: 8px;
-      }
-
-      .metric-status {
-        font-size: 12px;
-        font-weight: 600;
-        padding: 4px 12px;
-        border-radius: 12px;
-        display: inline-block;
-      }
-
-      .status-normal {
-        background: #e8f5e9;
-        color: #4caf50;
-      }
-
-      .status-warning {
-        background: #fff3e0;
-        color: #ff9800;
-      }
-
-      .status-critical {
-        background: #ffebee;
-        color: #f44336;
-      }
-
-      /* Chat Float Button */
-      .chat-float {
-        position: fixed;
-        bottom: 100px;
-        right: 30px;
-        width: 60px;
-        height: 60px;
-        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 28px;
-        box-shadow: 0 4px 20px rgba(90, 154, 174, 0.4);
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .chat-float:hover {
-        transform: scale(1.1);
-        box-shadow: 0 6px 30px rgba(90, 154, 174, 0.5);
-      }
-
-      /* Bottom Navigation */
-      .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: white;
-        padding: 15px 0;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: space-around;
-        z-index: 100;
-      }
-
-      .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 5px;
-        color: #7ba8b5;
-        text-decoration: none;
-        font-size: 12px;
-        padding: 8px 20px;
-        border-radius: 12px;
-        transition: all 0.3s ease;
-        cursor: pointer;
-      }
-
-      .nav-item.active {
-        color: #5a9aae;
-        background: #e8f4f8;
-      }
-
-      .nav-item:hover {
-        background: #f0f8fa;
-      }
-
-      .nav-icon {
-        font-size: 24px;
-      }
-
-      /* Responsive */
-      @media (max-width: 768px) {
-        .quick-actions {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .metrics-grid {
-          grid-template-columns: 1fr;
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
         }
       }
+    </script>
+  <link rel="stylesheet" href="style.css" />
 
-      /* Modal Styles */
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-        justify-content: center;
-        align-items: center;
-      }
+  
+</head>
 
-      .modal.active {
-        display: flex;
-      }
-
-      .modal-content {
-        background: white;
-        border-radius: 20px;
-        padding: 30px;
-        max-width: 500px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-      }
-
-      .modal-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-
-      .modal-header h2 {
-        color: #2c5f6f;
-        font-size: 22px;
-      }
-
-      .modal-close {
-        background: none;
-        border: none;
-        font-size: 28px;
-        color: #999;
-        cursor: pointer;
-        padding: 0;
-        width: 30px;
-        height: 30px;
-      }
-
-      .modal-close:hover {
-        color: #333;
-      }
-
-      .modal-body {
-        margin-bottom: 20px;
-      }
-
-      .form-group {
-        margin-bottom: 15px;
-      }
-
-      .form-group label {
-        display: block;
-        color: #2c5f6f;
-        font-weight: 600;
-        margin-bottom: 8px;
-        font-size: 14px;
-      }
-
-      .form-group input,
-      .form-group textarea,
-      .form-group select {
-        width: 100%;
-        padding: 12px 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 10px;
-        font-size: 14px;
-        transition: all 0.3s ease;
-      }
-
-      .form-group input:focus,
-      .form-group textarea:focus,
-      .form-group select:focus {
-        outline: none;
-        border-color: #5a9aae;
-        box-shadow: 0 0 0 3px rgba(90, 154, 174, 0.1);
-      }
-
-      .form-group textarea {
-        resize: vertical;
-        min-height: 80px;
-      }
-
-      .modal-footer {
-        display: flex;
-        gap: 10px;
-        justify-content: flex-end;
-      }
-
-      .modal-btn {
-        padding: 12px 24px;
-        border: none;
-        border-radius: 10px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .modal-btn-primary {
-        background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
-        color: white;
-      }
-
-      .modal-btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(90, 154, 174, 0.3);
-      }
-
-      .modal-btn-secondary {
-        background: #f5f5f5;
-        color: #666;
-      }
-
-      .modal-btn-secondary:hover {
-        background: #e0e0e0;
-      }
-    </style>
-  </head>
-  <body>
-    <!-- Header -->
-    <div class="header">
-      <div class="welcome-section">
-        <div class="welcome-text">
-          <h1 id="welcomeText">Welcome back, Patient!</h1>
-          <p id="dateText">Loading...</p>
-        </div>
-        <div style="display: flex; align-items: center; gap: 15px">
-          <div class="user-avatar" id="userAvatar">P</div>
-          <button
-            onclick="logout()"
-            style="
+<body>
+  <!-- Header -->
+  <div class="header">
+    <div class="welcome-section">
+      <div class="welcome-text">
+        <h1 id="welcomeText">Welcome back, Patient!</h1>
+        <p id="dateText">Loading...</p>
+      </div>
+      <div style="display: flex; align-items: center; gap: 15px">
+        <div class="user-avatar" id="userAvatar">P</div>
+        <button onclick="logout()" style="
               padding: 8px 16px;
               background: #f44336;
               color: white;
@@ -582,99 +43,75 @@
               cursor: pointer;
               font-size: 14px;
               font-weight: 600;
-            "
-          >
-            Logout
-          </button>
-        </div>
+            ">
+          Logout
+        </button>
       </div>
-
-      <!-- Alert Banner (shown only if there are alerts) -->
-      <div id="alertBanner" style="display: none"></div>
     </div>
 
-    <!-- Main Content -->
-    <div class="container">
-      <!-- Quick Actions -->
-      <div class="quick-actions">
-        <div class="action-card" onclick="logSymptoms()">
-          <div class="action-icon">
-            <span class="icon-personal-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span><span class="path28"></span
-            ></span>
-          </div>
-          <div class="action-label">Log Symptoms</div>
-        </div>
-        <div class="action-card" onclick="viewMedications()">
-          <div class="action-icon">
-            <span class="icon-bookmark-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span
-            ></span>
-          </div>
-          <div class="action-label">Medications</div>
-        </div>
-        <div class="action-card" onclick="requestConsultation()">
-          <div class="action-icon">
-            <span class="icon-personal-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span><span class="path28"></span
-            ></span>
-          </div>
-          <div class="action-label">Consultation</div>
-        </div>
-        <div class="action-card" onclick="viewEducation()">
-          <div class="action-icon">
-            <span class="icon-bookmark-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span
-            ></span>
-          </div>
-          <div class="action-label">Education</div>
+    <!-- Alert Banner (shown only if there are alerts) -->
+    <div id="alertBanner" style="display: none"></div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="container">
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+      <div class="action-card" onclick="logSymptoms()">
+        
+        <div class="action-label">Log Symptoms</div>
+      </div>
+      <div class="action-card" onclick="viewMedications()">
+        
+        <div class="action-label">Medications</div>
+      </div>
+      <div class="action-card" onclick="requestConsultation()">
+
+        <div class="action-label">Consultation</div>
+      </div>
+      <div class="action-card" onclick="viewEducation()">
+
+        <div class="action-label">Education</div>
+      </div>
+    </div>
+
+    <!-- Today's Medications -->
+
+    <div class="medication-section">
+      <div class="section-header">
+        <h2 class="section-title"> Today's Medications</h2>
+        <div class="date-selector">
+          <button onclick="changeDate(-1)">◀</button>
+          <span id="currentDate">Today</span>
+          <button onclick="changeDate(1)">▶</button>
         </div>
       </div>
 
-      <!-- Today's Medications -->
-      <div class="card">
+      <div id="medicationList" class="medication-list">
+        <!-- Medications will be loaded here -->
+        <div class="empty-state">
+          <div class="empty-state-icon"></div>
+          <div class="empty-state-text">Loading your medications...</div>
+        </div>
+      </div>
+
+      <div id="adherenceSummary" class="adherence-summary" style="display: none">
+        <div class="adherence-stat">
+          <div class="adherence-stat-value taken" id="takenCount">0</div>
+          <div class="adherence-stat-label">Taken</div>
+        </div>
+        <div class="adherence-stat">
+          <div class="adherence-stat-value missed" id="missedCount">0</div>
+          <div class="adherence-stat-label">Missed</div>
+        </div>
+        <div class="adherence-stat">
+          <div class="adherence-stat-value rate" id="adherenceRate">100%</div>
+          <div class="adherence-stat-label">Adherence</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- <div class="card">
         <div class="card-header">
           <h3>
             <span class="icon-lock-svgrepo-com"
@@ -706,1287 +143,1373 @@
             onclick="viewMedications(); return false;"
             >View All</a
           >
-        </div>
+        </div> -->
 
-        <div id="medicationsList">
+    <!-- <div id="medicationsList">
           <p style="text-align: center; color: #999; padding: 20px">
             Loading medications...
           </p>
         </div>
+      </div> -->
+
+    <!-- Recent Symptom Logs -->
+    <div class="card">
+      <div class="card-header">
+        <h3>
+          Recent Symptom Logs
+        </h3>
+        <a href="#" class="view-all" onclick="logSymptoms(); return false;">Log New</a>
       </div>
 
-      <!-- Recent Symptom Logs -->
-      <div class="card">
-        <div class="card-header">
-          <h3>
-            <span class="icon-pen-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span><span class="path28"></span
-              ><span class="path29"></span><span class="path30"></span
-              ><span class="path31"></span><span class="path32"></span
-              ><span class="path33"></span><span class="path34"></span
-              ><span class="path35"></span><span class="path36"></span
-              ><span class="path37"></span
-            ></span>
-            Recent Symptom Logs
+      <div id="symptomsList">
+        <p style="text-align: center; color: #999; padding: 20px">
+          No symptoms logged yet
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chat Float Button -->
+  <div class="chat-float" id="chatFloatBtn" onclick="handleChatClick()" title="Contact Service Team">
+    <span class="chat-float-icon">
+      <span class="icon-information-svgrepo-com-1"><span class="path1"></span><span class="path2"></span><span
+          class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span
+          class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span
+          class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span
+          class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span
+          class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span
+          class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span
+          class="path27"></span><span class="path28"></span><span class="path29"></span><span class="path30"></span><span
+          class="path31"></span><span class="path32"></span><span class="path33"></span><span class="path34"></span><span
+          class="path35"></span></span>
+    </span>
+    <span class="chat-float-label" id="chatFloatLabel">Service Team</span>
+  </div>
+
+
+  <!-- Log Symptoms Modal -->
+  <!-- Medication Details Modal -->
+  <div id="medicationDetailsModal" class="modal">
+    <div class="modal-content" style="max-width: 700px; max-height: 90vh">
+      <div class="modal-header">
+        <h2> Medication Details</h2>
+        <button class="modal-close" onclick="closeModal('medicationDetailsModal')">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body" id="medicationDetailsContent">
+        <div style="text-align: center; padding: 40px;">
+          <div class="loading-spinner"></div>
+          <p>Loading medication information...</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal('medicationDetailsModal')">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="symptomsModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Log Symptoms</h2>
+        <button class="modal-close" onclick="closeModal('symptomsModal')">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Symptom Type</label>
+          <input type="text" id="symptomType" placeholder="e.g., Headache, Nausea, Dizziness" />
+        </div>
+        <div class="form-group">
+          <label>Severity</label>
+          <select id="symptomSeverity">
+            <option value="mild">Mild</option>
+            <option value="moderate">Moderate</option>
+            <option value="severe">Severe</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea id="symptomDescription" placeholder="Please describe what you're experiencing..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal('symptomsModal')">
+          Cancel
+        </button>
+        <button class="modal-btn modal-btn-primary" onclick="submitSymptom()">
+          Log Symptom
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Medications Modal -->
+  <div id="medicationsModal" class="modal">
+    <div class="modal-content" style="max-width: 600px">
+      <div class="modal-header">
+        <h2>
+          <span class="icon-subscription-svgrepo-com"><span class="path1"></span><span class="path2"></span><span
+              class="path3"></span><span class="path4"></span><span class="path5"></span><span
+              class="path6"></span><span class="path7"></span><span class="path8"></span><span
+              class="path9"></span><span class="path10"></span><span class="path11"></span><span
+              class="path12"></span><span class="path13"></span><span class="path14"></span><span
+              class="path15"></span><span class="path16"></span><span class="path17"></span><span
+              class="path18"></span><span class="path19"></span><span class="path20"></span><span
+              class="path21"></span><span class="path22"></span><span class="path23"></span><span
+              class="path24"></span><span class="path25"></span><span class="path26"></span><span
+              class="path27"></span></span>
+          My Medications
+        </h2>
+        <button class="modal-close" onclick="closeModal('medicationsModal')">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body" id="medicationsContent">
+        <p>Loading medications...</p>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal('medicationsModal')">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Request Consultation Modal -->
+  <div id="consultationModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Request Consultation</h2>
+        <button class="modal-close" onclick="closeModal('consultationModal')">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Reason for Consultation</label>
+          <select id="consultReason">
+            <option value="medication-question">Medication Question</option>
+            <option value="side-effects">Side Effects</option>
+            <option value="dosage-concern">Dosage Concern</option>
+            <option value="refill">Refill Request</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Details</label>
+          <textarea id="consultDetails" placeholder="Please describe your concern or question..." rows="5"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Preferred Contact Method</label>
+          <select id="consultContact">
+            <option value="message">Message</option>
+            <option value="phone">Phone Call</option>
+            <option value="video">Video Call</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal('consultationModal')">
+          Cancel
+        </button>
+        <button class="modal-btn modal-btn-primary" onclick="submitConsultation()">
+          Submit Request
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Education Resources Modal -->
+  <div id="educationModal" class="modal">
+    <div class="modal-content" style="max-width: 700px">
+      <div class="modal-header">
+        <h2>
+          Education Resources
+        </h2>
+        <button class="modal-close" onclick="closeModal('educationModal')">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body" id="educationContent">
+        <div style="line-height: 1.8">
+          <h3 style="color: #2c5f6f; margin-bottom: 15px">
+            Medication Education
           </h3>
-          <a href="#" class="view-all" onclick="logSymptoms(); return false;"
-            >Log New</a
-          >
-        </div>
-
-        <div id="symptomsList">
-          <p style="text-align: center; color: #999; padding: 20px">
-            No symptoms logged yet
-          </p>
-        </div>
-      </div>
-
-      <!-- Health Metrics -->
-      <div class="card">
-        <div class="card-header">
-          <h3>
-            <span class="icon-report-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span><span class="path28"></span
-              ><span class="path29"></span><span class="path30"></span
-              ><span class="path31"></span><span class="path32"></span
-              ><span class="path33"></span><span class="path34"></span
-              ><span class="path35"></span><span class="path36"></span
-              ><span class="path37"></span><span class="path38"></span
-              ><span class="path39"></span><span class="path40"></span
-              ><span class="path41"></span><span class="path42"></span
-              ><span class="path43"></span><span class="path44"></span
-              ><span class="path45"></span><span class="path46"></span
-              ><span class="path47"></span><span class="path48"></span
-              ><span class="path49"></span><span class="path50"></span
-            ></span>
-            Health Metrics
-          </h3>
-        </div>
-
-        <div class="metrics-grid" id="healthMetrics">
-          <div class="metric-box">
-            <div class="metric-label">Blood Pressure</div>
-            <div class="metric-value">--/--</div>
-            <div class="metric-status status-normal">● Normal</div>
-          </div>
-
-          <div class="metric-box">
-            <div class="metric-label">Blood Sugar</div>
-            <div class="metric-value">-- mg/dL</div>
-            <div class="metric-status status-normal">● Normal</div>
-          </div>
-
-          <div class="metric-box">
-            <div class="metric-label">Heart Rate</div>
-            <div class="metric-value">-- bpm</div>
-            <div class="metric-status status-normal">● Normal</div>
-          </div>
-
-          <div class="metric-box">
-            <div class="metric-label">Adherence</div>
-            <div class="metric-value" id="adherenceValue">--%</div>
-            <div class="metric-status status-normal">● Excellent</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Upcoming Events -->
-      <div class="card">
-        <div class="card-header">
-          <h3>
-            <span class="icon-menu-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span><span class="path28"></span
-              ><span class="path29"></span
-            ></span>
-            Upcoming Events
-          </h3>
-        </div>
-
-        <div id="upcomingEvents">
-          <p style="text-align: center; color: #999; padding: 20px">
-            No upcoming events
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Chat Float Button -->
-    <div class="chat-float" onclick="openChat()" title="Chat with Service Team">
-      <span class="icon-information-svgrepo-com-1"
-        ><span class="path1"></span><span class="path2"></span
-        ><span class="path3"></span><span class="path4"></span
-        ><span class="path5"></span><span class="path6"></span
-        ><span class="path7"></span><span class="path8"></span
-        ><span class="path9"></span><span class="path10"></span
-        ><span class="path11"></span><span class="path12"></span
-        ><span class="path13"></span><span class="path14"></span
-        ><span class="path15"></span><span class="path16"></span
-        ><span class="path17"></span><span class="path18"></span
-        ><span class="path19"></span><span class="path20"></span
-        ><span class="path21"></span><span class="path22"></span
-        ><span class="path23"></span><span class="path24"></span
-        ><span class="path25"></span><span class="path26"></span
-        ><span class="path27"></span><span class="path28"></span
-        ><span class="path29"></span><span class="path30"></span
-        ><span class="path31"></span><span class="path32"></span
-        ><span class="path33"></span><span class="path34"></span
-        ><span class="path35"></span
-      ></span>
-    </div>
-
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-      <div class="nav-item active">
-        <div class="nav-icon">
-          <span class="icon-front-page-svgrepo-com"
-            ><span class="path1"></span><span class="path2"></span
-            ><span class="path3"></span><span class="path4"></span
-            ><span class="path5"></span><span class="path6"></span
-            ><span class="path7"></span><span class="path8"></span
-            ><span class="path9"></span><span class="path10"></span
-            ><span class="path11"></span><span class="path12"></span
-            ><span class="path13"></span><span class="path14"></span
-            ><span class="path15"></span><span class="path16"></span
-            ><span class="path17"></span><span class="path18"></span
-            ><span class="path19"></span><span class="path20"></span
-            ><span class="path21"></span><span class="path22"></span
-            ><span class="path23"></span><span class="path24"></span
-            ><span class="path25"></span><span class="path26"></span
-            ><span class="path27"></span><span class="path28"></span
-            ><span class="path29"></span><span class="path30"></span
-            ><span class="path31"></span><span class="path32"></span
-            ><span class="path33"></span><span class="path34"></span
-            ><span class="path35"></span><span class="path36"></span
-            ><span class="path37"></span><span class="path38"></span
-          ></span>
-        </div>
-        <span>Home</span>
-      </div>
-      <div class="nav-item">
-        <div class="nav-icon">
-          <span class="icon-lock-svgrepo-com"
-            ><span class="path1"></span><span class="path2"></span
-            ><span class="path3"></span><span class="path4"></span
-            ><span class="path5"></span><span class="path6"></span
-            ><span class="path7"></span><span class="path8"></span
-            ><span class="path9"></span><span class="path10"></span
-            ><span class="path11"></span><span class="path12"></span
-            ><span class="path13"></span><span class="path14"></span
-            ><span class="path15"></span><span class="path16"></span
-            ><span class="path17"></span><span class="path18"></span
-            ><span class="path19"></span><span class="path20"></span
-            ><span class="path21"></span><span class="path22"></span
-            ><span class="path23"></span><span class="path24"></span
-            ><span class="path25"></span><span class="path26"></span
-            ><span class="path27"></span><span class="path28"></span
-            ><span class="path29"></span><span class="path30"></span
-            ><span class="path31"></span><span class="path32"></span
-            ><span class="path33"></span><span class="path34"></span
-            ><span class="path35"></span><span class="path36"></span
-            ><span class="path37"></span
-          ></span>
-        </div>
-        <span>Medications</span>
-      </div>
-      <div class="nav-item">
-        <div class="nav-icon">
-          <span class="icon-report-svgrepo-com"
-            ><span class="path1"></span><span class="path2"></span
-            ><span class="path3"></span><span class="path4"></span
-            ><span class="path5"></span><span class="path6"></span
-            ><span class="path7"></span><span class="path8"></span
-            ><span class="path9"></span><span class="path10"></span
-            ><span class="path11"></span><span class="path12"></span
-            ><span class="path13"></span><span class="path14"></span
-            ><span class="path15"></span><span class="path16"></span
-            ><span class="path17"></span><span class="path18"></span
-            ><span class="path19"></span><span class="path20"></span
-            ><span class="path21"></span><span class="path22"></span
-            ><span class="path23"></span><span class="path24"></span
-            ><span class="path25"></span><span class="path26"></span
-            ><span class="path27"></span><span class="path28"></span
-            ><span class="path29"></span><span class="path30"></span
-            ><span class="path31"></span><span class="path32"></span
-            ><span class="path33"></span><span class="path34"></span
-            ><span class="path35"></span><span class="path36"></span
-            ><span class="path37"></span><span class="path38"></span
-            ><span class="path39"></span><span class="path40"></span
-            ><span class="path41"></span><span class="path42"></span
-            ><span class="path43"></span><span class="path44"></span
-            ><span class="path45"></span><span class="path46"></span
-            ><span class="path47"></span><span class="path48"></span
-            ><span class="path49"></span><span class="path50"></span
-          ></span>
-        </div>
-        <span>Health</span>
-      </div>
-      <div class="nav-item">
-        <div class="nav-icon">
-          <span class="icon-forward-svgrepo-com"
-            ><span class="path1"></span><span class="path2"></span
-            ><span class="path3"></span><span class="path4"></span
-            ><span class="path5"></span><span class="path6"></span
-            ><span class="path7"></span><span class="path8"></span
-            ><span class="path9"></span><span class="path10"></span
-            ><span class="path11"></span><span class="path12"></span
-            ><span class="path13"></span><span class="path14"></span
-            ><span class="path15"></span><span class="path16"></span
-            ><span class="path17"></span><span class="path18"></span
-            ><span class="path19"></span><span class="path20"></span
-            ><span class="path21"></span><span class="path22"></span
-            ><span class="path23"></span><span class="path24"></span
-            ><span class="path25"></span><span class="path26"></span
-            ><span class="path27"></span><span class="path28"></span
-            ><span class="path29"></span><span class="path30"></span
-            ><span class="path31"></span><span class="path32"></span
-            ><span class="path33"></span><span class="path34"></span
-            ><span class="path35"></span><span class="path36"></span
-            ><span class="path37"></span><span class="path38"></span
-          ></span>
-        </div>
-        <span>Education</span>
-      </div>
-      <div class="nav-item">
-        <div class="nav-icon">
-          <span class="icon-set-up-svgrepo-com"
-            ><span class="path1"></span><span class="path2"></span
-            ><span class="path3"></span><span class="path4"></span
-            ><span class="path5"></span><span class="path6"></span
-            ><span class="path7"></span><span class="path8"></span
-            ><span class="path9"></span><span class="path10"></span
-            ><span class="path11"></span><span class="path12"></span
-            ><span class="path13"></span><span class="path14"></span
-            ><span class="path15"></span><span class="path16"></span
-            ><span class="path17"></span><span class="path18"></span
-            ><span class="path19"></span><span class="path20"></span
-            ><span class="path21"></span><span class="path22"></span
-            ><span class="path23"></span><span class="path24"></span
-            ><span class="path25"></span><span class="path26"></span
-            ><span class="path27"></span
-          ></span>
-        </div>
-        <span>Settings</span>
-      </div>
-    </div>
-
-    <!-- Log Symptoms Modal -->
-    <div id="symptomsModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Log Symptoms</h2>
-          <button class="modal-close" onclick="closeModal('symptomsModal')">
-            &times;
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Symptom Type</label>
-            <input
-              type="text"
-              id="symptomType"
-              placeholder="e.g., Headache, Nausea, Dizziness"
-            />
-          </div>
-          <div class="form-group">
-            <label>Severity</label>
-            <select id="symptomSeverity">
-              <option value="mild">Mild</option>
-              <option value="moderate">Moderate</option>
-              <option value="severe">Severe</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Description</label>
-            <textarea
-              id="symptomDescription"
-              placeholder="Please describe what you're experiencing..."
-            ></textarea>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            class="modal-btn modal-btn-secondary"
-            onclick="closeModal('symptomsModal')"
-          >
-            Cancel
-          </button>
-          <button class="modal-btn modal-btn-primary" onclick="submitSymptom()">
-            Log Symptom
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- View Medications Modal -->
-    <div id="medicationsModal" class="modal">
-      <div class="modal-content" style="max-width: 600px">
-        <div class="modal-header">
-          <h2>
-            <span class="icon-subscription-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span
-            ></span>
-            My Medications
-          </h2>
-          <button class="modal-close" onclick="closeModal('medicationsModal')">
-            &times;
-          </button>
-        </div>
-        <div class="modal-body" id="medicationsContent">
-          <p>Loading medications...</p>
-        </div>
-        <div class="modal-footer">
-          <button
-            class="modal-btn modal-btn-secondary"
-            onclick="closeModal('medicationsModal')"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Request Consultation Modal -->
-    <div id="consultationModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Request Consultation</h2>
-          <button class="modal-close" onclick="closeModal('consultationModal')">
-            &times;
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="form-group">
-            <label>Reason for Consultation</label>
-            <select id="consultReason">
-              <option value="medication-question">Medication Question</option>
-              <option value="side-effects">Side Effects</option>
-              <option value="dosage-concern">Dosage Concern</option>
-              <option value="refill">Refill Request</option>
-              <option value="other">Other</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Details</label>
-            <textarea
-              id="consultDetails"
-              placeholder="Please describe your concern or question..."
-              rows="5"
-            ></textarea>
-          </div>
-          <div class="form-group">
-            <label>Preferred Contact Method</label>
-            <select id="consultContact">
-              <option value="message">Message</option>
-              <option value="phone">Phone Call</option>
-              <option value="video">Video Call</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            class="modal-btn modal-btn-secondary"
-            onclick="closeModal('consultationModal')"
-          >
-            Cancel
-          </button>
-          <button
-            class="modal-btn modal-btn-primary"
-            onclick="submitConsultation()"
-          >
-            Submit Request
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Education Resources Modal -->
-    <div id="educationModal" class="modal">
-      <div class="modal-content" style="max-width: 700px">
-        <div class="modal-header">
-          <h2>
-            <span class="icon-forward-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span><span class="path28"></span
-              ><span class="path29"></span><span class="path30"></span
-              ><span class="path31"></span><span class="path32"></span
-              ><span class="path33"></span><span class="path34"></span
-              ><span class="path35"></span><span class="path36"></span
-              ><span class="path37"></span><span class="path38"></span></span
-            >Education Resources
-          </h2>
-          <button class="modal-close" onclick="closeModal('educationModal')">
-            &times;
-          </button>
-        </div>
-        <div class="modal-body" id="educationContent">
-          <div style="line-height: 1.8">
-            <h3 style="color: #2c5f6f; margin-bottom: 15px">
-              Medication Education
-            </h3>
-            <div
-              style="
+          <div style="
                 background: #f8fbfc;
                 padding: 15px;
                 border-radius: 12px;
                 margin-bottom: 15px;
-              "
-            >
-              <h4 style="color: #5a9aae; margin-bottom: 10px">
-                Understanding Your Medications
-              </h4>
-              <p style="color: #666; font-size: 14px">
-                Learn about how your medications work, potential side effects,
-                and best practices for taking them.
-              </p>
-            </div>
-
-            <h3 style="color: #2c5f6f; margin: 20px 0 15px">
-              Condition Management
-            </h3>
-            <div
-              style="
-                background: #f8fbfc;
-                padding: 15px;
-                border-radius: 12px;
-                margin-bottom: 15px;
-              "
-            >
-              <h4 style="color: #5a9aae; margin-bottom: 10px">
-                Living with Chronic Conditions
-              </h4>
-              <p style="color: #666; font-size: 14px">
-                Tips and strategies for managing your chronic condition and
-                improving quality of life.
-              </p>
-            </div>
-
-            <h3 style="color: #2c5f6f; margin: 20px 0 15px">Lifestyle Tips</h3>
-            <div
-              style="
-                background: #f8fbfc;
-                padding: 15px;
-                border-radius: 12px;
-                margin-bottom: 15px;
-              "
-            >
-              <h4 style="color: #5a9aae; margin-bottom: 10px">
-                Healthy Habits
-              </h4>
-              <p style="color: #666; font-size: 14px">
-                Diet, exercise, and lifestyle modifications that can complement
-                your treatment plan.
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            class="modal-btn modal-btn-secondary"
-            onclick="closeModal('educationModal')"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Service Team Chat Modal -->
-    <div id="serviceTeamModal" class="modal">
-      <div class="modal-content" style="max-width: 600px; max-height: 90vh">
-        <div class="modal-header">
-          <h2>
-            <span class="icon-dial-svgrepo-com"
-              ><span class="path1"></span><span class="path2"></span
-              ><span class="path3"></span><span class="path4"></span
-              ><span class="path5"></span><span class="path6"></span
-              ><span class="path7"></span><span class="path8"></span
-              ><span class="path9"></span><span class="path10"></span
-              ><span class="path11"></span><span class="path12"></span
-              ><span class="path13"></span><span class="path14"></span
-              ><span class="path15"></span><span class="path16"></span
-              ><span class="path17"></span><span class="path18"></span
-              ><span class="path19"></span><span class="path20"></span
-              ><span class="path21"></span><span class="path22"></span
-              ><span class="path23"></span><span class="path24"></span
-              ><span class="path25"></span><span class="path26"></span
-              ><span class="path27"></span><span class="path28"></span
-              ><span class="path29"></span><span class="path30"></span
-              ><span class="path31"></span><span class="path32"></span
-              ><span class="path33"></span><span class="path34"></span
-              ><span class="path35"></span
-            ></span>
-            Chat with Service Team
-          </h2>
-          <button class="modal-close" onclick="closeModal('serviceTeamModal')">
-            &times;
-          </button>
-        </div>
-        <div class="modal-body">
-          <div
-            id="chatMessages"
-            style="
-              height: 400px;
-              overflow-y: auto;
-              border: 2px solid #e0e0e0;
-              border-radius: 12px;
-              padding: 15px;
-              margin-bottom: 15px;
-              background: #f8fbfc;
-            "
-          >
-            <p style="text-align: center; color: #999">
-              Start a conversation with the service team
+              ">
+            <h4 style="color: #5a9aae; margin-bottom: 10px">
+              Understanding Your Medications
+            </h4>
+            <p style="color: #666; font-size: 14px">
+              Learn about how your medications work, potential side effects,
+              and best practices for taking them.
             </p>
           </div>
-          <div class="form-group">
-            <textarea
-              id="chatMessageInput"
-              placeholder="Type your message..."
-              rows="3"
-            ></textarea>
+
+          <h3 style="color: #2c5f6f; margin: 20px 0 15px">
+            Condition Management
+          </h3>
+          <div style="
+                background: #f8fbfc;
+                padding: 15px;
+                border-radius: 12px;
+                margin-bottom: 15px;
+              ">
+            <h4 style="color: #5a9aae; margin-bottom: 10px">
+              Living with Chronic Conditions
+            </h4>
+            <p style="color: #666; font-size: 14px">
+              Tips and strategies for managing your chronic condition and
+              improving quality of life.
+            </p>
+          </div>
+
+          <h3 style="color: #2c5f6f; margin: 20px 0 15px">Lifestyle Tips</h3>
+          <div style="
+                background: #f8fbfc;
+                padding: 15px;
+                border-radius: 12px;
+                margin-bottom: 15px;
+              ">
+            <h4 style="color: #5a9aae; margin-bottom: 10px">
+              Healthy Habits
+            </h4>
+            <p style="color: #666; font-size: 14px">
+              Diet, exercise, and lifestyle modifications that can complement
+              your treatment plan.
+            </p>
           </div>
         </div>
-        <div class="modal-footer">
-          <button
-            class="modal-btn modal-btn-secondary"
-            onclick="closeModal('serviceTeamModal')"
-          >
-            Close
-          </button>
-          <button
-            class="modal-btn modal-btn-primary"
-            onclick="sendChatMessage()"
-          >
-            Send Message
-          </button>
-        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal('educationModal')">
+          Close
+        </button>
       </div>
     </div>
+  </div>
 
-    <script>
-      // Firebase Configuration
-      const firebaseConfig = {
-        apiKey: "AIzaSyDwMTaAWC1crZgt-qYPA8coG_0ufUBpWBg",
-        authDomain: "clearpharma-d267f.firebaseapp.com",
-        projectId: "clearpharma-d267f",
-        storageBucket: "clearpharma-d267f.firebasestorage.app",
-        messagingSenderId: "163400096970",
-        appId: "1:163400096970:web:cf0c6a3e0662823570a833",
-        measurementId: "G-T0LF1E23E4",
-      };
+  <!-- Service Team Chat Modal -->
+  <!-- AI Chat Modal -->
+  <div id="aiChatModal" class="modal">
+    <div class="modal-content" style="max-width: 600px; max-height: 90vh">
+      <div class="modal-header">
+        <h2 id="chatModalTitle">Help & Support</h2>
+        <button class="modal-close" onclick="closeModal('aiChatModal')">
+          &times;
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Choice Screen -->
+        <div id="chatChoiceScreen" style="text-align: center; padding: 40px 20px;">
+          <div style="margin-bottom: 30px;">
+            <h3 style="color: #2c5f6f; margin-bottom: 10px;">Hello! How can we help you today?</h3>
+            <p style="color: #666; font-size: 14px;">Choose how you'd like to get assistance</p>
+          </div>
 
-      // Initialize Firebase
-      firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
+          <div style="display: flex; flex-direction: column; gap: 15px; max-width: 400px; margin: 0 auto;">
+            <button onclick="startAIChat()" style="
+              padding: 20px;
+              background: linear-gradient(135deg, #5a9aae 0%, #7ba8b5 100%);
+              color: white;
+              border: none;
+              border-radius: 12px;
+              cursor: pointer;
+              font-size: 16px;
+              font-weight: 600;
+              box-shadow: 0 4px 15px rgba(90, 154, 174, 0.3);
+              transition: transform 0.2s;
+            " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+              Talk to AI Assistant
+              <div style="font-size: 13px; font-weight: 400; margin-top: 5px; opacity: 0.9;">Get instant answers to common questions</div>
+            </button>
 
-      let currentUser = null;
-      let currentPatient = null;
+            <button onclick="startServiceTeamChat()" style="
+              padding: 20px;
+              background: white;
+              color: #5a9aae;
+              border: 2px solid #5a9aae;
+              border-radius: 12px;
+              cursor: pointer;
+              font-size: 16px;
+              font-weight: 600;
+              transition: all 0.2s;
+            " onmouseover="this.style.background='#f8fbfc'" onmouseout="this.style.background='white'">
+              Contact Service Team
+              <div style="font-size: 13px; font-weight: 400; margin-top: 5px; opacity: 0.8;">Connect with a real person</div>
+            </button>
+          </div>
+        </div>
 
-      // Check if user is logged in and is a patient
-      auth.onAuthStateChanged(async (user) => {
-        if (user) {
-          currentUser = user;
+        <!-- Chat Interface -->
+        <div id="chatInterface" style="display: none;">
+          <div id="chatMessages" style="
+            height: 400px;
+            overflow-y: auto;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #f8fbfc;
+          ">
+          </div>
+          <div class="typing-indicator" id="typingIndicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="form-group">
+            <textarea id="chatMessageInput" placeholder="Type your message..." rows="3"
+              onkeypress="if(event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); sendChatMessage(); }"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="modal-btn modal-btn-secondary" id="chatBackBtn" onclick="backToChoice()" style="display: none;">
+          ← Back
+        </button>
+        <button class="modal-btn modal-btn-secondary" onclick="closeModal('aiChatModal')">
+          Close
+        </button>
+        <button class="modal-btn modal-btn-primary" id="chatSendBtn" onclick="sendChatMessage()" style="display: none;">
+          Send Message
+        </button>
+      </div>
+    </div>
+  </div>
 
-          // Get patient data
-          const patientDoc = await db.collection("users").doc(user.uid).get();
 
-          if (patientDoc.exists && patientDoc.data().role === "patient") {
-            currentPatient = patientDoc.data();
+  <script type="module">
+    import { GoogleGenerativeAI } from "@google/generative-ai";
 
-            // Update UI with patient info
-            document.getElementById(
-              "welcomeText"
-            ).textContent = `Welcome back, ${
-              currentPatient.name || "Patient"
-            }!`;
+    const GEMINI_API_KEY = "AIzaSyBOO1S1t1-myCAC3HEadXeCCDM9-DqtK1A";
+    const GEMINI_MODEL = "gemini-2.0-flash-exp";
 
-            // Set current date
-            const today = new Date();
-            const options = {
-              weekday: "long",
-              year: "numeric",
-              month: "long",
-              day: "numeric",
-            };
-            document.getElementById("dateText").textContent =
-              today.toLocaleDateString("en-US", options);
+    const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: GEMINI_MODEL });
 
-            // Get initials for avatar
-            const initials = (currentPatient.name || "PT")
-              .split(" ")
-              .map((n) => n[0])
-              .join("")
-              .toUpperCase();
-            document.getElementById("userAvatar").textContent = initials;
+    const SYSTEM_PROMPT = `You are a helpful AI health assistant for ClearPharma, a medication management platform.
 
-            // Load dashboard data
-            loadDashboardData();
-          } else {
-            // Not a patient, redirect to login
-            alert("Access denied. Patient account required.");
-            window.location.href = "index.html";
-          }
+Your role is to:
+- Provide helpful, accurate information about medications and health
+- Be empathetic and professional
+- Always remind users to consult with their healthcare provider for medical decisions
+- Keep responses concise and actionable (2-3 paragraphs max)
+- Never provide specific medical diagnoses or treatment plans
+- Focus on medication adherence, general wellness, and education
+
+Important: You are an AI assistant, not a replacement for healthcare professionals.`;
+
+    let chatHistory = [];
+
+    window.sendChatMessage = async function () {
+      const messageInput = document.getElementById("chatMessageInput");
+      const message = messageInput.value.trim();
+
+      if (!message) {
+        Swal.fire({
+          title: 'Message Required',
+          text: 'Please enter a message',
+          icon: 'warning',
+          confirmButtonColor: '#5a9aae'
+        });
+        return;
+      }
+
+      addMessageToChat(message, "user");
+      messageInput.value = "";
+
+      const typingIndicator = document.getElementById("typingIndicator");
+      typingIndicator.classList.add("active");
+
+      try {
+        const chatContext = SYSTEM_PROMPT + "\n\nConversation:\n" +
+          chatHistory.map(msg => `${msg.role}: ${msg.content}`).join("\n") +
+          `\nUser: ${message}\nAssistant:`;
+
+        const result = await model.generateContent(chatContext);
+        const response = await result.response;
+        const aiMessage = response.text();
+
+        typingIndicator.classList.remove("active");
+        addMessageToChat(aiMessage, "ai");
+
+        chatHistory.push({ role: "User", content: message });
+        chatHistory.push({ role: "Assistant", content: aiMessage });
+
+        if (chatHistory.length > 10) {
+          chatHistory = chatHistory.slice(-10);
+        }
+
+      } catch (error) {
+        console.error("Error calling Gemini API:", error);
+        typingIndicator.classList.remove("active");
+        addMessageToChat("Sorry, I'm having trouble connecting right now. Please try again in a moment.", "ai");
+      }
+    };
+
+    function addMessageToChat(message, sender) {
+      const chatContainer = document.getElementById("chatMessages");
+
+      const messageDiv = document.createElement("div");
+      messageDiv.className = `chat-message ${sender}`;
+
+      const avatar = document.createElement("div");
+      avatar.className = "chat-avatar";
+      avatar.textContent = sender === "ai" ? "" : window.currentPatient?.name?.charAt(0) || "P";
+
+      const bubble = document.createElement("div");
+      bubble.className = "chat-bubble";
+      bubble.textContent = message;
+
+      messageDiv.appendChild(avatar);
+      messageDiv.appendChild(bubble);
+      chatContainer.appendChild(messageDiv);
+
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    window.openChat = function () {
+      openModal("aiChatModal");
+    };
+  </script>
+
+  <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyDwMTaAWC1crZgt-qYPA8coG_0ufUBpWBg",
+      authDomain: "clearpharma-d267f.firebaseapp.com",
+      projectId: "clearpharma-d267f",
+      storageBucket: "clearpharma-d267f.firebasestorage.app",
+      messagingSenderId: "163400096970",
+      appId: "1:163400096970:web:cf0c6a3e0662823570a833",
+      measurementId: "G-T0LF1E23E4",
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    let currentUser = null;
+    let currentPatient = null;
+
+    // Check if user is logged in and is a patient
+    auth.onAuthStateChanged(async (user) => {
+      if (user) {
+        currentUser = user;
+        currentPatientUser = user;
+
+        // Get patient data
+        const patientDoc = await db.collection("users").doc(user.uid).get();
+
+        if (patientDoc.exists && patientDoc.data().role === "patient") {
+          currentPatient = patientDoc.data();
+
+          // Update UI with patient info
+          document.getElementById(
+            "welcomeText"
+          ).textContent = `Welcome back, ${currentPatient.name || "Patient"
+          }!`;
+
+          // Set current date
+          const today = new Date();
+          const options = {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          };
+          document.getElementById("dateText").textContent =
+            today.toLocaleDateString("en-US", options);
+
+          // Get initials for avatar
+          const initials = (currentPatient.name || "PT")
+            .split(" ")
+            .map((n) => n[0])
+            .join("")
+            .toUpperCase();
+          document.getElementById("userAvatar").textContent = initials;
+
+          // Load dashboard data
+          loadDashboardData();
+
+          setupMedicationListener();
         } else {
-          // Not logged in, redirect to login
-          window.location.href = "index.html";
+          // Not a patient, redirect to login
+          Swal.fire({
+            title: 'Access Denied',
+            text: 'Patient account required.',
+            icon: 'error',
+            confirmButtonColor: '#5a9aae'
+          }).then(() => {
+            window.location.href = "index.html";
+          });
         }
-      });
+      } else {
+        // Not logged in, redirect to login
+        window.location.href = "index.html";
+      }
+    });
 
-      // Load dashboard data
-      async function loadDashboardData() {
-        try {
-          // Load medications
-          loadMedications();
+    // Load dashboard data
+    async function loadDashboardData() {
+      try {
+        // Load today's medications
+        loadTodaysMedications();
 
-          // Load symptoms
+        // Load symptoms
+        loadSymptoms();
+
+        // Load health metrics
+        loadHealthMetrics();
+
+        // Load upcoming events
+        loadUpcomingEvents();
+
+        // Check for alerts
+        checkAlerts();
+      } catch (error) {
+        console.error("Error loading dashboard data:", error);
+      }
+    }
+
+    // Resolve a symptom (marks it as resolved)
+    async function resolveSymptom(symptomId) {
+      if (!confirm("Mark this symptom as resolved?")) {
+        return;
+      }
+
+      try {
+        await db.collection("symptoms").doc(symptomId).update({
+          resolved: true,
+          resolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          resolvedBy: currentUser.uid,
+        });
+
+        // Show success message
+        const successDiv = document.createElement("div");
+        successDiv.style.cssText =
+          "position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
+        successDiv.textContent = "✅ Symptom marked as resolved!";
+        document.body.appendChild(successDiv);
+
+        setTimeout(() => {
+          successDiv.remove();
+        }, 3000);
+
+        // Reload symptoms
+        setTimeout(() => {
           loadSymptoms();
+        }, 500);
+      } catch (error) {
+        console.error("Error resolving symptom:", error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Error resolving symptom: ' + error.message,
+          icon: 'error',
+          confirmButtonColor: '#5a9aae'
+        });
+      }
+    }
 
-          // Load health metrics
-          loadHealthMetrics();
-
-          // Load upcoming events
-          loadUpcomingEvents();
-
-          // Check for alerts
-          checkAlerts();
-        } catch (error) {
-          console.error("Error loading dashboard data:", error);
-        }
+    // Delete a symptom permanently
+    async function deleteSymptom(symptomId) {
+      if (
+        !confirm(
+          "Are you sure you want to delete this symptom? This cannot be undone."
+        )
+      ) {
+        return;
       }
 
-      // Resolve a symptom (marks it as resolved)
-      async function resolveSymptom(symptomId) {
-        if (!confirm("Mark this symptom as resolved?")) {
+      try {
+        await db.collection("symptoms").doc(symptomId).delete();
+
+        // Show success message
+        const successDiv = document.createElement("div");
+        successDiv.style.cssText =
+          "position: fixed; top: 20px; right: 20px; background: #ff9800; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
+        successDiv.textContent = "🗑️ Symptom deleted!";
+        document.body.appendChild(successDiv);
+
+        setTimeout(() => {
+          successDiv.remove();
+        }, 3000);
+
+        // Reload symptoms
+        setTimeout(() => {
+          loadSymptoms();
+        }, 500);
+      } catch (error) {
+        console.error("Error deleting symptom:", error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Error deleting symptom: ' + error.message,
+          icon: 'error',
+          confirmButtonColor: '#5a9aae'
+        });
+      }
+    }
+
+    // Load medications
+    // async function loadMedications() {
+    //   try {
+    //     const medsSnapshot = await db
+    //       .collection("medications")
+    //       .where("patientId", "==", currentUser.uid)
+    //       .limit(5)
+    //       .get();
+
+    //     const medicationsList = document.getElementById("medicationsList");
+
+    //     if (medsSnapshot.empty) {
+    //       medicationsList.innerHTML =
+    //         '<p style="text-align: center; color: #999; padding: 20px;">No medications scheduled. Your pharmacist will add them soon!</p>';
+    //       return;
+    //     }
+
+    //     medicationsList.innerHTML = "";
+
+    //     medsSnapshot.forEach((doc) => {
+    //       const med = doc.data();
+    //       const medItem = document.createElement("div");
+    //       medItem.className = `medication-item ${med.status || "upcoming"}`;
+
+    //       const statusClass =
+    //         med.status === "taken"
+    //           ? "taken"
+    //           : med.status === "missed"
+    //           ? "missed"
+    //           : "upcoming";
+    //       const statusText =
+    //         med.status === "taken"
+    //           ? "Taken"
+    //           : med.status === "missed"
+    //           ? "Missed"
+    //           : "Upcoming";
+
+    //       medItem.innerHTML = `
+    //                   <div class="med-header">
+    //                       <div class="med-name">${
+    //                         med.name || "Medication"
+    //                       }</div>
+    //                       <div class="med-status ${statusClass}">${statusText}</div>
+    //                   </div>
+    //                   <div class="med-dosage">${
+    //                     med.dosage || "Standard dose"
+    //                   }</div>
+    //                   <div class="med-time">${formatTime(
+    //                     med.scheduledTime
+    //                   )}</div>
+    //               `;
+
+    //       medicationsList.appendChild(medItem);
+    //     });
+    //   } catch (error) {
+    //     console.error("Error loading medications:", error);
+    //     document.getElementById("medicationsList").innerHTML =
+    //       '<p style="text-align: center; color: #999; padding: 20px;">No medications scheduled yet.</p>';
+    //   }
+    // }
+
+    // Load symptoms
+    // Load symptoms (FIXED - no orderBy to avoid index requirement)
+    async function loadSymptoms() {
+      try {
+        const symptomsSnapshot = await db
+          .collection("symptoms")
+          .where("patientId", "==", currentUser.uid)
+          .limit(10)
+          .get();
+
+        const symptomsList = document.getElementById("symptomsList");
+
+        if (symptomsSnapshot.empty) {
+          symptomsList.innerHTML =
+            '<p style="text-align: center; color: #999; padding: 20px;">No symptoms logged yet</p>';
           return;
         }
 
-        try {
-          await db.collection("symptoms").doc(symptomId).update({
-            resolved: true,
-            resolvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            resolvedBy: currentUser.uid,
-          });
+        // Convert to array and sort manually
+        const symptoms = [];
+        symptomsSnapshot.forEach((doc) => {
+          symptoms.push({ id: doc.id, ...doc.data() });
+        });
 
-          // Show success message
-          const successDiv = document.createElement("div");
-          successDiv.style.cssText =
-            "position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
-          successDiv.textContent = "✅ Symptom marked as resolved!";
-          document.body.appendChild(successDiv);
+        // Sort by loggedAt manually (most recent first)
+        symptoms.sort((a, b) => {
+          const dateA = a.loggedAt
+            ? a.loggedAt.toDate
+              ? a.loggedAt.toDate()
+              : new Date(a.loggedAt)
+            : new Date(0);
+          const dateB = b.loggedAt
+            ? b.loggedAt.toDate
+              ? b.loggedAt.toDate()
+              : new Date(b.loggedAt)
+            : new Date(0);
+          return dateB - dateA;
+        });
 
-          setTimeout(() => {
-            successDiv.remove();
-          }, 3000);
+        // Take only first 3
+        const recentSymptoms = symptoms.slice(0, 3);
 
-          // Reload symptoms
-          setTimeout(() => {
-            loadSymptoms();
-          }, 500);
-        } catch (error) {
-          console.error("Error resolving symptom:", error);
-          alert("Error resolving symptom: " + error.message);
-        }
-      }
+        symptomsList.innerHTML = "";
 
-      // Delete a symptom permanently
-      async function deleteSymptom(symptomId) {
-        if (
-          !confirm(
-            "Are you sure you want to delete this symptom? This cannot be undone."
-          )
-        ) {
-          return;
-        }
+        recentSymptoms.forEach((symptom) => {
+          const symptomItem = document.createElement("div");
+          symptomItem.className = "symptom-item";
 
-        try {
-          await db.collection("symptoms").doc(symptomId).delete();
-
-          // Show success message
-          const successDiv = document.createElement("div");
-          successDiv.style.cssText =
-            "position: fixed; top: 20px; right: 20px; background: #ff9800; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
-          successDiv.textContent = "🗑️ Symptom deleted!";
-          document.body.appendChild(successDiv);
-
-          setTimeout(() => {
-            successDiv.remove();
-          }, 3000);
-
-          // Reload symptoms
-          setTimeout(() => {
-            loadSymptoms();
-          }, 500);
-        } catch (error) {
-          console.error("Error deleting symptom:", error);
-          alert("Error deleting symptom: " + error.message);
-        }
-      }
-
-      // Load medications
-      async function loadMedications() {
-        try {
-          const medsSnapshot = await db
-            .collection("medications")
-            .where("patientId", "==", currentUser.uid)
-            .limit(5)
-            .get();
-
-          const medicationsList = document.getElementById("medicationsList");
-
-          if (medsSnapshot.empty) {
-            medicationsList.innerHTML =
-              '<p style="text-align: center; color: #999; padding: 20px;">No medications scheduled. Your pharmacist will add them soon!</p>';
-            return;
-          }
-
-          medicationsList.innerHTML = "";
-
-          medsSnapshot.forEach((doc) => {
-            const med = doc.data();
-            const medItem = document.createElement("div");
-            medItem.className = `medication-item ${med.status || "upcoming"}`;
-
-            const statusClass =
-              med.status === "taken"
-                ? "taken"
-                : med.status === "missed"
-                ? "missed"
-                : "upcoming";
-            const statusText =
-              med.status === "taken"
-                ? "Taken"
-                : med.status === "missed"
-                ? "Missed"
-                : "Upcoming";
-
-            medItem.innerHTML = `
-                        <div class="med-header">
-                            <div class="med-name">${
-                              med.name || "Medication"
-                            }</div>
-                            <div class="med-status ${statusClass}">${statusText}</div>
-                        </div>
-                        <div class="med-dosage">${
-                          med.dosage || "Standard dose"
-                        }</div>
-                        <div class="med-time">${formatTime(
-                          med.scheduledTime
-                        )}</div>
-                    `;
-
-            medicationsList.appendChild(medItem);
-          });
-        } catch (error) {
-          console.error("Error loading medications:", error);
-          document.getElementById("medicationsList").innerHTML =
-            '<p style="text-align: center; color: #999; padding: 20px;">No medications scheduled yet.</p>';
-        }
-      }
-
-      // Load symptoms
-      // Load symptoms (FIXED - no orderBy to avoid index requirement)
-      async function loadSymptoms() {
-        try {
-          const symptomsSnapshot = await db
-            .collection("symptoms")
-            .where("patientId", "==", currentUser.uid)
-            .limit(10)
-            .get();
-
-          const symptomsList = document.getElementById("symptomsList");
-
-          if (symptomsSnapshot.empty) {
-            symptomsList.innerHTML =
-              '<p style="text-align: center; color: #999; padding: 20px;">No symptoms logged yet</p>';
-            return;
-          }
-
-          // Convert to array and sort manually
-          const symptoms = [];
-          symptomsSnapshot.forEach((doc) => {
-            symptoms.push({ id: doc.id, ...doc.data() });
-          });
-
-          // Sort by loggedAt manually (most recent first)
-          symptoms.sort((a, b) => {
-            const dateA = a.loggedAt
-              ? a.loggedAt.toDate
-                ? a.loggedAt.toDate()
-                : new Date(a.loggedAt)
-              : new Date(0);
-            const dateB = b.loggedAt
-              ? b.loggedAt.toDate
-                ? b.loggedAt.toDate()
-                : new Date(b.loggedAt)
-              : new Date(0);
-            return dateB - dateA;
-          });
-
-          // Take only first 3
-          const recentSymptoms = symptoms.slice(0, 3);
-
-          symptomsList.innerHTML = "";
-
-          recentSymptoms.forEach((symptom) => {
-            const symptomItem = document.createElement("div");
-            symptomItem.className = "symptom-item";
-
-            symptomItem.innerHTML = `
+          symptomItem.innerHTML = `
   <div class="symptom-header">
       <div class="symptom-type">${symptom.type || "Symptom"}</div>
-      <div class="symptom-severity ${symptom.severity || "mild"}">${
-              symptom.severity || "Mild"
+      <div class="symptom-severity ${symptom.severity || "mild"}">${symptom.severity || "Mild"
             }</div>
   </div>
-  <div class="symptom-description">${
-    symptom.description || "No description"
-  }</div>
+  <div class="symptom-description">${symptom.description || "No description"
+            }</div>
   <div class="symptom-time">${formatTimestamp(symptom.loggedAt)}</div>
   <div class="symptom-actions">
-      <button class="symptom-btn symptom-btn-resolve" onclick="resolveSymptom('${
-        symptom.id
-      }')">
+      <button class="symptom-btn symptom-btn-resolve" onclick="resolveSymptom('${symptom.id
+            }')">
           ✓ Resolve
       </button>
-      <button class="symptom-btn symptom-btn-delete" onclick="deleteSymptom('${
-        symptom.id
-      }')">
+      <button class="symptom-btn symptom-btn-delete" onclick="deleteSymptom('${symptom.id
+            }')">
           × Delete
       </button>
   </div>
 `;
 
-            // Add resolved class if symptom is resolved
-            if (symptom.resolved) {
-              symptomItem.classList.add("resolved");
-            }
+          // Add resolved class if symptom is resolved
+          if (symptom.resolved) {
+            symptomItem.classList.add("resolved");
+          }
 
-            symptomsList.appendChild(symptomItem);
-          });
-        } catch (error) {
-          console.error("Error loading symptoms:", error);
-          document.getElementById("symptomsList").innerHTML =
-            '<p style="text-align: center; color: #999; padding: 20px;">Error loading symptoms</p>';
-        }
+          symptomsList.appendChild(symptomItem);
+        });
+      } catch (error) {
+        console.error("Error loading symptoms:", error);
+        document.getElementById("symptomsList").innerHTML =
+          '<p style="text-align: center; color: #999; padding: 20px;">Error loading symptoms</p>';
       }
+    }
 
-      // Load health metrics
-      async function loadHealthMetrics() {
-        try {
-          const metricsDoc = await db
-            .collection("healthMetrics")
-            .doc(currentUser.uid)
-            .get();
+    // Load health metrics
+    async function loadHealthMetrics() {
+      try {
+        const metricsDoc = await db
+          .collection("healthMetrics")
+          .doc(currentUser.uid)
+          .get();
 
-          if (metricsDoc.exists) {
-            const metrics = metricsDoc.data();
+        const adherenceValueEl = document.getElementById("adherenceValue");
 
-            // Update adherence
-            if (metrics.adherence !== undefined) {
-              document.getElementById(
-                "adherenceValue"
-              ).textContent = `${metrics.adherence}%`;
-            }
+        if (metricsDoc.exists && adherenceValueEl) {
+          const metrics = metricsDoc.data();
+
+          // Update adherence
+          if (metrics.adherence !== undefined) {
+            adherenceValueEl.textContent = `${metrics.adherence}%`;
           }
-
-          // Update adherence from patient profile
-          if (currentPatient.adherenceRate !== undefined) {
-            document.getElementById(
-              "adherenceValue"
-            ).textContent = `${currentPatient.adherenceRate}%`;
-          }
-        } catch (error) {
-          console.error("Error loading health metrics:", error);
         }
+
+        // Update adherence from patient profile
+        if (currentPatient.adherenceRate !== undefined && adherenceValueEl) {
+          adherenceValueEl.textContent = `${currentPatient.adherenceRate}%`;
+        }
+      } catch (error) {
+        console.error("Error loading health metrics:", error);
       }
+    }
 
-      // Load upcoming events
-      async function loadUpcomingEvents() {
-        try {
-          const eventsSnapshot = await db
-            .collection("events")
-            .where("patientId", "==", currentUser.uid)
-            .where("date", ">=", new Date())
-            .orderBy("date", "asc")
-            .limit(3)
-            .get();
+    // Load upcoming events
+    async function loadUpcomingEvents() {
+      try {
+        const eventsList = document.getElementById("upcomingEvents");
 
-          const eventsList = document.getElementById("upcomingEvents");
+        // Check if element exists, if not, skip this function
+        if (!eventsList) {
+          console.log("upcomingEvents element not found, skipping...");
+          return;
+        }
 
-          if (eventsSnapshot.empty) {
-            eventsList.innerHTML =
-              '<p style="text-align: center; color: #999; padding: 20px;">No upcoming events</p>';
-            return;
-          }
+        const eventsSnapshot = await db
+          .collection("events")
+          .where("patientId", "==", currentUser.uid)
+          .where("date", ">=", new Date())
+          .orderBy("date", "asc")
+          .limit(3)
+          .get();
 
-          eventsList.innerHTML = "";
+        if (eventsSnapshot.empty) {
+          eventsList.innerHTML =
+            '<p style="text-align: center; color: #999; padding: 20px;">No upcoming events</p>';
+          return;
+        }
 
-          eventsSnapshot.forEach((doc) => {
-            const event = doc.data();
-            const eventItem = document.createElement("div");
-            eventItem.className = "medication-item";
+        eventsList.innerHTML = "";
 
-            eventItem.innerHTML = `
+        eventsSnapshot.forEach((doc) => {
+          const event = doc.data();
+          const eventItem = document.createElement("div");
+          eventItem.className = "medication-item";
+
+          eventItem.innerHTML = `
                         <div class="med-name">${event.title || "Event"}</div>
                         <div class="med-dosage">${event.description || ""}</div>
                         <div class="med-time">${formatDate(event.date)}</div>
                     `;
 
-            eventsList.appendChild(eventItem);
-          });
-        } catch (error) {
-          console.error("Error loading events:", error);
-        }
+          eventsList.appendChild(eventItem);
+        });
+      } catch (error) {
+        console.error("Error loading events:", error);
       }
+    }
 
-      // Check for alerts
-      async function checkAlerts() {
-        try {
-          // Check for missed medications
-          const missedMeds = await db
-            .collection("medications")
-            .where("patientId", "==", currentUser.uid)
-            .where("status", "==", "missed")
-            .get();
+    // Check for alerts
+    async function checkAlerts() {
+      try {
+        // Check for missed medications
+        const missedMeds = await db
+          .collection("medications")
+          .where("patientId", "==", currentUser.uid)
+          .where("status", "==", "missed")
+          .get();
 
-          if (!missedMeds.empty) {
-            const alertBanner = document.getElementById("alertBanner");
-            alertBanner.className = "alert-banner critical";
-            alertBanner.style.display = "flex";
-            alertBanner.innerHTML = `
+        if (!missedMeds.empty) {
+          const alertBanner = document.getElementById("alertBanner");
+          alertBanner.className = "alert-banner critical";
+          alertBanner.style.display = "flex";
+          alertBanner.innerHTML = `
                         <div class="alert-icon">⚠️</div>
                         <div class="alert-content">
                             <strong>Missed Medication Alert</strong>
                             <p>You have ${missedMeds.size} missed medication(s). Please take them as soon as possible.</p>
                         </div>
                     `;
-          }
-        } catch (error) {
-          console.error("Error checking alerts:", error);
         }
+      } catch (error) {
+        console.error("Error checking alerts:", error);
       }
+    }
 
-      // Helper functions
-      function formatTime(timestamp) {
-        if (!timestamp) return "Time not set";
-        const date = timestamp.toDate
-          ? timestamp.toDate()
-          : new Date(timestamp);
-        return date.toLocaleTimeString("en-US", {
+    // Helper functions
+    function formatTime(timestamp) {
+      if (!timestamp) return "Time not set";
+      const date = timestamp.toDate
+        ? timestamp.toDate()
+        : new Date(timestamp);
+      return date.toLocaleTimeString("en-US", {
+        hour: "numeric",
+        minute: "2-digit",
+      });
+    }
+
+    function formatTimestamp(timestamp) {
+      if (!timestamp) return "Unknown time";
+      const date = timestamp.toDate
+        ? timestamp.toDate()
+        : new Date(timestamp);
+      return (
+        date.toLocaleDateString("en-US", { month: "short", day: "numeric" }) +
+        " at " +
+        date.toLocaleTimeString("en-US", {
           hour: "numeric",
           minute: "2-digit",
+        })
+      );
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return "Date not set";
+      const date = timestamp.toDate
+        ? timestamp.toDate()
+        : new Date(timestamp);
+      return date.toLocaleDateString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      });
+    }
+
+    // Modal functions
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add("active");
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove("active");
+    }
+
+    // Action functions
+    function logSymptoms() {
+      openModal("symptomsModal");
+    }
+
+    async function submitSymptom() {
+      const symptomType = document.getElementById("symptomType").value.trim();
+      const severity = document.getElementById("symptomSeverity").value;
+      const description = document
+        .getElementById("symptomDescription")
+        .value.trim();
+
+      if (!symptomType) {
+        Swal.fire({
+          title: 'Symptom Type Required',
+          text: 'Please enter a symptom type',
+          icon: 'warning',
+          confirmButtonColor: '#5a9aae'
+        });
+        return;
+      }
+
+      try {
+        // Save to Firestore with both server timestamp and local fallback
+        await db.collection("symptoms").add({
+          patientId: currentUser.uid,
+          patientName: currentPatient.name || "Patient",
+          pharmacistId: currentPatient.pharmacistId || null,
+          type: symptomType,
+          severity: severity,
+          description: description || "",
+          loggedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          createdAt: new Date(), // Fallback timestamp for immediate display
+        });
+
+        // Clear form
+        document.getElementById("symptomType").value = "";
+        document.getElementById("symptomSeverity").value = "mild";
+        document.getElementById("symptomDescription").value = "";
+
+        closeModal("symptomsModal");
+
+        // Show success message
+        const successDiv = document.createElement("div");
+        successDiv.style.cssText =
+          "position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
+        successDiv.textContent = "✅ Symptom logged successfully!";
+        document.body.appendChild(successDiv);
+
+        setTimeout(() => {
+          successDiv.remove();
+        }, 3000);
+
+        // Reload symptoms with a small delay
+        setTimeout(() => {
+          loadSymptoms();
+        }, 500);
+      } catch (error) {
+        console.error("Error logging symptom:", error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Error logging symptom: ' + error.message,
+          icon: 'error',
+          confirmButtonColor: '#5a9aae'
         });
       }
+    }
 
-      function formatTimestamp(timestamp) {
-        if (!timestamp) return "Unknown time";
-        const date = timestamp.toDate
-          ? timestamp.toDate()
-          : new Date(timestamp);
-        return (
-          date.toLocaleDateString("en-US", { month: "short", day: "numeric" }) +
-          " at " +
-          date.toLocaleTimeString("en-US", {
-            hour: "numeric",
-            minute: "2-digit",
-          })
-        );
-      }
+    function viewMedications() {
+      loadAllMedications();
+      openModal("medicationsModal");
+    }
 
-      function formatDate(timestamp) {
-        if (!timestamp) return "Date not set";
-        const date = timestamp.toDate
-          ? timestamp.toDate()
-          : new Date(timestamp);
-        return date.toLocaleDateString("en-US", {
-          month: "long",
-          day: "numeric",
-          year: "numeric",
-        });
-      }
+    async function loadAllMedications() {
+      try {
+        const medsSnapshot = await db
+          .collection("medications")
+          .where("patientId", "==", currentUser.uid)
+          .limit(30)
+          .get();
 
-      // Modal functions
-      function openModal(modalId) {
-        document.getElementById(modalId).classList.add("active");
-      }
+        const medsContainer = document.getElementById("medicationsContent");
 
-      function closeModal(modalId) {
-        document.getElementById(modalId).classList.remove("active");
-      }
-
-      // Action functions
-      function logSymptoms() {
-        openModal("symptomsModal");
-      }
-
-      async function submitSymptom() {
-        const symptomType = document.getElementById("symptomType").value.trim();
-        const severity = document.getElementById("symptomSeverity").value;
-        const description = document
-          .getElementById("symptomDescription")
-          .value.trim();
-
-        if (!symptomType) {
-          alert("Please enter a symptom type");
+        if (medsSnapshot.empty) {
+          medsContainer.innerHTML =
+            '<p style="text-align: center; color: #999; padding: 20px;">No medications found. Your pharmacist will add them soon!</p>';
           return;
         }
 
-        try {
-          // Save to Firestore with both server timestamp and local fallback
-          await db.collection("symptoms").add({
-            patientId: currentUser.uid,
-            patientName: currentPatient.name || "Patient",
-            pharmacistId: currentPatient.pharmacistId || null,
-            type: symptomType,
-            severity: severity,
-            description: description || "",
-            loggedAt: firebase.firestore.FieldValue.serverTimestamp(),
-            createdAt: new Date(), // Fallback timestamp for immediate display
-          });
-
-          // Clear form
-          document.getElementById("symptomType").value = "";
-          document.getElementById("symptomSeverity").value = "mild";
-          document.getElementById("symptomDescription").value = "";
-
-          closeModal("symptomsModal");
-
-          // Show success message
-          const successDiv = document.createElement("div");
-          successDiv.style.cssText =
-            "position: fixed; top: 20px; right: 20px; background: #4caf50; color: white; padding: 15px 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10000; font-weight: 600;";
-          successDiv.textContent = "✅ Symptom logged successfully!";
-          document.body.appendChild(successDiv);
-
-          setTimeout(() => {
-            successDiv.remove();
-          }, 3000);
-
-          // Reload symptoms with a small delay
-          setTimeout(() => {
-            loadSymptoms();
-          }, 500);
-        } catch (error) {
-          console.error("Error logging symptom:", error);
-          alert("Error logging symptom: " + error.message);
-        }
-      }
-
-      function viewMedications() {
-        loadAllMedications();
-        openModal("medicationsModal");
-      }
-
-      async function loadAllMedications() {
-        try {
-          const medsSnapshot = await db
-            .collection("medications")
-            .where("patientId", "==", currentUser.uid)
-            .limit(30)
-            .get();
-
-          const medsContainer = document.getElementById("medicationsContent");
-
-          if (medsSnapshot.empty) {
-            medsContainer.innerHTML =
-              '<p style="text-align: center; color: #999; padding: 20px;">No medications found. Your pharmacist will add them soon!</p>';
-            return;
-          }
-
-          let medsHTML = '<div style="max-height: 500px; overflow-y: auto;">';
-          medsSnapshot.forEach((doc) => {
-            const med = doc.data();
-            const statusClass =
-              med.status === "taken"
-                ? "taken"
-                : med.status === "missed"
+        let medsHTML = '<div style="max-height: 500px; overflow-y: auto;">';
+        medsSnapshot.forEach((doc) => {
+          const med = doc.data();
+          const statusClass =
+            med.status === "taken"
+              ? "taken"
+              : med.status === "missed"
                 ? "missed"
                 : "upcoming";
-            const statusText =
-              med.status === "taken"
-                ? "Taken"
-                : med.status === "missed"
+          const statusText =
+            med.status === "taken"
+              ? "Taken"
+              : med.status === "missed"
                 ? "Missed"
                 : "Upcoming";
-            const statusColor =
-              med.status === "taken"
-                ? "#4caf50"
-                : med.status === "missed"
+          const statusColor =
+            med.status === "taken"
+              ? "#4caf50"
+              : med.status === "missed"
                 ? "#f44336"
                 : "#2196f3";
 
-            medsHTML += `
-                        <div style="padding: 15px; background: #f8fbfc; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid ${statusColor};">
+          medsHTML += `
+                        <div onclick="viewMedicationDetails('${med.name}', '${med.din || ''}', '${doc.id}')" style="padding: 15px; background: #f8fbfc; border-radius: 12px; margin-bottom: 12px; border-left: 4px solid ${statusColor}; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='#e8f4f7'" onmouseout="this.style.background='#f8fbfc'">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                <div style="font-weight: 600; color: #2c5f6f; font-size: 15px;">${
-                                  med.name || "Medication"
-                                }</div>
+                                <div style="font-weight: 600; color: #2c5f6f; font-size: 15px;">${med.name || "Medication"
+            }</div>
                                 <div style="padding: 4px 12px; background: ${statusColor}20; color: ${statusColor}; border-radius: 12px; font-size: 12px; font-weight: 600;">${statusText}</div>
                             </div>
-                            <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${
-                              med.dosage || "Standard dose"
-                            }</div>
+                            <div style="color: #666; font-size: 14px; margin-bottom: 5px;">${med.dosage || "Standard dose"
+            }</div>
                             <div style="color: #999; font-size: 13px;">${formatTime(
-                              med.scheduledTime
-                            )}</div>
+              med.scheduledTime
+            )}</div>
+                            <div style="color: #5a9aae; font-size: 12px; margin-top: 8px; font-weight: 500;">Click for more information ›</div>
                         </div>
                     `;
-          });
-          medsHTML += "</div>";
+        });
+        medsHTML += "</div>";
 
-          medsContainer.innerHTML = medsHTML;
-        } catch (error) {
-          console.error("Error loading medications:", error);
-          document.getElementById("medicationsContent").innerHTML =
-            '<p style="text-align: center; color: #999; padding: 20px;">No medications found.</p>';
-        }
+        medsContainer.innerHTML = medsHTML;
+      } catch (error) {
+        console.error("Error loading medications:", error);
+        document.getElementById("medicationsContent").innerHTML =
+          '<p style="text-align: center; color: #999; padding: 20px;">No medications found.</p>';
       }
+    }
 
-      function requestConsultation() {
-        openModal("consultationModal");
-      }
+    // View Medication Details with API data
+    async function viewMedicationDetails(medName, din, medId) {
+      closeModal("medicationsModal");
+      openModal("medicationDetailsModal");
 
-      async function submitConsultation() {
-        const reason = document.getElementById("consultReason").value;
-        const details = document.getElementById("consultDetails").value.trim();
-        const contactMethod = document.getElementById("consultContact").value;
+      const detailsContent = document.getElementById("medicationDetailsContent");
+      detailsContent.innerHTML = `
+        <div style="text-align: center; padding: 40px;">
+          <div class="loading-spinner"></div>
+          <p>Loading medication information...</p>
+        </div>
+      `;
 
-        if (!details) {
-          alert("Please provide details about your consultation request");
-          return;
-        }
+      try {
+        // Extract common drug name from full medication name
+        // Remove brand prefixes (APO-, TEVA-, etc.) and dosage info (TAB 600MG, etc.)
+        let commonName = medName
+          .replace(/^(APO-|TEVA-|MYLAN-|SANDOZ-|ACT-|PMS-|RATIO-|GD-|JAMP-|MINT-|MAR-|RAN-|NOVO-|NU-)/i, '') // Remove brand prefixes
+          .replace(/\s+(TAB|CAP|CAPS|TABLET|CAPSULE|MG|MCG|ML|G)\s*\d+.*$/i, '') // Remove dosage form and strength
+          .replace(/\s+\d+\s*(MG|MCG|ML|G).*$/i, '') // Remove any remaining dosage info
+          .trim();
 
+        console.log(`Original: ${medName} → Common name: ${commonName}`);
+
+        let detailsHTML = `<h3 style="color: #2c5f6f; margin-bottom: 20px;">${medName}</h3>`;
+        detailsHTML += `<p style="color: #666; font-size: 13px; margin-top: -10px; margin-bottom: 20px;">Searching for: <strong>${commonName}</strong></p>`;
+
+        // Fetch from Health Canada API for DIN and basic info
+        detailsHTML += '<h4 style="color: #5a9aae; margin-top: 20px;">Drug Information</h4>';
         try {
-          await db.collection("consultations").add({
-            patientId: currentUser.uid,
-            patientName: currentPatient.name,
-            pharmacistId: currentPatient.pharmacistId,
-            reason: reason,
-            details: details,
-            contactMethod: contactMethod,
-            status: "pending",
-            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-          });
+          // Try searching by brand name first, then fall back to common name
+          const searchQuery = din ? `din=${din}` : `brand_name=${encodeURIComponent(commonName)}`;
+          const healthCanadaResponse = await fetch(`https://health-products.canada.ca/api/drug/drugproduct/?${searchQuery}&type=json`);
 
-          alert(
-            "✅ Consultation request submitted!\n\nYour pharmacist or service team will respond soon."
-          );
+          if (healthCanadaResponse.ok) {
+            const healthCanadaData = await healthCanadaResponse.json();
 
-          // Clear form
-          document.getElementById("consultDetails").value = "";
-          closeModal("consultationModal");
+            if (healthCanadaData && healthCanadaData.length > 0) {
+              const drugData = healthCanadaData[0];
+
+              detailsHTML += '<div style="background: #f8fbfc; padding: 15px; border-radius: 10px; margin-top: 10px;">';
+
+              if (drugData.drug_identification_number) {
+                detailsHTML += `<p><strong>DIN:</strong> ${drugData.drug_identification_number}</p>`;
+              }
+
+              if (drugData.brand_name) {
+                detailsHTML += `<p><strong>Brand Name:</strong> ${drugData.brand_name}</p>`;
+              }
+
+              if (drugData.company_name) {
+                detailsHTML += `<p><strong>Manufacturer:</strong> ${drugData.company_name}</p>`;
+              }
+
+              if (drugData.active_ingredient) {
+                detailsHTML += `<p><strong>Active Ingredient:</strong> ${drugData.active_ingredient}</p>`;
+              }
+
+              if (drugData.dosage_form) {
+                detailsHTML += `<p><strong>Dosage Form:</strong> ${drugData.dosage_form}</p>`;
+              }
+
+              if (drugData.route_of_administration) {
+                detailsHTML += `<p><strong>Route:</strong> ${drugData.route_of_administration}</p>`;
+              }
+
+              if (drugData.therapeutic_class) {
+                detailsHTML += `<p><strong>Therapeutic Class:</strong> ${drugData.therapeutic_class}</p>`;
+              }
+
+              detailsHTML += '</div>';
+            } else {
+              detailsHTML += '<p style="color: #999; font-style: italic;">No Health Canada data found for this medication.</p>';
+            }
+          }
         } catch (error) {
-          console.error("Error submitting consultation:", error);
-          alert("Error submitting consultation request. Please try again.");
+          console.error("Health Canada API error:", error);
+          detailsHTML += '<p style="color: #f44336;">Unable to fetch Health Canada data at this time.</p>';
         }
-      }
 
-      function viewEducation() {
-        openModal("educationModal");
-      }
-
-      function openChat() {
-        loadChatMessages();
-        openModal("serviceTeamModal");
-      }
-
-      async function loadChatMessages() {
+        // Fetch from FDA API for side effects and warnings
+        detailsHTML += '<h4 style="color: #5a9aae; margin-top: 25px;">Side Effects & Warnings</h4>';
         try {
-          const messagesSnapshot = await db
-            .collection("serviceTeamMessages")
-            .where("userId", "==", currentUser.uid)
-            .orderBy("timestamp", "asc")
-            .limit(50)
-            .get();
+          const fdaResponse = await fetch(`https://api.fda.gov/drug/label.json?search=openfda.generic_name:"${commonName}"&limit=1`);
 
-          const chatContainer = document.getElementById("chatMessages");
+          if (fdaResponse.ok) {
+            const fdaData = await fdaResponse.json();
 
-          if (messagesSnapshot.empty) {
-            chatContainer.innerHTML =
-              '<p style="text-align: center; color: #999;">No messages yet. Start a conversation!</p>';
-          } else {
-            chatContainer.innerHTML = "";
-            messagesSnapshot.forEach((doc) => {
-              const msg = doc.data();
-              const isUser = msg.senderId === currentUser.uid;
-              const timestamp = msg.timestamp
-                ? msg.timestamp.toDate
-                  ? msg.timestamp.toDate()
-                  : new Date(msg.timestamp)
-                : new Date();
+            if (fdaData.results && fdaData.results.length > 0) {
+              const drugLabel = fdaData.results[0];
 
-              const messageDiv = document.createElement("div");
-              messageDiv.style.cssText = `
+              detailsHTML += '<div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 10px; border-left: 4px solid #ffc107;">';
+
+              // Adverse Reactions / Side Effects
+              if (drugLabel.adverse_reactions && drugLabel.adverse_reactions.length > 0) {
+                detailsHTML += '<div style="margin-bottom: 15px;">';
+                detailsHTML += '<p style="font-weight: 600; color: #856404; margin-bottom: 8px;">Common Side Effects:</p>';
+                detailsHTML += `<p style="font-size: 14px; line-height: 1.6;">${drugLabel.adverse_reactions[0].substring(0, 500)}...</p>`;
+                detailsHTML += '</div>';
+              }
+
+              // Warnings
+              if (drugLabel.warnings && drugLabel.warnings.length > 0) {
+                detailsHTML += '<div style="margin-bottom: 15px;">';
+                detailsHTML += '<p style="font-weight: 600; color: #856404; margin-bottom: 8px;">Warnings:</p>';
+                detailsHTML += `<p style="font-size: 14px; line-height: 1.6;">${drugLabel.warnings[0].substring(0, 500)}...</p>`;
+                detailsHTML += '</div>';
+              }
+
+              // Drug Interactions
+              if (drugLabel.drug_interactions && drugLabel.drug_interactions.length > 0) {
+                detailsHTML += '<div>';
+                detailsHTML += '<p style="font-weight: 600; color: #856404; margin-bottom: 8px;">Drug Interactions:</p>';
+                detailsHTML += `<p style="font-size: 14px; line-height: 1.6;">${drugLabel.drug_interactions[0].substring(0, 500)}...</p>`;
+                detailsHTML += '</div>';
+              }
+
+              detailsHTML += '</div>';
+            } else {
+              detailsHTML += '<p style="color: #999; font-style: italic;">No FDA data found for this medication.</p>';
+            }
+          }
+        } catch (error) {
+          console.error("FDA API error:", error);
+          detailsHTML += '<p style="color: #f44336;">Unable to fetch FDA data at this time.</p>';
+        }
+
+        detailsHTML += '<div style="margin-top: 25px; padding: 15px; background: #e3f2fd; border-radius: 10px; border-left: 4px solid #2196f3;">';
+        detailsHTML += '<p style="font-size: 13px; color: #1565c0;"><strong>Important:</strong> This information is for reference only. Always consult your healthcare provider or pharmacist about your medications.</p>';
+        detailsHTML += '</div>';
+
+        detailsContent.innerHTML = detailsHTML;
+      } catch (error) {
+        console.error("Error fetching medication details:", error);
+        detailsContent.innerHTML = `
+          <div style="text-align: center; padding: 40px;">
+            <p style="color: #f44336; margin-bottom: 10px;">Error loading medication details</p>
+            <p style="color: #666; font-size: 14px;">${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function requestConsultation() {
+      openModal("consultationModal");
+    }
+
+    async function submitConsultation() {
+      const reason = document.getElementById("consultReason").value;
+      const details = document.getElementById("consultDetails").value.trim();
+      const contactMethod = document.getElementById("consultContact").value;
+
+      if (!details) {
+        Swal.fire({
+          title: 'Details Required',
+          text: 'Please provide details about your consultation request',
+          icon: 'warning',
+          confirmButtonColor: '#5a9aae'
+        });
+        return;
+      }
+
+      try {
+        await db.collection("consultations").add({
+          patientId: currentUser.uid,
+          patientName: currentPatient.name,
+          pharmacistId: currentPatient.pharmacistId,
+          reason: reason,
+          details: details,
+          contactMethod: contactMethod,
+          status: "pending",
+          createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        Swal.fire({
+          title: 'Consultation Submitted',
+          text: 'Your pharmacist or service team will respond soon.',
+          icon: 'success',
+          confirmButtonColor: '#5a9aae',
+          timer: 3000
+        });
+
+        // Clear form
+        document.getElementById("consultDetails").value = "";
+        closeModal("consultationModal");
+      } catch (error) {
+        console.error("Error submitting consultation:", error);
+        Swal.fire({
+          title: 'Error',
+          text: 'Error submitting consultation request. Please try again.',
+          icon: 'error',
+          confirmButtonColor: '#5a9aae'
+        });
+      }
+    }
+
+    function viewEducation() {
+      openModal("educationModal");
+    }
+
+    function handleChatClick() {
+      const chatBtn = document.getElementById('chatFloatBtn');
+      const hasClickedBefore = localStorage.getItem('chatButtonClicked');
+
+      if (!hasClickedBefore) {
+        // First time clicking - collapse the button
+        chatBtn.classList.add('collapsed');
+        localStorage.setItem('chatButtonClicked', 'true');
+      }
+
+      // Open the chat
+      openChat();
+    }
+
+    let chatMode = null; // 'ai' or 'serviceTeam'
+
+    function openChat() {
+      // Reset to choice screen
+      chatMode = null;
+      document.getElementById('chatChoiceScreen').style.display = 'block';
+      document.getElementById('chatInterface').style.display = 'none';
+      document.getElementById('chatBackBtn').style.display = 'none';
+      document.getElementById('chatSendBtn').style.display = 'none';
+      document.getElementById('chatModalTitle').textContent = 'Help & Support';
+      openModal("aiChatModal");
+    }
+
+    function startAIChat() {
+      chatMode = 'ai';
+      document.getElementById('chatChoiceScreen').style.display = 'none';
+      document.getElementById('chatInterface').style.display = 'block';
+      document.getElementById('chatBackBtn').style.display = 'inline-block';
+      document.getElementById('chatSendBtn').style.display = 'inline-block';
+      document.getElementById('chatModalTitle').textContent = 'AI Assistant';
+
+      // Initialize AI chat with welcome message
+      const chatContainer = document.getElementById("chatMessages");
+      chatContainer.innerHTML = `
+        <div class="chat-message ai">
+          <div class="chat-avatar"></div>
+          <div class="chat-bubble">
+            Hello! I'm your AI health assistant. I can help answer questions about your medications, symptoms, and general health. How can I assist you today?
+          </div>
+        </div>
+      `;
+    }
+
+    function startServiceTeamChat() {
+      chatMode = 'serviceTeam';
+      document.getElementById('chatChoiceScreen').style.display = 'none';
+      document.getElementById('chatInterface').style.display = 'block';
+      document.getElementById('chatBackBtn').style.display = 'inline-block';
+      document.getElementById('chatSendBtn').style.display = 'inline-block';
+      document.getElementById('chatModalTitle').textContent = 'Service Team';
+
+      // Load service team messages
+      loadServiceTeamMessages();
+    }
+
+    function backToChoice() {
+      chatMode = null;
+      document.getElementById('chatChoiceScreen').style.display = 'block';
+      document.getElementById('chatInterface').style.display = 'none';
+      document.getElementById('chatBackBtn').style.display = 'none';
+      document.getElementById('chatSendBtn').style.display = 'none';
+      document.getElementById('chatModalTitle').textContent = 'Help & Support';
+
+      // Clear chat
+      document.getElementById('chatMessages').innerHTML = '';
+      document.getElementById('chatMessageInput').value = '';
+    }
+
+    // Check on page load if button should be collapsed
+    window.addEventListener('DOMContentLoaded', () => {
+      const hasClickedBefore = localStorage.getItem('chatButtonClicked');
+      const chatBtn = document.getElementById('chatFloatBtn');
+
+      if (hasClickedBefore && chatBtn) {
+        chatBtn.classList.add('collapsed');
+      }
+    });
+
+    async function loadServiceTeamMessages() {
+      try {
+        const messagesSnapshot = await db
+          .collection("serviceTeamMessages")
+          .where("userId", "==", currentUser.uid)
+          .orderBy("timestamp", "asc")
+          .limit(50)
+          .get();
+
+        const chatContainer = document.getElementById("chatMessages");
+
+        if (messagesSnapshot.empty) {
+          chatContainer.innerHTML = `
+            <div class="chat-message ai">
+              <div class="chat-avatar"></div>
+              <div class="chat-bubble">
+                Hello! You've reached the ClearPharma service team. How can we help you today?
+              </div>
+            </div>
+          `;
+        } else {
+          chatContainer.innerHTML = "";
+          messagesSnapshot.forEach((doc) => {
+            const msg = doc.data();
+            const isUser = msg.senderId === currentUser.uid;
+            const timestamp = msg.timestamp
+              ? msg.timestamp.toDate
+                ? msg.timestamp.toDate()
+                : new Date(msg.timestamp)
+              : new Date();
+
+            const messageDiv = document.createElement("div");
+            messageDiv.style.cssText = `
                             margin-bottom: 12px;
                             text-align: ${isUser ? "right" : "left"};
                         `;
 
-              messageDiv.innerHTML = `
+            messageDiv.innerHTML = `
                             <div style="
                                 display: inline-block;
                                 max-width: 70%;
@@ -1996,32 +1519,43 @@
                                 border-radius: 12px;
                                 text-align: left;
                             ">
-                                <div style="font-size: 14px;">${
-                                  msg.message
-                                }</div>
+                                <div style="font-size: 14px;">${msg.message
+              }</div>
                                 <div style="font-size: 11px; opacity: 0.7; margin-top: 5px;">
                                     ${timestamp.toLocaleTimeString()}
                                 </div>
                             </div>
                         `;
 
-              chatContainer.appendChild(messageDiv);
-            });
+            chatContainer.appendChild(messageDiv);
+          });
 
-            // Scroll to bottom
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-          }
-        } catch (error) {
-          console.error("Error loading messages:", error);
+          // Scroll to bottom
+          chatContainer.scrollTop = chatContainer.scrollHeight;
         }
+      } catch (error) {
+        console.error("Error loading messages:", error);
       }
+    }
 
-      async function sendChatMessage() {
+    async function sendChatMessage() {
+      if (chatMode === 'ai') {
+        // Use the AI chat function from the module
+        if (window.sendChatMessage) {
+          window.sendChatMessage();
+        }
+      } else if (chatMode === 'serviceTeam') {
+        // Send to service team via Firebase
         const messageInput = document.getElementById("chatMessageInput");
         const message = messageInput.value.trim();
 
         if (!message) {
-          alert("Please enter a message");
+          Swal.fire({
+          title: 'Message Required',
+          text: 'Please enter a message',
+          icon: 'warning',
+          confirmButtonColor: '#5a9aae'
+        });
           return;
         }
 
@@ -2037,36 +1571,641 @@
           });
 
           messageInput.value = "";
-          loadChatMessages();
+          loadServiceTeamMessages();
         } catch (error) {
           console.error("Error sending message:", error);
-          alert("Error sending message. Please try again.");
+          Swal.fire({
+            title: 'Error',
+            text: 'Error sending message. Please try again.',
+            icon: 'error',
+            confirmButtonColor: '#5a9aae'
+          });
         }
       }
+    }
 
-      // Logout function
-      async function logout() {
-        if (confirm("Are you sure you want to log out?")) {
-          try {
-            await auth.signOut();
+    // Logout function
+    async function logout() {
+      if (confirm("Are you sure you want to log out?")) {
+        try {
+          await auth.signOut();
 
-            // Show logging out message
-            const logoutDiv = document.createElement("div");
-            logoutDiv.style.cssText =
-              "position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px 50px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center;";
-            logoutDiv.innerHTML =
-              '<div style="font-size: 18px; color: #2c5f6f; font-weight: 600;">Logging out...</div>';
-            document.body.appendChild(logoutDiv);
+          // Show logging out message
+          const logoutDiv = document.createElement("div");
+          logoutDiv.style.cssText =
+            "position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 30px 50px; border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); z-index: 10000; text-align: center;";
+          logoutDiv.innerHTML =
+            '<div style="font-size: 18px; color: #2c5f6f; font-weight: 600;">Logging out...</div>';
+          document.body.appendChild(logoutDiv);
 
-            setTimeout(() => {
-              window.location.href = "index.html";
-            }, 500);
-          } catch (error) {
-            console.error("Error logging out:", error);
-            alert("Error logging out. Please try again.");
+          setTimeout(() => {
+            window.location.href = "index.html";
+          }, 500);
+        } catch (error) {
+          console.error("Error logging out:", error);
+          Swal.fire({
+            title: 'Error',
+            text: 'Error logging out. Please try again.',
+            icon: 'error',
+            confirmButtonColor: '#5a9aae'
+          });
+        }
+      }
+    }
+
+    // Helper function: Check if a date is today
+    function isToday(date) {
+      const today = new Date();
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    }
+
+    // Helper function: Show toast notification
+    function showToast(message, type = "info") {
+      const toast = document.createElement("div");
+      toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 15px 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        z-index: 10000;
+        font-weight: 600;
+        animation: slideIn 0.3s ease;
+      `;
+
+      const colors = {
+        success: "#4caf50",
+        error: "#f44336",
+        info: "#2196f3"
+      };
+
+      toast.style.background = colors[type] || colors.info;
+      toast.style.color = "white";
+      toast.textContent = message;
+
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = "slideOut 0.3s ease";
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Helper function: Update date display
+    function updateDateDisplay() {
+      const dateDisplay = document.getElementById("currentDate");
+      if (dateDisplay) {
+        if (isToday(currentViewDate)) {
+          dateDisplay.textContent = "Today";
+        } else {
+          dateDisplay.textContent = currentViewDate.toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric"
+          });
+        }
+      }
+    }
+
+    // Helper function: Update medication adherence
+    async function updateMedicationAdherence(medId) {
+      try {
+        // Calculate adherence across ALL patient's medications, not just one
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+        // Get ALL doses for this patient in the last 30 days
+        const dosesSnapshot = await db
+          .collection("scheduledDoses")
+          .where("patientId", "==", currentPatientUser.uid)
+          .where("scheduledTime", ">=", thirtyDaysAgo)
+          .get();
+
+        if (dosesSnapshot.empty) return;
+
+        let takenCount = 0;
+        let totalCount = 0;
+        const now = new Date();
+
+        dosesSnapshot.forEach((doc) => {
+          const dose = doc.data();
+          const scheduledTime = dose.scheduledTime.toDate ? dose.scheduledTime.toDate() : new Date(dose.scheduledTime);
+
+          // Only count doses that should have been taken (scheduled time is in the past)
+          if (scheduledTime <= now) {
+            totalCount++;
+            if (dose.status === "taken") {
+              takenCount++;
+            }
+          }
+        });
+
+        // If no doses are due yet, don't update adherence
+        if (totalCount === 0) return;
+
+        const adherenceRate = Math.round((takenCount / totalCount) * 100);
+
+        console.log(`Adherence calculation: ${takenCount} taken / ${totalCount} total = ${adherenceRate}%`);
+
+        // Update patient adherence rate in users collection
+        if (currentPatientUser) {
+          await db.collection("users").doc(currentPatientUser.uid).update({
+            adherenceRate: adherenceRate,
+            lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        }
+      } catch (error) {
+        console.error("Error updating adherence:", error);
+      }
+    }
+
+    // Helper function: Create medication card
+    function createMedicationCard(medication, dose, doseId, medId) {
+      const card = document.createElement("div");
+      card.className = `medication-card ${dose.status}`;
+
+      const statusText = {
+        pending: "Pending",
+        taken: "Taken",
+        missed: "Missed",
+        skipped: "Skipped"
+      }[dose.status] || "Unknown";
+
+      const scheduledTime = dose.scheduledTime.toDate
+        ? dose.scheduledTime.toDate()
+        : new Date(dose.scheduledTime);
+
+      card.innerHTML = `
+        <div class="med-header">
+          <div class="med-name">${medication.name || "Medication"}</div>
+          <div class="status-badge ${dose.status}">${statusText}</div>
+        </div>
+        <div class="med-dosage">${medication.dosage || "Standard dose"}</div>
+        <div class="med-time">${formatTime(dose.scheduledTime)}</div>
+        ${medication.instructions ? `<div class="instructions-box">${medication.instructions}</div>` : ""}
+        <div class="medication-actions">
+          ${dose.status === "pending" ? `
+            <button class="med-action-btn take" onclick="markAsTaken('${doseId}', '${medId}')">
+              ✓ Mark as Taken
+            </button>
+            <button class="med-action-btn skip" onclick="markAsSkipped('${doseId}')">
+              Skip
+            </button>
+          ` : dose.status === "taken" ? `
+            <button class="med-action-btn undo" onclick="undoTaken('${doseId}')">
+              ↺ Undo
+            </button>
+          ` : ""}
+        </div>
+      `;
+
+      return card;
+    }
+
+    // CRITICAL FIX: Add a loading flag to prevent concurrent loads
+    let isLoadingMedications = false;
+    let currentViewDate = new Date();
+    let medicationListenerUnsubscribe = null;
+    let hasInitialLoad = false;
+    let reloadTimeout = null;
+    let skipNextListenerReload = false;
+
+    // Load medications for the selected date
+    async function loadTodaysMedications() {
+      // PREVENT CONCURRENT LOADS
+      if (isLoadingMedications) {
+        console.log("⏳ Already loading medications, skipping...");
+        return;
+      }
+
+      isLoadingMedications = true;
+
+      try {
+        const medicationList = document.getElementById("medicationList");
+
+        if (!medicationList) {
+          console.error("❌ medicationList element not found!");
+          return;
+        }
+
+        medicationList.innerHTML =
+          '<div style="text-align: center; padding: 20px; color: #999;">Loading...</div>';
+
+        const startOfDay = new Date(currentViewDate);
+        startOfDay.setHours(0, 0, 0, 0);
+
+        const endOfDay = new Date(currentViewDate);
+        endOfDay.setHours(23, 59, 59, 999);
+
+        console.log("📅 Loading medications for:", startOfDay.toDateString());
+
+        if (!currentPatientUser || !currentPatientUser.uid) {
+          medicationList.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">⚠️</div>
+              <div class="empty-state-text">Please log in to view medications</div>
+            </div>
+          `;
+          return;
+        }
+
+        // Get all active medications
+        const medicationsSnapshot = await db
+          .collection("medications")
+          .where("patientId", "==", currentPatientUser.uid)
+          .where("active", "==", true)
+          .get();
+
+        console.log(" Found", medicationsSnapshot.size, "active medications");
+
+        if (medicationsSnapshot.empty) {
+          medicationList.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon"></div>
+              <div class="empty-state-text">No medications prescribed yet</div>
+              <div class="empty-state-subtext">Your pharmacist will add medications for you</div>
+            </div>
+          `;
+          return;
+        }
+
+        medicationList.innerHTML = "";
+
+        let takenCount = 0;
+        let missedCount = 0;
+        let totalCount = 0;
+
+        // Process all medications
+        for (const medDoc of medicationsSnapshot.docs) {
+          const medication = medDoc.data();
+          const medId = medDoc.id;
+
+          // Get doses for this medication on the selected date
+          const dosesSnapshot = await db
+            .collection("scheduledDoses")
+            .where("medicationId", "==", medId)
+            .where("scheduledTime", ">=", startOfDay)
+            .where("scheduledTime", "<=", endOfDay)
+            .orderBy("scheduledTime", "asc")
+            .get();
+
+          // ONLY create doses if viewing today AND no doses exist
+          if (dosesSnapshot.empty && isToday(currentViewDate)) {
+            console.log(`🔨 Creating doses for ${medication.name}`);
+            await createDosesForToday(medId, medication);
+
+            // Fetch the newly created doses
+            const newDosesSnapshot = await db
+              .collection("scheduledDoses")
+              .where("medicationId", "==", medId)
+              .where("scheduledTime", ">=", startOfDay)
+              .where("scheduledTime", "<=", endOfDay)
+              .orderBy("scheduledTime", "asc")
+              .get();
+
+            // Display the newly created doses
+            newDosesSnapshot.forEach((doseDoc) => {
+              const dose = doseDoc.data();
+              const doseId = doseDoc.id;
+              totalCount++;
+
+              if (dose.status === "taken") takenCount++;
+              if (dose.status === "missed") missedCount++;
+
+              const card = createMedicationCard(medication, dose, doseId, medId);
+              medicationList.appendChild(card);
+            });
+          } else {
+            // Display existing doses
+            dosesSnapshot.forEach((doseDoc) => {
+              const dose = doseDoc.data();
+              const doseId = doseDoc.id;
+              totalCount++;
+
+              if (dose.status === "taken") takenCount++;
+              if (dose.status === "missed") missedCount++;
+
+              const card = createMedicationCard(medication, dose, doseId, medId);
+              medicationList.appendChild(card);
+            });
           }
         }
+
+        // Update adherence summary
+        const adherenceSummary = document.getElementById("adherenceSummary");
+        if (adherenceSummary && totalCount > 0) {
+          adherenceSummary.style.display = "grid";
+
+          const takenCountEl = document.getElementById("takenCount");
+          const missedCountEl = document.getElementById("missedCount");
+          const adherenceRateEl = document.getElementById("adherenceRate");
+
+          if (takenCountEl) takenCountEl.textContent = takenCount;
+          if (missedCountEl) missedCountEl.textContent = missedCount;
+          if (adherenceRateEl) {
+            const adherenceRate = totalCount > 0 ? Math.round((takenCount / totalCount) * 100) : 100;
+            adherenceRateEl.textContent = adherenceRate + "%";
+          }
+        }
+
+        console.log(`✅ Loaded ${totalCount} doses for today`);
+      } catch (error) {
+        console.error("❌ Error loading medications:", error);
+        const medicationList = document.getElementById("medicationList");
+        if (medicationList) {
+          medicationList.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">⚠️</div>
+              <div class="empty-state-text">Error loading medications</div>
+              <div class="empty-state-subtext">${error.message}</div>
+            </div>
+          `;
+        }
+      } finally {
+        // ALWAYS reset the loading flag
+        isLoadingMedications = false;
       }
-    </script>
-  </body>
+    }
+
+    // Create doses for today if they don't exist
+    async function createDosesForToday(medId, medication) {
+      try {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        const tomorrow = new Date(today);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+
+        // DOUBLE CHECK: Make sure doses don't already exist
+        const existingDosesCheck = await db
+          .collection("scheduledDoses")
+          .where("medicationId", "==", medId)
+          .where("scheduledTime", ">=", today)
+          .where("scheduledTime", "<", tomorrow)
+          .get();
+
+        if (!existingDosesCheck.empty) {
+          console.log("Doses already exist, skipping creation");
+          return;
+        }
+
+        console.log("Creating new doses for today...");
+
+        const batch = db.batch();
+        let doseCount = 0;
+
+        medication.times.forEach((time) => {
+          const [hours, minutes] = time.split(":");
+          const scheduledTime = new Date(today);
+          scheduledTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+          const doseRef = db.collection("scheduledDoses").doc();
+          batch.set(doseRef, {
+            medicationId: medId,
+            patientId: medication.patientId,
+            pharmacistId: medication.pharmacistId,
+            medicationName: medication.name,
+            dosage: medication.dosage,
+            scheduledTime: scheduledTime,
+            status: "pending",
+            takenAt: null,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+          });
+          doseCount++;
+        });
+
+        await batch.commit();
+        console.log(`Created ${doseCount} doses for ${medication.name}`);
+      } catch (error) {
+        console.error("Error creating doses:", error);
+      }
+    }
+
+    // Mark dose as taken
+    async function markAsTaken(doseId, medId) {
+      try {
+        const now = new Date();
+
+        // Update dose status
+        await db.collection("scheduledDoses").doc(doseId).update({
+          status: "taken",
+          takenAt: firebase.firestore.FieldValue.serverTimestamp(),
+          actualTakeTime: now,
+        });
+
+        // Update medication adherence tracking
+        await updateMedicationAdherence(medId);
+
+        // Show success feedback
+        showToast("✓ Medication marked as taken!", "success");
+
+        // Skip listener reload since we're doing manual reload
+        skipNextListenerReload = true;
+
+        // Immediately reload to update UI
+        await loadTodaysMedications();
+      } catch (error) {
+        console.error("Error marking as taken:", error);
+        showToast("Error updating medication status", "error");
+      }
+    }
+
+    // Mark dose as skipped
+    async function markAsSkipped(doseId) {
+      try {
+        await db.collection("scheduledDoses").doc(doseId).update({
+          status: "skipped",
+          skippedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        });
+
+        showToast("Medication skipped", "info");
+
+        // Skip listener reload since we're doing manual reload
+        skipNextListenerReload = true;
+
+        // Immediately reload to update UI
+        await loadTodaysMedications();
+      } catch (error) {
+        console.error("Error marking as skipped:", error);
+        showToast("Error updating medication status", "error");
+      }
+    }
+
+    // Mark dose as missed
+    async function markAsMissed(doseId) {
+      try {
+        await db.collection("scheduledDoses").doc(doseId).update({
+          status: "missed",
+        });
+
+        showToast("Marked as missed", "info");
+
+        // Skip listener reload since we're doing manual reload
+        skipNextListenerReload = true;
+
+        // Immediately reload to update UI
+        await loadTodaysMedications();
+      } catch (error) {
+        console.error("Error marking as missed:", error);
+      }
+    }
+
+    // Undo taken status
+    async function undoTaken(doseId) {
+      try {
+        await db.collection("scheduledDoses").doc(doseId).update({
+          status: "pending",
+          takenAt: null,
+          actualTakeTime: null,
+        });
+
+        showToast("Status reset to pending", "info");
+
+        // Skip listener reload since we're doing manual reload
+        skipNextListenerReload = true;
+
+        // Immediately reload to update UI
+        await loadTodaysMedications();
+      } catch (error) {
+        console.error("Error undoing:", error);
+        showToast("Error updating medication status", "error");
+      }
+    }
+
+    // FIXED: Set up real-time listener that doesn't cause infinite loops
+    function setupMedicationListener() {
+      if (!currentPatientUser) return;
+
+      // Unsubscribe from previous listener if it exists
+      if (medicationListenerUnsubscribe) {
+        medicationListenerUnsubscribe();
+      }
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+
+      // Reset initial load flag
+      hasInitialLoad = false;
+
+      // Listen to scheduledDoses changes for today only
+      medicationListenerUnsubscribe = db
+        .collection("scheduledDoses")
+        .where("patientId", "==", currentPatientUser.uid)
+        .where("scheduledTime", ">=", today)
+        .where("scheduledTime", "<", tomorrow)
+        .onSnapshot(
+          (snapshot) => {
+            // Skip the very first snapshot (initial load)
+            if (!hasInitialLoad) {
+              hasInitialLoad = true;
+              console.log("📊 Initial listener snapshot, skipping reload");
+              return;
+            }
+
+            // Skip if we just did a manual reload
+            if (skipNextListenerReload) {
+              skipNextListenerReload = false;
+              console.log("⏭️ Skipping listener reload after manual reload");
+              return;
+            }
+
+            // Skip if there are pending writes (our own changes)
+            if (snapshot.metadata.hasPendingWrites) {
+              console.log("✏️ Pending writes, skipping reload");
+              return;
+            }
+
+            // Skip if already loading
+            if (isLoadingMedications) {
+              console.log("⏳ Already loading, skipping reload");
+              return;
+            }
+
+            // Clear any existing timeout
+            if (reloadTimeout) {
+              clearTimeout(reloadTimeout);
+            }
+
+            // Debounce the reload to prevent multiple rapid calls
+            console.log("🔄 Dose updated, scheduling reload...");
+            reloadTimeout = setTimeout(() => {
+              loadTodaysMedications();
+              reloadTimeout = null;
+            }, 500);
+          },
+          (error) => {
+            console.error("Error in medication listener:", error);
+          }
+        );
+    }
+
+    // Change date view
+    function changeDate(days) {
+      currentViewDate.setDate(currentViewDate.getDate() + days);
+      updateDateDisplay();
+
+      // Unsubscribe from listener when changing dates
+      if (medicationListenerUnsubscribe) {
+        medicationListenerUnsubscribe();
+        medicationListenerUnsubscribe = null;
+      }
+
+      // Clear any pending reload
+      if (reloadTimeout) {
+        clearTimeout(reloadTimeout);
+        reloadTimeout = null;
+      }
+
+      // Reset initial load flag
+      hasInitialLoad = false;
+
+      loadTodaysMedications();
+
+      // Only set up listener if viewing today
+      if (isToday(currentViewDate)) {
+        setupMedicationListener();
+      }
+    }
+
+
+
+
+
+    // Add CSS animations
+    const style = document.createElement("style");
+    style.textContent = `
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOut {
+    from {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    to {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+`;
+    document.head.appendChild(style);
+
+  </script>
+</body>
+
 </html>
