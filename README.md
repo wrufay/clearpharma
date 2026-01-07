@@ -31,4 +31,30 @@ Our target focus is communication and transparency, two fundamental needs in pha
 - HTML, CSS, Javascript
 - Firebase, Google Gemini API
 
-_See our workflow here: https://streamable.com/vxmo9g_
+## Getting Started
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/<your-username>/clearpharma.git
+   cd clearpharma
+   ```
+
+2. Start the app (simple local run on most systems):
+
+  From the project folder in your terminal, run:
+
+  ```bash
+  start index.html
+
+  ```
+  This command, run from the project folder in your terminal, will open index.html in your default browser.
+
+
+
+See our workflow here: https://streamable.com/vxmo9g
+
+
+
+
+
+
