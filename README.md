@@ -40,17 +40,13 @@ Our target focus is communication and transparency, two fundamental needs in pha
    ```
 
 2. Start the app (simple local run on most systems):
-
-  From the project folder in your terminal, run:
-
-  ```bash
-  start index.html
-
-  ```
-  This command, run from the project folder in your terminal, will open index.html in your default browser.
-
-
-
+   From the project folder in your terminal, run:
+   ```bash
+   start index.html
+   ```
+   This command, run from the project folder in your terminal, will open index.html in your default browser.
+   
+   
 See our workflow here: https://streamable.com/vxmo9g
 
 
